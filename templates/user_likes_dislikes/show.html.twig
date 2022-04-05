@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}UserLikesDislikes{% endblock %}
+
+{% block body %}
+    <h1>UserLikesDislikes</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ user_likes_dislike.id }}</td>
+            </tr>
+            <tr>
+                <th>Like</th>
+                <td>{{ user_likes_dislike.like ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_user_likes_dislikes_index') }}">back to list</a>
+
+    <a href="{{ path('app_user_likes_dislikes_edit', {'id': user_likes_dislike.id}) }}">edit</a>
+
+    {{ include('user_likes_dislikes/_delete_form.html.twig') }}
+{% endblock %}

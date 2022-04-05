@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MarketItems index{% endblock %}
+
+{% block body %}
+    <h1>MarketItems index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Sold</th>
+                <th>PostDate</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for market_item in market_items %}
+            <tr>
+                <td>{{ market_item.id }}</td>
+                <td>{{ market_item.title }}</td>
+                <td>{{ market_item.description }}</td>
+                <td>{{ market_item.sold ? 'Yes' : 'No' }}</td>
+                <td>{{ market_item.postDate ? market_item.postDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_market_items_show', {'id': market_item.id}) }}">show</a>
+                    <a href="{{ path('app_market_items_edit', {'id': market_item.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_market_items_new') }}">Create new</a>
+{% endblock %}

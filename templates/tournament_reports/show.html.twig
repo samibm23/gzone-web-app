@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TournamentReports{% endblock %}
+
+{% block body %}
+    <h1>TournamentReports</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ tournament_report.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_tournament_reports_index') }}">back to list</a>
+
+    <a href="{{ path('app_tournament_reports_edit', {'id': tournament_report.id}) }}">edit</a>
+
+    {{ include('tournament_reports/_delete_form.html.twig') }}
+{% endblock %}

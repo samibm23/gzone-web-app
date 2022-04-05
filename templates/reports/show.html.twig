@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reports{% endblock %}
+
+{% block body %}
+    <h1>Reports</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ report.id }}</td>
+            </tr>
+            <tr>
+                <th>Subject</th>
+                <td>{{ report.subject }}</td>
+            </tr>
+            <tr>
+                <th>Head</th>
+                <td>{{ report.head }}</td>
+            </tr>
+            <tr>
+                <th>Body</th>
+                <td>{{ report.body }}</td>
+            </tr>
+            <tr>
+                <th>ReportDate</th>
+                <td>{{ report.reportDate ? report.reportDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reports_index') }}">back to list</a>
+
+    <a href="{{ path('app_reports_edit', {'id': report.id}) }}">edit</a>
+
+    {{ include('reports/_delete_form.html.twig') }}
+{% endblock %}

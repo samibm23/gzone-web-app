@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}UserLikesDislikes index{% endblock %}
+
+{% block body %}
+    <h1>UserLikesDislikes index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Like</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user_likes_dislike in user_likes_dislikes %}
+            <tr>
+                <td>{{ user_likes_dislike.id }}</td>
+                <td>{{ user_likes_dislike.like ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_user_likes_dislikes_show', {'id': user_likes_dislike.id}) }}">show</a>
+                    <a href="{{ path('app_user_likes_dislikes_edit', {'id': user_likes_dislike.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_user_likes_dislikes_new') }}">Create new</a>
+{% endblock %}

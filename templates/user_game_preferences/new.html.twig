@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New UserGamePreferences{% endblock %}
+
+{% block body %}
+    <h1>Create new UserGamePreferences</h1>
+
+    {{ include('user_game_preferences/_form.html.twig') }}
+
+    <a href="{{ path('app_user_game_preferences_index') }}">back to list</a>
+{% endblock %}

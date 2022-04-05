@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}MarketItemReports index{% endblock %}
+
+{% block body %}
+    <h1>MarketItemReports index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for market_item_report in market_item_reports %}
+            <tr>
+                <td>{{ market_item_report.id }}</td>
+                <td>
+                    <a href="{{ path('app_market_item_reports_show', {'id': market_item_report.id}) }}">show</a>
+                    <a href="{{ path('app_market_item_reports_edit', {'id': market_item_report.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_market_item_reports_new') }}">Create new</a>
+{% endblock %}
