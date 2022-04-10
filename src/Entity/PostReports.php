@@ -41,5 +41,34 @@ class PostReports
      */
     private $report;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getPost(): ?Posts
+    {
+        return $this->post;
+    }
+
+    public function setPost(?Posts $post): self
+    {
+        $this->post = $post;
+
+        return $this;
+    }
+
+    public function getReport(): ?Reports
+    {
+        return $this->report;
+    }
+
+    public function setReport(?Reports $report): self
+    {
+        $this->report = $report;
+
+        return $this;
+    }
+
 
 }

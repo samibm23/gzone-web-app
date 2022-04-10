@@ -38,5 +38,34 @@ class Badges
      */
     private $game;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getGame(): ?Games
+    {
+        return $this->game;
+    }
+
+    public function setGame(?Games $game): self
+    {
+        $this->game = $game;
+
+        return $this;
+    }
+
 
 }

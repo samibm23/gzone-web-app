@@ -90,5 +90,118 @@ class Teams
      */
     private $game;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getPhotoUrl(): ?string
+    {
+        return $this->photoUrl;
+    }
+
+    public function setPhotoUrl(?string $photoUrl): self
+    {
+        $this->photoUrl = $photoUrl;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getTeamSize(): ?int
+    {
+        return $this->teamSize;
+    }
+
+    public function setTeamSize(int $teamSize): self
+    {
+        $this->teamSize = $teamSize;
+
+        return $this;
+    }
+
+    public function getRequestable(): ?bool
+    {
+        return $this->requestable;
+    }
+
+    public function setRequestable(bool $requestable): self
+    {
+        $this->requestable = $requestable;
+
+        return $this;
+    }
+
+    public function getInvitable(): ?bool
+    {
+        return $this->invitable;
+    }
+
+    public function setInvitable(bool $invitable): self
+    {
+        $this->invitable = $invitable;
+
+        return $this;
+    }
+
+    public function getCreateDate(): ?\DateTimeInterface
+    {
+        return $this->createDate;
+    }
+
+    public function setCreateDate(\DateTimeInterface $createDate): self
+    {
+        $this->createDate = $createDate;
+
+        return $this;
+    }
+
+    public function getAdmin(): ?Users
+    {
+        return $this->admin;
+    }
+
+    public function setAdmin(?Users $admin): self
+    {
+        $this->admin = $admin;
+
+        return $this;
+    }
+
+    public function getGame(): ?Games
+    {
+        return $this->game;
+    }
+
+    public function setGame(?Games $game): self
+    {
+        $this->game = $game;
+
+        return $this;
+    }
+
 
 }

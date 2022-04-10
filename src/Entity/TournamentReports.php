@@ -41,5 +41,34 @@ class TournamentReports
      */
     private $report;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getTournament(): ?Tournaments
+    {
+        return $this->tournament;
+    }
+
+    public function setTournament(?Tournaments $tournament): self
+    {
+        $this->tournament = $tournament;
+
+        return $this;
+    }
+
+    public function getReport(): ?Reports
+    {
+        return $this->report;
+    }
+
+    public function setReport(?Reports $report): self
+    {
+        $this->report = $report;
+
+        return $this;
+    }
+
 
 }

@@ -41,5 +41,34 @@ class StoreReports
      */
     private $report;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getStore(): ?Stores
+    {
+        return $this->store;
+    }
+
+    public function setStore(?Stores $store): self
+    {
+        $this->store = $store;
+
+        return $this;
+    }
+
+    public function getReport(): ?Reports
+    {
+        return $this->report;
+    }
+
+    public function setReport(?Reports $report): self
+    {
+        $this->report = $report;
+
+        return $this;
+    }
+
 
 }

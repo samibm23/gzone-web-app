@@ -55,5 +55,58 @@ class Comments
      */
     private $commenter;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getCommentBody(): ?string
+    {
+        return $this->commentBody;
+    }
+
+    public function setCommentBody(string $commentBody): self
+    {
+        $this->commentBody = $commentBody;
+
+        return $this;
+    }
+
+    public function getCommentDate(): ?\DateTimeInterface
+    {
+        return $this->commentDate;
+    }
+
+    public function setCommentDate(\DateTimeInterface $commentDate): self
+    {
+        $this->commentDate = $commentDate;
+
+        return $this;
+    }
+
+    public function getPost(): ?Posts
+    {
+        return $this->post;
+    }
+
+    public function setPost(?Posts $post): self
+    {
+        $this->post = $post;
+
+        return $this;
+    }
+
+    public function getCommenter(): ?Users
+    {
+        return $this->commenter;
+    }
+
+    public function setCommenter(?Users $commenter): self
+    {
+        $this->commenter = $commenter;
+
+        return $this;
+    }
+
 
 }

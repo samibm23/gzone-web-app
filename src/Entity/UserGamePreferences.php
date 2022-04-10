@@ -41,5 +41,34 @@ class UserGamePreferences
      */
     private $game;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getUser(): ?Users
+    {
+        return $this->user;
+    }
+
+    public function setUser(?Users $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getGame(): ?Games
+    {
+        return $this->game;
+    }
+
+    public function setGame(?Games $game): self
+    {
+        $this->game = $game;
+
+        return $this;
+    }
+
 
 }

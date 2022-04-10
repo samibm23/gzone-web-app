@@ -59,5 +59,70 @@ class Reports
      */
     private $reporter;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getSubject(): ?string
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(?string $subject): self
+    {
+        $this->subject = $subject;
+
+        return $this;
+    }
+
+    public function getHead(): ?string
+    {
+        return $this->head;
+    }
+
+    public function setHead(string $head): self
+    {
+        $this->head = $head;
+
+        return $this;
+    }
+
+    public function getBody(): ?string
+    {
+        return $this->body;
+    }
+
+    public function setBody(?string $body): self
+    {
+        $this->body = $body;
+
+        return $this;
+    }
+
+    public function getReportDate(): ?\DateTimeInterface
+    {
+        return $this->reportDate;
+    }
+
+    public function setReportDate(\DateTimeInterface $reportDate): self
+    {
+        $this->reportDate = $reportDate;
+
+        return $this;
+    }
+
+    public function getReporter(): ?Users
+    {
+        return $this->reporter;
+    }
+
+    public function setReporter(?Users $reporter): self
+    {
+        $this->reporter = $reporter;
+
+        return $this;
+    }
+
 
 }

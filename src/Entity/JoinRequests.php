@@ -86,5 +86,106 @@ class JoinRequests
      */
     private $team;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+    public function setMessage(?string $message): self
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    public function getRequestDate(): ?\DateTimeInterface
+    {
+        return $this->requestDate;
+    }
+
+    public function setRequestDate(\DateTimeInterface $requestDate): self
+    {
+        $this->requestDate = $requestDate;
+
+        return $this;
+    }
+
+    public function getAccepted(): ?bool
+    {
+        return $this->accepted;
+    }
+
+    public function setAccepted(?bool $accepted): self
+    {
+        $this->accepted = $accepted;
+
+        return $this;
+    }
+
+    public function getResponseDate(): ?\DateTimeInterface
+    {
+        return $this->responseDate;
+    }
+
+    public function setResponseDate(?\DateTimeInterface $responseDate): self
+    {
+        $this->responseDate = $responseDate;
+
+        return $this;
+    }
+
+    public function getInvitation(): ?bool
+    {
+        return $this->invitation;
+    }
+
+    public function setInvitation(bool $invitation): self
+    {
+        $this->invitation = $invitation;
+
+        return $this;
+    }
+
+    public function getUser(): ?Users
+    {
+        return $this->user;
+    }
+
+    public function setUser(?Users $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getTournament(): ?Tournaments
+    {
+        return $this->tournament;
+    }
+
+    public function setTournament(?Tournaments $tournament): self
+    {
+        $this->tournament = $tournament;
+
+        return $this;
+    }
+
+    public function getTeam(): ?Teams
+    {
+        return $this->team;
+    }
+
+    public function setTeam(?Teams $team): self
+    {
+        $this->team = $team;
+
+        return $this;
+    }
+
 
 }

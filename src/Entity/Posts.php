@@ -66,5 +66,82 @@ class Posts
      */
     private $poster;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getResolved(): ?bool
+    {
+        return $this->resolved;
+    }
+
+    public function setResolved(bool $resolved): self
+    {
+        $this->resolved = $resolved;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function getTags(): ?string
+    {
+        return $this->tags;
+    }
+
+    public function setTags(?string $tags): self
+    {
+        $this->tags = $tags;
+
+        return $this;
+    }
+
+    public function getPostDate(): ?\DateTimeInterface
+    {
+        return $this->postDate;
+    }
+
+    public function setPostDate(\DateTimeInterface $postDate): self
+    {
+        $this->postDate = $postDate;
+
+        return $this;
+    }
+
+    public function getPoster(): ?Users
+    {
+        return $this->poster;
+    }
+
+    public function setPoster(?Users $poster): self
+    {
+        $this->poster = $poster;
+
+        return $this;
+    }
+
 
 }
