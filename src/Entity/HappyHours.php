@@ -85,6 +85,12 @@ class HappyHours
 
         return $this;
     }
+    // c'est pas sur 
+    public function __toString(): string
+    {
+        return $this->badge;
+    }
+
 
 
 }

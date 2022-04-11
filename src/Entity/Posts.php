@@ -142,6 +142,7 @@ class Posts
 
         return $this;
     }
+    
 
 
 }

@@ -132,6 +132,9 @@ class UserLikesDislikes
 
         return $this;
     }
-
+    public function __toString(): string
+    {
+        return $this->like. " | " . $this->dislike;
+    }
 
 }
