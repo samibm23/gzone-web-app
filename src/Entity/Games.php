@@ -84,7 +84,7 @@ class Games
     }
     public function __toString(): string
     {
-        return $this->game;
+        return $this->name;
     }
 
 }
