@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/user/likes/dislikes')]
+#[Route('/user-likes-dislikes')]
 class UserLikesDislikesController extends AbstractController
 {
     #[Route('/', name: 'app_user_likes_dislikes_index', methods: ['GET'])]

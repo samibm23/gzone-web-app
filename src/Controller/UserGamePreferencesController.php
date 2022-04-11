@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/user/game/preferences')]
+#[Route('/user-game-preferences')]
 class UserGamePreferencesController extends AbstractController
 {
     #[Route('/', name: 'app_user_game_preferences_index', methods: ['GET'])]

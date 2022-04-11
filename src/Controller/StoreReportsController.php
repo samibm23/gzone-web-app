@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/store/reports')]
+#[Route('/store-reports')]
 class StoreReportsController extends AbstractController
 {
     #[Route('/', name: 'app_store_reports_index', methods: ['GET'])]

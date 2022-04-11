@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/badge/ships')]
+#[Route('/badge-ships')]
 class BadgeShipsController extends AbstractController
 {
     #[Route('/', name: 'app_badge_ships_index', methods: ['GET'])]

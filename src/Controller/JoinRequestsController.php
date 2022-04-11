@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/join/requests')]
+#[Route('/join-requests')]
 class JoinRequestsController extends AbstractController
 {
     #[Route('/', name: 'app_join_requests_index', methods: ['GET'])]

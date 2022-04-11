@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/happy/hours')]
+#[Route('/happy-hours')]
 class HappyHoursController extends AbstractController
 {
     #[Route('/', name: 'app_happy_hours_index', methods: ['GET'])]
