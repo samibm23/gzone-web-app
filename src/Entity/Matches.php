@@ -152,5 +152,9 @@ class Matches
         return $this;
     }
 
+    public function __toString(): string
+    {
+        return $this->team1 . " vs " . $this->team2;
+    }
 
 }
