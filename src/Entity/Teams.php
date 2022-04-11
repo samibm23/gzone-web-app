@@ -68,7 +68,7 @@ class Teams
      *
      * @ORM\Column(name="create_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
      */
-    private $createDate = 'current_timestamp()';
+    private $createDate;
 
     /**
      * @var \Users

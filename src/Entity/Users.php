@@ -82,7 +82,7 @@ class Users
      *
      * @ORM\Column(name="join_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
      */
-    private $joinDate = 'current_timestamp()';
+    private $joinDate;
 
     /**
      * @var bool

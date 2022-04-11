@@ -33,7 +33,7 @@ class Comments
      *
      * @ORM\Column(name="comment_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
      */
-    private $commentDate = 'current_timestamp()';
+    private $commentDate;
 
     /**
      * @var \Posts

@@ -33,7 +33,7 @@ class JoinRequests
      *
      * @ORM\Column(name="request_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
      */
-    private $requestDate = 'current_timestamp()';
+    private $requestDate;
 
     /**
      * @var bool|null

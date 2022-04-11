@@ -54,7 +54,7 @@ class Posts
      *
      * @ORM\Column(name="post_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
      */
-    private $postDate = 'current_timestamp()';
+    private $postDate;
 
     /**
      * @var \Users

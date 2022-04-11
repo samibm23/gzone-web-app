@@ -47,7 +47,7 @@ class Reports
      *
      * @ORM\Column(name="report_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
      */
-    private $reportDate = 'current_timestamp()';
+    private $reportDate;
 
     /**
      * @var \Users
