@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Posts
@@ -32,6 +33,7 @@ class Posts
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=500, nullable=false)
+     * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
      * 
      */
     private $title;
@@ -48,7 +50,7 @@ class Posts
      * @var string|null
      *
      * @ORM\Column(name="tags", type="string", length=255, nullable=true, options={"default"="NULL"})
-     * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
+     
      */
     private $tags;
 
@@ -56,6 +58,7 @@ class Posts
      * @var \DateTime
      *
      * @ORM\Column(name="post_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
+     * @Assert\GreaterThanOrEqual("today")
      */
     private $postDate;
 
@@ -66,7 +69,7 @@ class Posts
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="poster_id", referencedColumnName="id")
      * })
-     * @Assert\GreaterThanOrEqual("today")
+     * 
      */
     private $poster;
 

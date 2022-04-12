@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * MarketItems
@@ -25,6 +26,8 @@ class MarketItems
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
+     * 
      */
     private $title;
 
@@ -32,6 +35,8 @@ class MarketItems
      * @var string|null
      *
      * @ORM\Column(name="description", type="string", length=500, nullable=true, options={"default"="NULL"})
+     * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
+     * 
      */
     private $description;
 
@@ -46,6 +51,7 @@ class MarketItems
      * @var \DateTime
      *
      * @ORM\Column(name="post_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
+     * @Assert\GreaterThanOrEqual("today")
      */
     private $postDate;
 

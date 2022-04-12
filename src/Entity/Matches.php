@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,6 +25,7 @@ class Matches
      * @var \DateTime
      *
      * @ORM\Column(name="start_time", type="datetime", nullable=false)
+     * @Assert\GreaterThanOrEqual("today")
      */
     private $startTime;
 
@@ -32,6 +33,7 @@ class Matches
      * @var int|null
      *
      * @ORM\Column(name="round", type="integer", nullable=true, options={"default"="NULL"})
+     * 
      */
     private $round = NULL;
 

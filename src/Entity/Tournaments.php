@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+
 
 /**
  * Tournaments
@@ -25,6 +26,7 @@ class Tournaments
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
      */
     private $name;
 
@@ -32,6 +34,7 @@ class Tournaments
      * @var string|null
      *
      * @ORM\Column(name="description", type="string", length=500, nullable=true, options={"default"="NULL"})
+     * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
      */
     private $description;
 
@@ -39,6 +42,7 @@ class Tournaments
      * @var int
      *
      * @ORM\Column(name="required_teams", type="integer", nullable=false)
+     * 
      */
     private $requiredTeams;
 
@@ -67,6 +71,7 @@ class Tournaments
      * @var \DateTime
      *
      * @ORM\Column(name="create_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
+     * @Assert\GreaterThanOrEqual("today")
      */
     private $createDate;
 
@@ -77,6 +82,7 @@ class Tournaments
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="admin_id", referencedColumnName="id")
      * })
+     * 
      */
     private $admin;
 

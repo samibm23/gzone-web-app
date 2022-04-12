@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,6 +25,7 @@ class Comments
      * @var string
      *
      * @ORM\Column(name="comment_body", type="string", length=1000, nullable=false)
+     * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
      */
     private $commentBody;
 
@@ -32,7 +33,8 @@ class Comments
      * @var \DateTime
      *
      * @ORM\Column(name="comment_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
-     * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
+     * @Assert\GreaterThanOrEqual("today")
+     * 
      */
     private $commentDate;
 
@@ -43,7 +45,7 @@ class Comments
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="post_id", referencedColumnName="id")
      * })
-     * @Assert\GreaterThanOrEqual("today")
+     * 
      */
     private $post;
 
