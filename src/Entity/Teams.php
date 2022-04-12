@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,6 +27,7 @@ class Teams
      * @var string|null
      *
      * @ORM\Column(name="photo_url", type="string", length=500, nullable=true, options={"default"="NULL"})
+     *  @Assert\NotBlank(message="photo url is required")
      */
     private $photoUrl = 'NULL';
 
@@ -32,6 +35,7 @@ class Teams
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="name is required")
      */
     private $name;
 
@@ -39,6 +43,7 @@ class Teams
      * @var string|null
      *
      * @ORM\Column(name="description", type="string", length=500, nullable=true, options={"default"="NULL"})
+     * @Assert\NotBlank(message="description is required")
      */
     private $description = 'NULL';
 
