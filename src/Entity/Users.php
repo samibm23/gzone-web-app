@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,6 +26,13 @@ class Users
      * @var string|null
      *
      * @ORM\Column(name="phone_number", type="string", length=255, nullable=true, options={"default"="NULL"})
+     *  @Assert\NotBlank(message="Le Champ Titre est obligatoire")
+     * @Assert\Length(
+     *     min=5,
+     *     max=50,
+     *     minMessage="Le titre doit contenir au moins 5 carcatères ",
+     *     maxMessage="Le titre doit contenir au plus 20 carcatères"
+     * )
      */
     private $phoneNumber;
 

@@ -3,8 +3,9 @@
 {% block title %}Users{% endblock %}
 
 {% block body %}
-    <h1>Users</h1>
 
+    <h1>Users</h1>
+    <a href="{{ path('app_reports_new') }}" target="modal">Report</a>
     <table class="table">
         <tbody>
             <tr>
@@ -57,7 +58,7 @@
             </tr>
         </tbody>
     </table>
-
+    
     <a href="{{ path('app_users_index') }}">back to list</a>
 
     <a href="{{ path('app_users_edit', {'id': user.id}) }}">edit</a>
