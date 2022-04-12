@@ -124,5 +124,9 @@ class MarketItems
         return $this;
     }
 
+    public function __toString(): string
+    {
+        return $this->title;
+    }
 
 }
