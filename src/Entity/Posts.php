@@ -22,7 +22,7 @@ class Posts
     private $id;
 
     /**
-     * @var bool
+     * @var boolean
      *
      * @ORM\Column(name="resolved", type="boolean", nullable=false)
      */
@@ -32,6 +32,7 @@ class Posts
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=500, nullable=false)
+     * 
      */
     private $title;
 
@@ -39,6 +40,7 @@ class Posts
      * @var string
      *
      * @ORM\Column(name="content", type="string", length=2555, nullable=false)
+     * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
      */
     private $content;
 
@@ -46,6 +48,7 @@ class Posts
      * @var string|null
      *
      * @ORM\Column(name="tags", type="string", length=255, nullable=true, options={"default"="NULL"})
+     * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
      */
     private $tags;
 
@@ -63,6 +66,7 @@ class Posts
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="poster_id", referencedColumnName="id")
      * })
+     * @Assert\GreaterThanOrEqual("today")
      */
     private $poster;
 

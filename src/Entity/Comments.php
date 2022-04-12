@@ -32,6 +32,7 @@ class Comments
      * @var \DateTime
      *
      * @ORM\Column(name="comment_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
+     * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
      */
     private $commentDate;
 
@@ -42,6 +43,7 @@ class Comments
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="post_id", referencedColumnName="id")
      * })
+     * @Assert\GreaterThanOrEqual("today")
      */
     private $post;
 
