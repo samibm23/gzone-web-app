@@ -47,7 +47,7 @@ class Posts
      *
      * @ORM\Column(name="tags", type="string", length=255, nullable=true, options={"default"="NULL"})
      */
-    private $tags = 'NULL';
+    private $tags;
 
     /**
      * @var \DateTime

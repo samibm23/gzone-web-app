@@ -29,7 +29,7 @@ class Teams
      * @ORM\Column(name="photo_url", type="string", length=500, nullable=true, options={"default"="NULL"})
      *  @Assert\NotBlank(message="photo url is required")
      */
-    private $photoUrl = 'NULL';
+    private $photoUrl;
 
     /**
      * @var string
@@ -45,7 +45,7 @@ class Teams
      * @ORM\Column(name="description", type="string", length=500, nullable=true, options={"default"="NULL"})
      * @Assert\NotBlank(message="description is required")
      */
-    private $description = 'NULL';
+    private $description;
 
     /**
      * @var int

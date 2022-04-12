@@ -26,7 +26,7 @@ class JoinRequests
      *
      * @ORM\Column(name="message", type="string", length=255, nullable=true, options={"default"="NULL"})
      */
-    private $message = 'NULL';
+    private $message;
 
     /**
      * @var \DateTime
@@ -40,14 +40,14 @@ class JoinRequests
      *
      * @ORM\Column(name="accepted", type="boolean", nullable=true, options={"default"="NULL"})
      */
-    private $accepted = 'NULL';
+    private $accepted;
 
     /**
      * @var \DateTime|null
      *
      * @ORM\Column(name="response_date", type="datetime", nullable=true, options={"default"="NULL"})
      */
-    private $responseDate = 'NULL';
+    private $responseDate;
 
     /**
      * @var bool

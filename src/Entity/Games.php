@@ -33,14 +33,14 @@ class Games
      *
      * @ORM\Column(name="photo_url", type="string", length=500, nullable=true, options={"default"="NULL"})
      */
-    private $photoUrl = 'NULL';
+    private $photoUrl;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="description", type="string", length=500, nullable=true, options={"default"="NULL"})
      */
-    private $description = 'NULL';
+    private $description;
 
     public function getId(): ?int
     {

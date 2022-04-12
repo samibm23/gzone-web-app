@@ -26,14 +26,14 @@ class Users
      *
      * @ORM\Column(name="phone_number", type="string", length=255, nullable=true, options={"default"="NULL"})
      */
-    private $phoneNumber = 'NULL';
+    private $phoneNumber;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true, options={"default"="NULL"})
      */
-    private $email = 'NULL';
+    private $email;
 
     /**
      * @var string
@@ -54,21 +54,21 @@ class Users
      *
      * @ORM\Column(name="photo_url", type="string", length=500, nullable=true, options={"default"="NULL"})
      */
-    private $photoUrl = 'NULL';
+    private $photoUrl;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="full_name", type="string", length=255, nullable=true, options={"default"="NULL"})
      */
-    private $fullName = 'NULL';
+    private $fullName;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="bio", type="string", length=500, nullable=true, options={"default"="NULL"})
      */
-    private $bio = 'NULL';
+    private $bio;
 
     /**
      * @var \DateTime
@@ -96,7 +96,7 @@ class Users
      *
      * @ORM\Column(name="role", type="string", length=20, nullable=true, options={"default"="NULL"})
      */
-    private $role = 'NULL';
+    private $role;
 
     public function getId(): ?int
     {

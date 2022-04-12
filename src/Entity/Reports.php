@@ -26,7 +26,7 @@ class Reports
      *
      * @ORM\Column(name="subject", type="string", length=20, nullable=true, options={"default"="NULL"})
      */
-    private $subject = 'NULL';
+    private $subject;
 
     /**
      * @var string
@@ -40,7 +40,7 @@ class Reports
      *
      * @ORM\Column(name="body", type="string", length=1000, nullable=true, options={"default"="NULL"})
      */
-    private $body = 'NULL';
+    private $body;
 
     /**
      * @var \DateTime

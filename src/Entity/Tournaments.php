@@ -33,7 +33,7 @@ class Tournaments
      *
      * @ORM\Column(name="description", type="string", length=500, nullable=true, options={"default"="NULL"})
      */
-    private $description = 'NULL';
+    private $description;
 
     /**
      * @var int
