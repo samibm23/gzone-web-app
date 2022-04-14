@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Acme\CascadeBundle\Entity;
 
 /**
  * JoinRequests
@@ -79,7 +80,8 @@ class JoinRequests
     /**
      * @var \Teams
      *
-     * @ORM\ManyToOne(targetEntity="Teams")
+     * @ORM\ManyToOne(targetEntity="Teams", cascade={"remove"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="team_id", referencedColumnName="id")
      * })

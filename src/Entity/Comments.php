@@ -3,6 +3,7 @@
 namespace App\Entity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use Acme\CascadeBundle\Entity;
 
 /**
  * Comments
@@ -41,7 +42,8 @@ class Comments
     /**
      * @var \Posts
      *
-     * @ORM\ManyToOne(targetEntity="Posts")
+     * @ORM\ManyToOne(targetEntity="Posts" , cascade={"remove"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="post_id", referencedColumnName="id")
      * })
