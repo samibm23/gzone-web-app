@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Games;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,9 +14,12 @@ class GamesType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('photoUrl')
             ->add('description')
-        ;
+            ->add('image',FileType::class,[
+                'required'=>false,'mapped'=>false,
+            ])
+         ;
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

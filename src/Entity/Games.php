@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Entity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * Games
@@ -25,20 +28,25 @@ class Games
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     *@Assert\NotBlank(message="Le Champ Titre est obligatoire")
+
      */
     private $name;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="photo_url", type="string", length=500, nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="image", type="string",
+     * length=500, nullable=true, options={"default"="NULL"})
      */
-    private $photoUrl;
+    private $Image;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="description", type="string", length=500, nullable=true, options={"default"="NULL"})
+     *  @Assert\NotBlank(message="photo url is required")
+
      */
     private $description;
 
@@ -59,17 +67,22 @@ class Games
         return $this;
     }
 
-    public function getPhotoUrl(): ?string
+    /**
+     * @return string|null
+     */
+    public function getImage()
     {
-        return $this->photoUrl;
+        return $this->Image;
     }
 
-    public function setPhotoUrl(?string $photoUrl): self
+    /**
+     * @param string|null $Image
+     */
+    public function setImage( $Image)
     {
-        $this->photoUrl = $photoUrl;
-
-        return $this;
+        $this->Image = $Image;
     }
+
 
     public function getDescription(): ?string
     {

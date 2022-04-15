@@ -68,7 +68,7 @@ class Badges
     }
     public function __toString(): string
     {
-        return $this->badge;
+        return $this->title;
     }
 
 }

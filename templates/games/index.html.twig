@@ -3,14 +3,14 @@
 {% block title %}Games index{% endblock %}
 
 {% block body %}
-    <h1>Games index</h1>
+    <h1>Games </h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>PhotoUrl</th>
+                <th>Image</th>
                 <th>Description</th>
                 <th>actions</th>
             </tr>
@@ -20,7 +20,7 @@
             <tr>
                 <td>{{ game.id }}</td>
                 <td>{{ game.name }}</td>
-                <td>{{ game.photoUrl }}</td>
+                <td><img style="height: 100px; width: 100px" src="{{ asset('public/images/games/'~game.image) }}" ></td>
                 <td>{{ game.description }}</td>
                 <td>
                     <a href="{{ path('app_games_show', {'id': game.id}) }}">show</a>
