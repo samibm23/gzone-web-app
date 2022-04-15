@@ -20,7 +20,7 @@ class UsersType extends AbstractType
             ->add('fullName')
             ->add('bio')
             ->add('birthDate')
-            ->add('joinDate')
+        
             ->add('invitable')
             ->add('role')
         ;

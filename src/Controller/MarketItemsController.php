@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\Validator\Constraints\DateTime;
 #[Route('/market-items')]
 class MarketItemsController extends AbstractController
 {
@@ -31,6 +31,8 @@ class MarketItemsController extends AbstractController
         $marketItem = new MarketItems();
         $form = $this->createForm(MarketItemsType::class, $marketItem);
         $form->handleRequest($request);
+        $date = new \DateTime('now'); 
+        $marketItem->setPostDate($date);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($marketItem);

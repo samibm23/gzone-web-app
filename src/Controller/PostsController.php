@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 #[Route('/posts')]
 class PostsController extends AbstractController
@@ -31,6 +32,8 @@ class PostsController extends AbstractController
         $post = new Posts();
         $form = $this->createForm(PostsType::class, $post);
         $form->handleRequest($request);
+        $date = new \DateTime('now'); 
+        $post->setPostDate($date);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($post);

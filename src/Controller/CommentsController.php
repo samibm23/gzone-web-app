@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 #[Route('/comments')]
 class CommentsController extends AbstractController
@@ -31,6 +32,8 @@ class CommentsController extends AbstractController
         $comment = new Comments();
         $form = $this->createForm(CommentsType::class, $comment);
         $form->handleRequest($request);
+        $date = new \DateTime('now'); 
+        $commentDate->setCommentDate($date);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($comment);

@@ -18,7 +18,6 @@ class TeamsType extends AbstractType
             ->add('teamSize')
             ->add('requestable')
             ->add('invitable')
-            ->add('createDate')
             ->add('admin')
             ->add('game')
         ;

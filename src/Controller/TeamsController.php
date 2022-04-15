@@ -9,10 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 #[Route('/teams')]
 class TeamsController extends AbstractController
 {
+    
     #[Route('/', name: 'app_teams_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -31,6 +33,8 @@ class TeamsController extends AbstractController
         $team = new Teams();
         $form = $this->createForm(TeamsType::class, $team);
         $form->handleRequest($request);
+        $date = new \DateTime('now'); 
+        $team->setCreateDate($date);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($team);

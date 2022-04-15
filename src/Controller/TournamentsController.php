@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 #[Route('/tournaments')]
 class TournamentsController extends AbstractController
@@ -31,6 +32,8 @@ class TournamentsController extends AbstractController
         $tournament = new Tournaments();
         $form = $this->createForm(TournamentsType::class, $tournament);
         $form->handleRequest($request);
+        $date = new \DateTime('now'); 
+        $tournament->setCreateDate($date);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($tournament);

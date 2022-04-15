@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 #[Route('/join-requests')]
 class JoinRequestsController extends AbstractController
@@ -31,6 +32,8 @@ class JoinRequestsController extends AbstractController
         $joinRequest = new JoinRequests();
         $form = $this->createForm(JoinRequestsType::class, $joinRequest);
         $form->handleRequest($request);
+        $date = new \DateTime('now'); 
+        $joinRequest->setRequestDate($date);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($joinRequest);
@@ -38,6 +41,7 @@ class JoinRequestsController extends AbstractController
 
             return $this->redirectToRoute('app_join_requests_index', [], Response::HTTP_SEE_OTHER);
         }
+
 
         return $this->renderForm('join_requests/new.html.twig', [
             'join_request' => $joinRequest,

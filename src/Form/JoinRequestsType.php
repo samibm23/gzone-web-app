@@ -13,9 +13,9 @@ class JoinRequestsType extends AbstractType
     {
         $builder
             ->add('message')
-            ->add('requestDate')
+            
             ->add('accepted')
-            ->add('responseDate')
+           
             ->add('invitation')
             ->add('user')
             ->add('tournament')

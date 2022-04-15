@@ -16,7 +16,7 @@ class PostsType extends AbstractType
             ->add('title')
             ->add('content')
             ->add('tags')
-            ->add('postDate')
+            
             ->add('poster')
         ;
     }

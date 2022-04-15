@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 #[Route('/users')]
 class UsersController extends AbstractController
@@ -31,6 +32,8 @@ class UsersController extends AbstractController
         $user = new Users();
         $form = $this->createForm(UsersType::class, $user);
         $form->handleRequest($request);
+        $date = new \DateTime('now'); 
+        $user->setJoinDate($date);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($user);

@@ -15,7 +15,7 @@ class MarketItemsType extends AbstractType
             ->add('title')
             ->add('description')
             ->add('sold')
-            ->add('postDate')
+            
             ->add('store')
         ;
     }
