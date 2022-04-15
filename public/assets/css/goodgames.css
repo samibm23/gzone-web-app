@@ -92,18 +92,16 @@
 
  -------------------------------------------------------------------*/
 body {
-    color: whitesmoke; 
-    
+    position: relative;
+    color: #7f8b92;
     background-color: #171e22;
 }
 
 .nk-main {
-    
     overflow: hidden;
 }
 
 body.nk-page-boxed {
-    
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -485,18 +483,16 @@ pre[class*="language-"] {
 
  -------------------------------------------------------------------*/
 html {
-    font-size: 16px;
-   
+    font-size: 14px;
 }
 
 body {
-    font-family: 'Trebuchet MS', sans-serif;
+    font-family: "Open Sans", sans-serif;
     line-height: 1.7;
     letter-spacing: .015em;
     word-wrap: break-word;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-   
 }
 
 p {
