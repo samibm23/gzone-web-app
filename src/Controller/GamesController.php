@@ -83,6 +83,24 @@ class GamesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $ImageFile = $form->get('image')->getData();
+            if ($ImageFile) {
+                $newFilename = md5(uniqid()).'.'.$ImageFile->guessExtension();
+                $destination = $this->getParameter('kernel.project_dir').'/public/images/games';
+                // Move the file to the directory where brochures are stored
+                try {
+                    $ImageFile->move(
+                        $destination,
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'ImageFilename' property to store the PDF file name
+                // instead of its contents
+                $game->setImage($newFilename);
+            }
             $entityManager->flush();
 
             return $this->redirectToRoute('app_games_index', [], Response::HTTP_SEE_OTHER);
