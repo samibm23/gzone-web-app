@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.html.twig' %}
 
 {% block title %}Games index{% endblock %}
 
@@ -25,6 +25,11 @@
                 <td>
                     <a href="{{ path('app_games_show', {'id': game.id}) }}">show</a>
                     <a href="{{ path('app_games_edit', {'id': game.id}) }}">edit</a>
+                    <form method="post" action="{{ path('app_games_delete', {'id': game.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ game.id) }}">
+                        <button class="btn">Delete</button>
+                    </form>
+
                 </td>
             </tr>
         {% else %}

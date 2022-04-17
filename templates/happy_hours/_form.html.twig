@@ -1,4 +1,22 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+<table>
+    <tr>
+        <td>{{ form_label(form.startDate) }}</td>
+        <td>{{ form_widget(form.startDate) }}</td>
+        <td>{{ form_errors(form.startDate) }}</td>
+    </tr>
+    <tr>
+        <td>{{ form_label(form.endDate) }}</td>
+        <td>{{ form_widget(form.endDate) }}</td>
+        <td>{{ form_errors(form.endDate) }}</td>
+    </tr>
+    <tr>
+        <td>{{ form_label(form.badge) }}</td>
+        <td>{{ form_widget(form.badge) }}</td>
+        <td>{{ form_errors(form.badge) }}</td>
+    </tr>
+</table>
     <button class="btn">{{ button_label|default('Save') }}</button>
+<a href="{{ path('app_happy_hours_index') }}">back to list</a>
+
 {{ form_end(form) }}

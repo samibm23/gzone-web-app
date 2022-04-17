@@ -24,17 +24,18 @@ class HappyHours
      */
     private $id;
 
-    /**
+     /**
      * @var \DateTime
      *
      * @ORM\Column(name="start_date", type="datetime", nullable=false)
+
      */
     private $startDate;
 
     /**
      * @var \DateTime
-     *
      * @ORM\Column(name="end_date", type="datetime", nullable=false)
+    
      */
     private $endDate;
 

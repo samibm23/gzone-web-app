@@ -1,11 +1,9 @@
 <?php
 
 namespace App\Entity;
-use Symfony\Component\Validator\Constraints as Assert;
-
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Games
@@ -26,28 +24,38 @@ class Games
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     *@Assert\NotBlank(message="Le Champ Titre est obligatoire")
+     * @Assert\NotBlank
+     * @ORM\Column(name="name", type="string", length=255)
+
 
      */
     private $name;
 
     /**
      * @var string|null
-     *
      * @ORM\Column(name="image", type="string",
      * length=500, nullable=true, options={"default"="NULL"})
+     * @Assert\Image(
+     *     minWidth = 200,
+     *     maxWidth = 400,
+     *     minHeight = 200,
+     *     maxHeight = 400
+     * )
      */
     private $Image;
 
     /**
      * @var string|null
-     *
+     * @Assert\NotBlank
      * @ORM\Column(name="description", type="string", length=500, nullable=true, options={"default"="NULL"})
-     *  @Assert\NotBlank(message="photo url is required")
-
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 50,
+     *      minMessage = "Your description must be at least {{ 2 }} characters long",
+     *      maxMessage = "Your description cannot be longer than {{ 50 }} characters"
+     * )
      */
+     
     private $description;
 
     public function getId(): ?int

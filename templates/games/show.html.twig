@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.html.twig' %}
 
 {% block title %}Games{% endblock %}
 
@@ -30,5 +30,6 @@
 
     <a href="{{ path('app_games_edit', {'id': game.id}) }}">edit</a>
 
-    {{ include('games/_delete_form.html.twig') }}
+
+
 {% endblock %}
