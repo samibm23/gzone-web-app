@@ -3,15 +3,17 @@
 namespace App\Entity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Users
  *
- * @ORM\Table(name="users", uniqueConstraints={@ORM\UniqueConstraint(name="username", columns={"username"}), @ORM\UniqueConstraint(name="phone_number", columns={"phone_number"}), @ORM\UniqueConstraint(name="email", columns={"email"})})
+ * @ORM\Table(name="users")
  * @ORM\Entity
+ * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
  */
-class Users
+class Users implements UserInterface
 {
     /**
      * @var int
@@ -27,11 +29,11 @@ class Users
      *
      * @ORM\Column(name="phone_number", type="string", length=255, nullable=true, options={"default"="NULL"})
      *  @Assert\NotBlank(message="Le Champ Titre est obligatoire")
-     * @Assert\Length(
-     *     min=5,
-     *     max=50,
-     *     minMessage="Le titre doit contenir au moins 5 carcatères ",
-     *     maxMessage="Le titre doit contenir au plus 20 carcatères"
+      * @Assert\Length(
+     *      min = 8,
+     *      max = 8,
+     *      minMessage="le numero de telephone doit etre 8 chiffres",
+     *      maxMessage="le numero de telephone doit etre 8 chiffres"
      * )
      */
     private $phoneNumber;
@@ -40,6 +42,8 @@ class Users
      * @var string|null
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true, options={"default"="NULL"})
+     * * @Assert\NotBlank(message="le champs ne doit pas etre vide")
+     * @Assert\Email(message = "The email '{{ value }}' is not a valid email")
      */
     private $email;
 
@@ -47,6 +51,13 @@ class Users
      * @var string
      *
      * @ORM\Column(name="username", type="string", length=255, nullable=false)
+      * @Assert\NotBlank(message="le champs ne doit pas etre vide")
+      * @Assert\Length(
+     *     min=3,
+     *     max=50,
+     *     minMessage="The username must be at least 3 characters long",
+     *     maxMessage="The username cannot be longer than 50 characters"
+     * )
      */
     private $username;
 
@@ -54,6 +65,12 @@ class Users
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255, nullable=false)
+     * @Assert\Length(
+     *     min=3,
+     *     max=50,
+     *     minMessage="The password must be at least 3 characters long",
+     *     maxMessage="The password cannot be longer than 50 characters"
+     * )
      */
     private $password;
 
@@ -102,9 +119,11 @@ class Users
     /**
      * @var string|null
      *
-     * @ORM\Column(name="role", type="string", length=20, nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="role", type="string", length=20, nullable=true, options={"default"="user"})
      */
     private $role;
+
+
 
     public function getId(): ?int
     {
@@ -230,7 +249,10 @@ class Users
 
         return $this;
     }
-
+    public function getRoles(): ?string
+    {
+        return $this->role;
+    }
     public function getRole(): ?string
     {
         return $this->role;
@@ -243,9 +265,32 @@ class Users
         return $this;
     }
 
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+    public function getUserIdentifier(): ?string
+    {
+        return $this->fullName;
+    }
+    
     public function __toString(): string
     {
         return $this->username;
+    }
+    public function serialize()
+    {
+        return serialize($this->id);
+    }
+
+    public function unserialize($data)
+    {
+        $this->id = unserialize($data);
     }
 
 }

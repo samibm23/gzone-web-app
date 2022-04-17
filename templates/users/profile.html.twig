@@ -1,0 +1,129 @@
+{% extends 'front.html.twig' %}
+
+{% block body %}
+
+     <style>
+     body {
+    background: white
+}
+
+.card {
+    border: none;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    cursor: pointer
+}
+
+.card:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background-color: white;
+    transform: scaleY(1);
+    transition: all 0.5s;
+    transform-origin: bottom
+}
+
+.card:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background-color: #e6922e;
+    transform: scaleY(0);
+    transition: all 0.5s;
+    transform-origin: bottom
+}
+
+.card:hover::after {
+    transform: scaleY(1)
+}
+
+.fonts {
+    font-size: 11px
+}
+
+.social-list {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    padding: 0
+}
+
+.social-list li {
+    padding: 10px;
+    color: #e6922e;
+    font-size: 19px
+}
+
+.buttons button:nth-child(1) {
+    border: 1px solid #e6922e !important;
+    color: #e6922e;
+    height: 40px
+}
+
+.buttons button:nth-child(1):hover {
+    border: 1px solid #e6922e !important;
+    color: #fff;
+    height: 40px;
+    background-color: #e6922e
+}
+
+.buttons button:nth-child(2) {
+    border: 1px solid #e6922e !important;
+    background-color: #e6922e;
+    color: #fff;
+    height: 40px
+}
+     </style>
+	<div class="container mt-5" style="margin-top:10%; margin-bottom:5%">
+    <div class="row d-flex justify-content-center" style='background-color:whotesmoke;display: flex;
+  justify-content: center;
+  align-items: center;' >
+        <div class="col-md-7" >
+            <div class="card p-3 py-4">
+                <div class="text-center"> 
+                <img src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png" width="40%" class="rounded-circle">
+                 </div>
+                <div class="text-center mt-3"> <span class="bg-secondary p-1 px-4 rounded text-white">USER PROFILE</span>
+                    <h5 class="mt-2 mb-0">Welcome {{ user.nom ~ ' ' ~user.prenom}}</h5> <span>{{user.username}}</span>
+                    <div class="px-4 mt-1">
+                        <ul>
+                                        <li><span>Email :</span>{{ user.email }}</li>
+                                        <li><span>Nom :</span>{{ user.nom }}</li>
+                                        <li><span>Prenom :</span> {{ user.prenom }}</li>
+                                        <li><span>Numero de tel:</span> {{ user.numTel }}</li>
+                                        <li><span>Username:</span> {{ user.username }}</li>
+                                        <li><span>date de naissance :</span>{{ user.dateNaissance | date("d-m-Y")}}</li>
+                                        <li><span>adresse :</span>{{ user.adresse }}</li>
+                                        
+                    </div>
+                   
+                   <div class="col-lg-6 col-md-6">
+                                    <div class="anime__details__btn" style="display: flex">
+
+                                    <form  method="get" action="{{ path('edit_profile') }}">
+                                            <button  class="btn btn-success btn-fw"><i
+                                                        class="fa fa-angle-right"></i> edit Account</button>
+                                        </form>
+
+                                    </div>
+                                    <div class="text-center">
+                                <a class="btn btn-danger btn-block enter-btn" href="{{ path('app_logout') }}"><i class="mdi mdi-arrow-right-bold-hexagon-outline"></i> Log out </a>
+                            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

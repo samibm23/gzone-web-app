@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Bienvenue chez fly invictus</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{{ asset('back/assets/vendors/mdi/css/materialdesignicons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('back/assets/vendors/css/vendor.bundle.base.css') }}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{{ asset('back/assets/css/style.css') }}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{{ asset('back/assets/images/favicon.png') }}" />
+    <style>
+        .card{
+            border: 2px solid white;
+        }
+    </style>
+</head>
+<body>
+<div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="row w-100 m-0">
+            <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+                <div class="card col-lg-4 mx-auto">
+                    <div class="card-body px-5 py-5">
+                        <h3 style="color: chartreuse;"class="card-title text-center mb-3">{{ app.user.username }}</h3>
+
+                        <form method="post">
+                            {% if app.user %}
+                                <div class="form-group">
+                                    <p class="sign-up">
+                                    Access Denied.<br>
+                                    </p>
+                                </div>
+                            {% endif %}
+                            <div class="text-center">
+                                <a class="btn btn-danger btn-block enter-btn" href="{{ path('app_logout') }}"><i class="mdi mdi-arrow-right-bold-hexagon-outline"></i> Log out </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- content-wrapper ends -->
+        </div>
+        <!-- row ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+<!-- plugins:js -->
+<script src="{{ asset('Back/assets/vendors/js/vendor.bundle.base.js') }}"></script>
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script src="{{ asset('Back/assets/js/off-canvas.js') }}"></script>
+<script src="{{ asset('Back/assets/js/hoverable-collapse.js') }}"></script>
+<script src="{{ asset('Back/assets/js/misc.js') }}"></script>
+<script src="{{ asset('Back/assets/js/settings.js') }}"></script>
+<script src="{{ asset('Back/assets/js/todolist.js') }}"></script>
+<!-- endinject -->
+</body>
+</html>

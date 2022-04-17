@@ -1,0 +1,35 @@
+{% extends 'front.html.twig' %}
+
+     {% block body %}
+        <section class="login spad">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+
+                        <div class="login__form" style="margin-top:20%">
+                        
+                            <div class="input__item">
+                            {{ form_start(form ,  {'attr' : {'novalidate' : 'novalidate'}}) }}
+                                <span class="icon_mail"></span>
+                            </div>
+                    
+
+                            <ul>
+                                <button type="submit" class="btn btn-success btn-fw" style="margin-top:10%">{{ button_label|default('Save') }}</button>
+                            </ul>
+                                {{ form_end(form) }}
+                            </div>
+                    </div>
+                    <div class="col-lg-6" style="margin-top:20%">
+                        <div style="display: grid " class="login__register">
+                            <a  class="btn btn-info" href="{{ path('profile') }}">Back</a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    {% endblock %}
+
+
+
