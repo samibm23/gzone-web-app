@@ -252,7 +252,7 @@ class Users implements UserInterface
     public function getRoles(): array
     {
         $role = $this->role;
-        return explode(' ', $role);
+        return explode(" ", $role);
     }
     public function getRole(): ?string
     {
