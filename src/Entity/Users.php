@@ -119,7 +119,7 @@ class Users implements UserInterface
     /**
      * @var string|null
      *
-     * @ORM\Column(name="role", type="string", length=20, nullable=true, options={"default"="user"})
+     * @ORM\Column(name="role", type="string", length=20, nullable=true, options={"default"="ROLE_USER"})
      */
     private $role;
 
@@ -252,7 +252,12 @@ class Users implements UserInterface
     public function getRoles(): array
     {
         $role = $this->role;
-        return explode(" ", $role);
+        if (strcmp($role, "ROLE_USER")==0){
+            return $roles = array("ROLE_USER");
+        }else{
+            return $roles = array("ROLE_ADMIN");
+        }
+        
     }
     public function getRole(): ?string
     {

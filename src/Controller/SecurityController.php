@@ -15,12 +15,8 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
-
         if ($this->getUser()) {
-            $hasAccess = in_array("ROLE_ADMIN", $this->getUser()->getRoles());
+            $hasAccess = in_array("ROLE_ADMIN", $this->getUser()->getRoles());        
             if ($hasAccess) {
                 return $this->redirectToRoute('choice');
             } else {
@@ -54,12 +50,12 @@ class SecurityController extends AbstractController
     /**
      * @Route("/choice", name="choice")
      */
-    public function choice()
+    public function choice(AuthenticationUtils $authenticationUtils)
     {
 
-        $full_name = $this->getUser()->getUserIdentifier();
+        $lastUsername = $authenticationUtils->getLastUsername();
         return $this->render('security/choice.html.twig', [
-            'full_name' => $full_name,
+            'full_name' => $lastUsername,
         ]);
     }
 
