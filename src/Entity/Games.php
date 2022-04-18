@@ -78,7 +78,7 @@ class Games
     /**
      * @return string|null
      */
-    public function getPhotoUrl(): ?string
+    public function getPhoto_Url(): ?string
     {
         return $this->photo_url;
     }
@@ -86,7 +86,7 @@ class Games
     /**
      * @param string|null $photo_url
      */
-    public function setPhotoUrl(?string $photo_url): void
+    public function setPhoto_Url(?string $photo_url): void
     {
         $this->photo_url = $photo_url;
     }
