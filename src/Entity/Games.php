@@ -32,8 +32,8 @@ class Games
     private $name;
 
     /**
-     * @var string|null
-     * @ORM\Column(name="image", type="string",
+     * @var string
+     * @ORM\Column(name="photo_url",
      * length=500, nullable=true, options={"default"="NULL"})
      * @Assert\Image(
      *     minWidth = 200,
@@ -42,7 +42,7 @@ class Games
      *     maxHeight = 400
      * )
      */
-    private $Image;
+    private $photo_url	;
 
     /**
      * @var string|null
@@ -78,18 +78,23 @@ class Games
     /**
      * @return string|null
      */
-    public function getImage()
+    public function getPhotoUrl(): ?string
     {
-        return $this->Image;
+        return $this->photo_url;
     }
 
     /**
-     * @param string|null $Image
+     * @param string|null $photo_url
      */
-    public function setImage( $Image)
+    public function setPhotoUrl(?string $photo_url): void
     {
-        $this->Image = $Image;
+        $this->photo_url = $photo_url;
     }
+
+
+    /**
+     * @return string|null
+     */
 
 
     public function getDescription(): ?string

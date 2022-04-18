@@ -20,7 +20,7 @@
             <tr>
                 <td>{{ game.id }}</td>
                 <td>{{ game.name }}</td>
-                <td><img style="height: 100px; width: 100px" src="{{ asset('public/images/games/'~game.image) }}" ></td>
+                <td><img style="height: 100px; width: 100px" src="{{ asset('images/games/'~game.photo_url) }}" ></td>
                 <td>{{ game.description }}</td>
                 <td>
                     <a href="{{ path('app_games_show', {'id': game.id}) }}">show</a>

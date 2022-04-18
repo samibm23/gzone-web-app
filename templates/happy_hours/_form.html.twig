@@ -1,22 +1,61 @@
 {{ form_start(form) }}
 <table>
     <tr>
-        <td>{{ form_label(form.startDate) }}</td>
-        <td>{{ form_widget(form.startDate) }}</td>
-        <td>{{ form_errors(form.startDate) }}</td>
+        <td>{{ form_row(form.startDate, {'attr':{'class':'form-control'}}) }}</td>
     </tr>
     <tr>
-        <td>{{ form_label(form.endDate) }}</td>
-        <td>{{ form_widget(form.endDate) }}</td>
-        <td>{{ form_errors(form.endDate) }}</td>
+        <td>{{ form_row(form.endDate, {'attr':{'class':'form-control'}}) }}</td>
     </tr>
     <tr>
-        <td>{{ form_label(form.badge) }}</td>
-        <td>{{ form_widget(form.badge) }}</td>
-        <td>{{ form_errors(form.badge) }}</td>
+        <td>{{ form_row(form.badge) }}</td>
     </tr>
 </table>
     <button class="btn">{{ button_label|default('Save') }}</button>
 <a href="{{ path('app_happy_hours_index') }}">back to list</a>
 
 {{ form_end(form) }}
+
+
+
+{#<div class="page-wrapper">
+    <div class="content">
+
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <form>
+                    <div class="form-group">
+                            <td>{{ form_row(form.badge) }}  </td>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="cal-icon">
+                                    <td>{{ form_row(form.startDate, {'attr':{'class':'form-control'}}) }}</td>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+
+                                <div class="cal-icon">
+                                    <td>{{ form_row(form.endDate, {'attr':{'class':'form-control'}}) }}</td>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="m-t-20 text-center">
+                        <button class="btn btn-primary submit-btn">{{ button_label|default('Save') }}</button>
+                        <a href="{{ path('app_happy_hours_index') }}">back to list</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+</div>#}

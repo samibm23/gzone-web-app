@@ -18,8 +18,9 @@ class GamesType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
-            ->add('image',FileType::class,[
-                'required'=>false,'mapped'=>false,
+            ->add('photo_url',FileType::class,[
+                'required'=>false,
+                'mapped'=>false,
             ])
             
 

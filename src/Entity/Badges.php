@@ -34,16 +34,18 @@ class Badges
      *      minMessage = "Your description must be at least {{ 2 }} characters long",
      *      maxMessage = "Your description cannot be longer than {{ 50 }} characters"
      * )
+     *      @Assert\Unique
+
      */
     private $title;
 
     /**
      * @var \Games
      *
-     * @ORM\ManyToOne(targetEntity="Games")
-     * @ORM\JoinColumns({
+     * @ORM\ManyToOne(targetEntity="Games", cascade={"remove"} )
+     *
      *   @ORM\JoinColumn(name="game_id", referencedColumnName="id")
-     * })
+     *
      */
     private $game;
 

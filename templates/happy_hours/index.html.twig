@@ -20,8 +20,12 @@
                 <td>{{ happy_hour.id }}</td>
 
 
-                <td>{{ happy_hour.startDate ? happy_hour.startDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{  happy_hour.startDate ? happy_hour.startDate|date('Y-m-d H:i:s') : ''}}</td>
+
+
+
                 <td>{{ happy_hour.endDate ? happy_hour.endDate|date('Y-m-d H:i:s') : '' }}</td>
+
                 <td>
                     <a href="{{ path('app_happy_hours_show', {'id': happy_hour.id}) }}">show</a>
                     <a href="{{ path('app_happy_hours_edit', {'id': happy_hour.id}) }}">edit</a>

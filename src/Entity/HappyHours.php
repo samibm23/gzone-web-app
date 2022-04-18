@@ -26,26 +26,28 @@ class HappyHours
 
      /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="start_date", type="datetime", nullable=false)
+      *
+     * @ORM\Column(name="start_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
+      * @Assert\GreaterThanOrEqual("today")
 
      */
     private $startDate;
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="end_date", type="datetime", nullable=false)
-    
+     * @ORM\Column(name="end_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
+     * @Assert\GreaterThanOrEqual(propertyPath="startDate", message="la date fin doit etre superieurà la date de debut")
+
      */
     private $endDate;
 
     /**
      * @var \Badges
      *
-     * @ORM\ManyToOne(targetEntity="Badges")
-     * @ORM\JoinColumns({
+     * @ORM\ManyToOne(targetEntity="Badges", cascade={"remove"})
+     *
      *   @ORM\JoinColumn(name="badge_id", referencedColumnName="id")
-     * })
+     *
      */
     private $badge;
 
@@ -54,29 +56,39 @@ class HappyHours
         return $this->id;
     }
 
-    public function getStartDate(): ?\DateTimeInterface
+    /**
+     * @return \DateTime
+     */
+    public function getStartDate(): \DateTime
     {
         return $this->startDate;
     }
 
-    public function setStartDate(\DateTimeInterface $startDate): self
+    /**
+     * @param \DateTime $startDate
+     */
+    public function setStartDate(\DateTime $startDate): void
     {
         $this->startDate = $startDate;
-
-        return $this;
     }
 
-    public function getEndDate(): ?\DateTimeInterface
+    /**
+     * @return \DateTime
+     */
+    public function getEndDate(): \DateTime
     {
         return $this->endDate;
     }
 
-    public function setEndDate(\DateTimeInterface $endDate): self
+    /**
+     * @param \DateTime $endDate
+     */
+    public function setEndDate(\DateTime $endDate): void
     {
         $this->endDate = $endDate;
-
-        return $this;
     }
+
+
 
     public function getBadge(): ?Badges
     {
