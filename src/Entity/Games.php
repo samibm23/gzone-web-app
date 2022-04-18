@@ -86,7 +86,7 @@ class Games
     /**
      * @param string|null $photo_url
      */
-    public function setPhoto_Url(?string $photo_url): void
+    public function setPhotoUrl(?string $photo_url): void
     {
         $this->photo_url = $photo_url;
     }
