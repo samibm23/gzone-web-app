@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Users;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,7 +14,9 @@ class EditUserType extends AbstractType
     {
         $builder
             ->add('bio')
-            ->add('birth_date')
+            ->add('birth_date', DateType::class, [
+                'attr' => ['class' => 'js-datepicker'],
+            ]) 
             ->add('email')
             ->add('full_name')
             ->add('phone_number')

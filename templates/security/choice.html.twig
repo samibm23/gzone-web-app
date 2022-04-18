@@ -30,7 +30,7 @@
             <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
                 <div class="card col-lg-4 mx-auto">
                     <div class="card-body px-5 py-5">
-                        <h3 class="card-title text-center mb-3">Welcome {{ nom }}</h3>
+                        <h3 class="card-title text-center mb-3">Welcome {{ full_name }}</h3>
 
                         <form method="post">
                             <div class="form-group">
@@ -38,7 +38,7 @@
                             </div>
 
                             <div class="d-flex" style="margin-bottom: 20px;">
-                                <a class="btn btn-primary mr-2 col " href="{{ path('app_user_index') }}"><i class="mdi mdi-account-box"></i> Admin Panel </a>
+                                <a class="btn btn-primary mr-2 col " href="{{ path('app_users_index') }}"><i class="mdi mdi-account-box"></i> Admin Panel </a>
                                 <a class="btn btn-primary mr-2 col" href="{{ path('profile') }}"><i class="mdi mdi-arrow-right-bold-hexagon-outline"></i> Front panel </a>
                             </div>
                             <div class="text-center">

@@ -1,4 +1,4 @@
-{% extends 'front.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
 
@@ -92,16 +92,16 @@
                 <img src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png" width="40%" class="rounded-circle">
                  </div>
                 <div class="text-center mt-3"> <span class="bg-secondary p-1 px-4 rounded text-white">USER PROFILE</span>
-                    <h5 class="mt-2 mb-0">Welcome {{ user.nom ~ ' ' ~user.prenom}}</h5> <span>{{user.username}}</span>
+                    <h5 class="mt-2 mb-0">Welcome {{ user.fullName}}</h5> <span>{{user.username}}</span>
                     <div class="px-4 mt-1">
                         <ul>
                                         <li><span>Email :</span>{{ user.email }}</li>
-                                        <li><span>Nom :</span>{{ user.nom }}</li>
-                                        <li><span>Prenom :</span> {{ user.prenom }}</li>
-                                        <li><span>Numero de tel:</span> {{ user.numTel }}</li>
+                                        <li><span>Name :</span>{{ user.fullName }}</li>
+                                        
+                                        <li><span>Phone Number:</span> {{ user.phoneNumber }}</li>
                                         <li><span>Username:</span> {{ user.username }}</li>
-                                        <li><span>date de naissance :</span>{{ user.dateNaissance | date("d-m-Y")}}</li>
-                                        <li><span>adresse :</span>{{ user.adresse }}</li>
+                                        <li><span>Birthdate :</span>{{ user.birthDate | date("d-m-Y")}}</li>
+                                        <li><span>Bio :</span>{{ user.bio }}</li>
                                         
                     </div>
                    

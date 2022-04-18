@@ -249,9 +249,10 @@ class Users implements UserInterface
 
         return $this;
     }
-    public function getRoles(): ?string
+    public function getRoles(): array
     {
-        return $this->role;
+        $role = $this->role;
+        return explode(' ', $role);
     }
     public function getRole(): ?string
     {
@@ -276,7 +277,7 @@ class Users implements UserInterface
     }
     public function getUserIdentifier(): ?string
     {
-        return $this->fullName;
+        return $this->id;
     }
     
     public function __toString(): string

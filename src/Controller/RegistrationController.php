@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoder;
+
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class RegistrationController extends AbstractController
@@ -25,6 +25,7 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
         $date = new \DateTime('now'); 
         $user->setJoinDate($date);
+        $user->setRole("ROLE_USER");
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password

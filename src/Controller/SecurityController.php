@@ -20,7 +20,7 @@ class SecurityController extends AbstractController
         // }
 
         if ($this->getUser()) {
-            $hasAccess = in_array('ROLE_ADMIN', $this->getUser()->getRoles());
+            $hasAccess = in_array("ROLE_ADMIN", $this->getUser()->getRoles());
             if ($hasAccess) {
                 return $this->redirectToRoute('choice');
             } else {
