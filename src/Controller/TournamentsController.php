@@ -80,6 +80,10 @@ class TournamentsController extends AbstractController
     #[Route('/{id}', name: 'app_tournaments_delete', methods: ['POST'])]
     public function delete(Request $request, Tournaments $tournament, EntityManagerInterface $entityManager): Response
     {
+        if ($this->getUser()->getId() != $tournament->getAdmin()->getId()) {
+            return $this->redirectToRoute('app_tournaments_index', [], Response::HTTP_SEE_OTHER);
+        }
+        
         if ($this->isCsrfTokenValid('delete'.$tournament->getId(), $request->request->get('_token'))) {
             $entityManager->remove($tournament);
             $entityManager->flush();
