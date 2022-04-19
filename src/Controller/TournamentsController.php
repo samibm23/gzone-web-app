@@ -59,6 +59,9 @@ class TournamentsController extends AbstractController
     #[Route('/{id}/edit', name: 'app_tournaments_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Tournaments $tournament, EntityManagerInterface $entityManager): Response
     {
+        if ($this->getUser()->getId() != $tournament->getAdmin()->getId()) {
+            return $this->redirectToRoute('app_tournaments_index', [], Response::HTTP_SEE_OTHER);
+        }
         $form = $this->createForm(TournamentsType::class, $tournament);
         $form->handleRequest($request);
 
