@@ -59,6 +59,9 @@ class CommentsController extends AbstractController
     #[Route('/{id}/edit', name: 'app_comments_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Comments $comment, EntityManagerInterface $entityManager): Response
     {
+        if ($this->getUser()->getId() != $comment->getCommenter()->getId()) {
+            return $this->redirectToRoute('app_comments_index', [], Response::HTTP_SEE_OTHER);
+        }
         $form = $this->createForm(CommentsType::class, $comment);
         $form->handleRequest($request);
 
@@ -77,6 +80,9 @@ class CommentsController extends AbstractController
     #[Route('/{id}', name: 'app_comments_delete', methods: ['POST'])]
     public function delete(Request $request, Comments $comment, EntityManagerInterface $entityManager): Response
     {
+        if ($this->getUser()->getId() != $comment->getCommenter()->getId()) {
+            return $this->redirectToRoute('app_comments_index', [], Response::HTTP_SEE_OTHER);
+        }
         if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
             $entityManager->remove($comment);
             $entityManager->flush();

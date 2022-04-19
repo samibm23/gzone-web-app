@@ -58,7 +58,11 @@ class PostsController extends AbstractController
 
     #[Route('/{id}/edit', name: 'app_posts_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Posts $post, EntityManagerInterface $entityManager): Response
+
     {
+        if ($this->getUser()->getId() != $post->getPoster()->getId()) {
+            return $this->redirectToRoute('app_posts_index', [], Response::HTTP_SEE_OTHER);
+        }
         $form = $this->createForm(PostsType::class, $post);
         $form->handleRequest($request);
 
@@ -77,6 +81,9 @@ class PostsController extends AbstractController
     #[Route('/{id}', name: 'app_posts_delete', methods: ['POST'])]
     public function delete(Request $request, Posts $post, EntityManagerInterface $entityManager): Response
     {
+        if ($this->getUser()->getId() != $post->getPoster()->getId()) {
+            return $this->redirectToRoute('app_posts_index', [], Response::HTTP_SEE_OTHER);
+        }
         if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->request->get('_token'))) {
             $entityManager->remove($post);
             $entityManager->flush();
