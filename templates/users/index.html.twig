@@ -1,0 +1,56 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}Users{% endblock %}
+
+{% block body %}
+    <h1>Users </h1>
+
+    <table class="table" style="color: whitesmoke;">
+   
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>PhoneNumber</th>
+                <th>Email</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>PhotoUrl</th>
+                <th>FullName</th>
+                <th>Bio</th>
+                <th>BirthDate</th>
+                <th>JoinDate</th>
+                <th>Invitable</th>
+                <th>Role</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.phoneNumber }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.password }}</td>
+                <td>{{ user.photoUrl }}</td>
+                <td>{{ user.fullName }}</td>
+                <td>{{ user.bio }}</td>
+                <td>{{ user.birthDate ? user.birthDate|date('Y-m-d') : '' }}</td>
+                <td>{{ user.joinDate ? user.joinDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ user.invitable ? 'Yes' : 'No' }}</td>
+                <td>{{ user.role }}</td>
+                <td>
+                    <a href="{{ path('app_users_show', {'id': user.id}) }}">show</a>
+                    <a href="{{ path('app_users_edit', {'id': user.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="13">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_register') }}" >Create new</a>
+{% endblock %}

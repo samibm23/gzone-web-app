@@ -68,5 +68,73 @@ class UserLikesDislikes
      */
     private $comment;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getLike(): ?bool
+    {
+        return $this->like;
+    }
+
+    public function setLike(bool $like): self
+    {
+        $this->like = $like;
+
+        return $this;
+    }
+
+    public function getUser(): ?Users
+    {
+        return $this->user;
+    }
+
+    public function setUser(?Users $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getPost(): ?Posts
+    {
+        return $this->post;
+    }
+
+    public function setPost(?Posts $post): self
+    {
+        $this->post = $post;
+
+        return $this;
+    }
+
+    public function getStore(): ?Stores
+    {
+        return $this->store;
+    }
+
+    public function setStore(?Stores $store): self
+    {
+        $this->store = $store;
+
+        return $this;
+    }
+
+    public function getComment(): ?Comments
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?Comments $comment): self
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+    public function __toString(): string
+    {
+        return $this->like. " | " . $this->dislike;
+    }
 
 }

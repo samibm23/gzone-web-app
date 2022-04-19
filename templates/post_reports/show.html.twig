@@ -1,0 +1,22 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}PostReports{% endblock %}
+
+{% block body %}
+    <h1>PostReports</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ post_report.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_post_reports_index') }}">back to list</a>
+
+    <a href="{{ path('app_post_reports_edit', {'id': post_report.id}) }}">edit</a>
+
+    {{ include('post_reports/_delete_form.html.twig') }}
+{% endblock %}

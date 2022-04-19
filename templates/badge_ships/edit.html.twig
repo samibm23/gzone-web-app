@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit BadgeShips{% endblock %}
+
+{% block body %}
+    <h1>Edit BadgeShips</h1>
+
+    {{ include('badge_ships/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_badge_ships_index') }}">back to list</a>
+
+    {{ include('badge_ships/_delete_form.html.twig') }}
+{% endblock %}

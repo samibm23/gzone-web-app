@@ -1,0 +1,29 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}HappyHours{% endblock %}
+
+{% block body %}
+    <h1>HappyHours</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ happy_hour.id }}</td>
+            </tr>
+            <tr>
+                <th>StartDate</th>
+                <td>{{  happy_hour.startDate ? happy_hour.startDate|date('Y-m-d H:i:s') : ''}}</td>
+
+            </tr>
+            <tr>
+                <th>EndDate</th>
+                <td>{{ happy_hour.endDate ? happy_hour.endDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_happy_hours_index') }}">back to list</a>
+
+
+{% endblock %}

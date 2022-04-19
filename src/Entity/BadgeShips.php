@@ -41,5 +41,37 @@ class BadgeShips
      */
     private $user;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getBadge(): ?Badges
+    {
+        return $this->badge;
+    }
+
+    public function setBadge(?Badges $badge): self
+    {
+        $this->badge = $badge;
+
+        return $this;
+    }
+
+    public function getUser(): ?Users
+    {
+        return $this->user;
+    }
+
+    public function setUser(?Users $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+    public function __toString(): string
+    {
+        return $this->badge;
+    }
 
 }

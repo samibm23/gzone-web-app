@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New TournamentReports{% endblock %}
+
+{% block body %}
+    <h1>Create new TournamentReports</h1>
+
+    {{ include('tournament_reports/_form.html.twig') }}
+
+    <a href="{{ path('app_tournament_reports_index') }}">back to list</a>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}UserGamePreferences index{% endblock %}
+
+{% block body %}
+    <h1>UserGamePreferences index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user_game_preference in user_game_preferences %}
+            <tr>
+                <td>{{ user_game_preference.id }}</td>
+                <td>
+                    <a href="{{ path('app_user_game_preferences_show', {'id': user_game_preference.id}) }}">show</a>
+                    <a href="{{ path('app_user_game_preferences_edit', {'id': user_game_preference.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_user_game_preferences_new') }}">Create new</a>
+{% endblock %}

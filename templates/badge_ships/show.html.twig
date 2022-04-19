@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BadgeShips{% endblock %}
+
+{% block body %}
+    <h1>BadgeShips</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ badge_ship.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_badge_ships_index') }}">back to list</a>
+
+    <a href="{{ path('app_badge_ships_edit', {'id': badge_ship.id}) }}">edit</a>
+
+    {{ include('badge_ships/_delete_form.html.twig') }}
+{% endblock %}

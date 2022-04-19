@@ -1,0 +1,33 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}StoreReports index{% endblock %}
+
+{% block body %}
+    <h1>StoreReports index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for store_report in store_reports %}
+            <tr>
+                <td>{{ store_report.id }}</td>
+                <td>
+                    <a href="{{ path('app_store_reports_show', {'id': store_report.id}) }}">show</a>
+                    <a href="{{ path('app_store_reports_edit', {'id': store_report.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_store_reports_new') }}">Create new</a>
+{% endblock %}

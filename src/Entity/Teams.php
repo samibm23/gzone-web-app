@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,13 +27,15 @@ class Teams
      * @var string|null
      *
      * @ORM\Column(name="photo_url", type="string", length=500, nullable=true, options={"default"="NULL"})
+     *  @Assert\NotBlank(message="photo url is required")
      */
-    private $photoUrl = 'NULL';
+    private $photoUrl;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="name is required")
      */
     private $name;
 
@@ -39,8 +43,9 @@ class Teams
      * @var string|null
      *
      * @ORM\Column(name="description", type="string", length=500, nullable=true, options={"default"="NULL"})
+     * @Assert\NotBlank(message="description is required")
      */
-    private $description = 'NULL';
+    private $description;
 
     /**
      * @var int
@@ -68,7 +73,7 @@ class Teams
      *
      * @ORM\Column(name="create_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
      */
-    private $createDate = 'current_timestamp()';
+    private $createDate;
 
     /**
      * @var \Users
@@ -89,6 +94,123 @@ class Teams
      * })
      */
     private $game;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getPhotoUrl(): ?string
+    {
+        return $this->photoUrl;
+    }
+
+    public function setPhotoUrl(?string $photoUrl): self
+    {
+        $this->photoUrl = $photoUrl;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getTeamSize(): ?int
+    {
+        return $this->teamSize;
+    }
+
+    public function setTeamSize(int $teamSize): self
+    {
+        $this->teamSize = $teamSize;
+
+        return $this;
+    }
+
+    public function getRequestable(): ?bool
+    {
+        return $this->requestable;
+    }
+
+    public function setRequestable(bool $requestable): self
+    {
+        $this->requestable = $requestable;
+
+        return $this;
+    }
+
+    public function getInvitable(): ?bool
+    {
+        return $this->invitable;
+    }
+
+    public function setInvitable(bool $invitable): self
+    {
+        $this->invitable = $invitable;
+
+        return $this;
+    }
+
+    public function getCreateDate(): ?\DateTimeInterface
+    {
+        return $this->createDate;
+    }
+
+    public function setCreateDate(\DateTimeInterface $createDate): self
+    {
+        $this->createDate = $createDate;
+
+        return $this;
+    }
+
+    public function getAdmin(): ?Users
+    {
+        return $this->admin;
+    }
+
+    public function setAdmin(?Users $admin): self
+    {
+        $this->admin = $admin;
+
+        return $this;
+    }
+
+    public function getGame(): ?Games
+    {
+        return $this->game;
+    }
+
+    public function setGame(?Games $game): self
+    {
+        $this->game = $game;
+
+        return $this;
+    }
+    public function __toString(): string
+    {
+        return $this->name;
+    }
 
 
 }

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Posts
@@ -22,7 +23,7 @@ class Posts
     private $id;
 
     /**
-     * @var bool
+     * @var boolean
      *
      * @ORM\Column(name="resolved", type="boolean", nullable=false)
      */
@@ -32,6 +33,8 @@ class Posts
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=500, nullable=false)
+     * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
+     * 
      */
     private $title;
 
@@ -39,6 +42,7 @@ class Posts
      * @var string
      *
      * @ORM\Column(name="content", type="string", length=2555, nullable=false)
+     * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
      */
     private $content;
 
@@ -46,15 +50,17 @@ class Posts
      * @var string|null
      *
      * @ORM\Column(name="tags", type="string", length=255, nullable=true, options={"default"="NULL"})
+     
      */
-    private $tags = 'NULL';
+    private $tags;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="post_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
+     * @Assert\GreaterThanOrEqual("today")
      */
-    private $postDate = 'current_timestamp()';
+    private $postDate;
 
     /**
      * @var \Users
@@ -63,8 +69,90 @@ class Posts
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="poster_id", referencedColumnName="id")
      * })
+     * 
      */
     private $poster;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getResolved(): ?bool
+    {
+        return $this->resolved;
+    }
+
+    public function setResolved(bool $resolved): self
+    {
+        $this->resolved = $resolved;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    public function getTags(): ?string
+    {
+        return $this->tags;
+    }
+
+    public function setTags(?string $tags): self
+    {
+        $this->tags = $tags;
+
+        return $this;
+    }
+
+    public function getPostDate(): ?\DateTimeInterface
+    {
+        return $this->postDate;
+    }
+
+    public function setPostDate(\DateTimeInterface $postDate): self
+    {
+        $this->postDate = $postDate;
+
+        return $this;
+    }
+
+    public function getPoster(): ?Users
+    {
+        return $this->poster;
+    }
+
+    public function setPoster(?Users $poster): self
+    {
+        $this->poster = $poster;
+
+        return $this;
+    }
+    
+    public function __toString(): string
+    {
+        return $this->title;
+    }
 
 }

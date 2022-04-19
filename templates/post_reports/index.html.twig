@@ -1,0 +1,33 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}PostReports index{% endblock %}
+
+{% block body %}
+    <h1>PostReports index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for post_report in post_reports %}
+            <tr>
+                <td>{{ post_report.id }}</td>
+                <td>
+                    <a href="{{ path('app_post_reports_show', {'id': post_report.id}) }}">show</a>
+                    <a href="{{ path('app_post_reports_edit', {'id': post_report.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_post_reports_new') }}">Create new</a>
+{% endblock %}

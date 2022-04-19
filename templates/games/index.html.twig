@@ -1,0 +1,44 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Games index{% endblock %}
+
+{% block body %}
+    <h1>Games </h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for game in games %}
+            <tr>
+                <td>{{ game.id }}</td>
+                <td>{{ game.name }}</td>
+                <td><img style="height: 100px; width: 100px" src="{{ asset('images/games/'~game.photo_url) }}" ></td>
+                <td>{{ game.description }}</td>
+                <td>
+                    <a href="{{ path('app_games_show', {'id': game.id}) }}">show</a>
+                    <a href="{{ path('app_games_edit', {'id': game.id}) }}">edit</a>
+                    <form method="post" action="{{ path('app_games_delete', {'id': game.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ game.id) }}">
+                        <button class="btn">Delete</button>
+                    </form>
+
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_games_new') }}">Create new</a>
+{% endblock %}

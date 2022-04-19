@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New MarketItemReports{% endblock %}
+
+{% block body %}
+    <h1>Create new MarketItemReports</h1>
+
+    {{ include('market_item_reports/_form.html.twig') }}
+
+    <a href="{{ path('app_market_item_reports_index') }}">back to list</a>
+{% endblock %}

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,6 +25,7 @@ class Matches
      * @var \DateTime
      *
      * @ORM\Column(name="start_time", type="datetime", nullable=false)
+     * @Assert\GreaterThanOrEqual("today")
      */
     private $startTime;
 
@@ -32,6 +33,7 @@ class Matches
      * @var int|null
      *
      * @ORM\Column(name="round", type="integer", nullable=true, options={"default"="NULL"})
+     * 
      */
     private $round = NULL;
 
@@ -75,5 +77,86 @@ class Matches
      */
     private $winnerTeam;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getStartTime(): ?\DateTimeInterface
+    {
+        return $this->startTime;
+    }
+
+    public function setStartTime(\DateTimeInterface $startTime): self
+    {
+        $this->startTime = $startTime;
+
+        return $this;
+    }
+
+    public function getRound(): ?int
+    {
+        return $this->round;
+    }
+
+    public function setRound(?int $round): self
+    {
+        $this->round = $round;
+
+        return $this;
+    }
+
+    public function getTournament(): ?Tournaments
+    {
+        return $this->tournament;
+    }
+
+    public function setTournament(?Tournaments $tournament): self
+    {
+        $this->tournament = $tournament;
+
+        return $this;
+    }
+
+    public function getTeam2(): ?Teams
+    {
+        return $this->team2;
+    }
+
+    public function setTeam2(?Teams $team2): self
+    {
+        $this->team2 = $team2;
+
+        return $this;
+    }
+
+    public function getTeam1(): ?Teams
+    {
+        return $this->team1;
+    }
+
+    public function setTeam1(?Teams $team1): self
+    {
+        $this->team1 = $team1;
+
+        return $this;
+    }
+
+    public function getWinnerTeam(): ?Teams
+    {
+        return $this->winnerTeam;
+    }
+
+    public function setWinnerTeam(?Teams $winnerTeam): self
+    {
+        $this->winnerTeam = $winnerTeam;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->team1 . " vs " . $this->team2;
+    }
 
 }

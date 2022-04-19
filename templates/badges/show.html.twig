@@ -1,0 +1,25 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Badges{% endblock %}
+
+{% block body %}
+    <h1>Badges</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ badge.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ badge.title }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_badges_index') }}">back to list</a>
+
+
+    {{ include('badges/_delete_form.html.twig') }}
+{% endblock %}

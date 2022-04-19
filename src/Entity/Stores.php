@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Acme\CascadeBundle\Entity;
 
 /**
  * Stores
@@ -25,6 +27,8 @@ class Stores
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
+     * 
      */
     private $name;
 
@@ -35,6 +39,7 @@ class Stores
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
      * })
+     * 
      */
     private $owner;
 
@@ -47,6 +52,52 @@ class Stores
      * })
      */
     private $game;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getOwner(): ?Users
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?Users $owner): self
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function getGame(): ?Games
+    {
+        return $this->game;
+    }
+
+    public function setGame(?Games $game): self
+    {
+        $this->game = $game;
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
+    }
 
 
 }

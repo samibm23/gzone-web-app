@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Posts{% endblock %}
+
+{% block body %}
+    <h1>Posts</h1>
+    <a href={{ path('app_comments_new') }} target="modal">Comment</a>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ post.id }}</td>
+            </tr>
+            <tr>
+                <th>Resolved</th>
+                <td>{{ post.resolved ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ post.title }}</td>
+            </tr>
+            <tr>
+                <th>Content</th>
+                <td>{{ post.content }}</td>
+            </tr>
+            <tr>
+                <th>Tags</th>
+                <td>{{ post.tags }}</td>
+            </tr>
+            <tr>
+                <th>PostDate</th>
+                <td>{{ post.postDate ? post.postDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_posts_index') }}">back to list</a>
+
+    <a href="{{ path('app_posts_edit', {'id': post.id}) }}">edit</a>
+
+    {{ include('posts/_delete_form.html.twig') }}
+{% endblock %}
