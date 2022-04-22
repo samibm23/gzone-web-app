@@ -36,7 +36,7 @@ class HappyHours
     /**
      * @var \DateTime
      * @ORM\Column(name="end_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
-     * @Assert\GreaterThanOrEqual(propertyPath="startDate", message="la date fin doit etre superieurà la date de debut")
+     * @Assert\GreaterThanOrEqual(propertyPath="startDate", message="the End Date should be greater than Start date")
 
      */
     private $endDate;

@@ -34,7 +34,6 @@ class Badges
      *      minMessage = "Your description must be at least {{ 2 }} characters long",
      *      maxMessage = "Your description cannot be longer than {{ 50 }} characters"
      * )
-     *      @Assert\Unique
 
      */
     private $title;

@@ -124,6 +124,6 @@ class GamesController extends AbstractController
         return $this->redirectToRoute('app_games_index', [], Response::HTTP_SEE_OTHER);
     }
 
-   
+  
 
 }
