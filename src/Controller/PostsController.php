@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Snipe\BanBuilder\CensorWords;
+
 
 #[Route('/posts')]
 class PostsController extends AbstractController
@@ -36,7 +38,12 @@ class PostsController extends AbstractController
         $date = new \DateTime('now'); 
         $post->setPostDate($date);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
+            $Postcontent =$form->get('content')->getData();
+            $censor = new CensorWords;
+            $string = $censor->censorString($Postcontent);
+            $post->setContent($string['clean']);
             $entityManager->persist($post);
             $entityManager->flush();
 

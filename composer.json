@@ -41,6 +41,7 @@
         "symfony/web-link": "5.4.*",
         "symfony/yaml": "5.4.*",
         "twig/extra-bundle": "^2.12|^3.0",
+        "snipe/banbuilder": "dev-master",
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
@@ -58,6 +59,7 @@
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "symfony/flex": true,
+            "endroid/installer": true,
             "symfony/runtime": true
         },
         "optimize-autoloader": true,
