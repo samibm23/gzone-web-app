@@ -114,7 +114,7 @@ class UsersController extends AbstractController
      */
     public function edit(Request $request, Users $user, UsersRepository $userRepository): Response
     {
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UsersType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
