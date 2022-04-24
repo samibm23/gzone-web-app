@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Data\SearchData;
 use App\Entity\Users;
-use App\Form\SearchForm;
+use App\Form\SearchFormType;
 use App\Form\UsersType;
 use App\Form\ProfileType;
 use App\Form\EditUserType;
@@ -52,7 +52,6 @@ class UsersController extends AbstractController
         }
     }
 
-
     /**
      * @Route("/profile/edit", name="edit_profile", methods={"GET" , "POST" })
      */
@@ -76,8 +75,6 @@ class UsersController extends AbstractController
         ]);
     }
 
-
-
     /**
     
      * @Route("/", name="app_users_index", methods={"GET"})
@@ -85,7 +82,7 @@ class UsersController extends AbstractController
     public function index(UsersRepository $userRepository, Request $request): Response
     {
         $data = new SearchData();
-        $form = $this->createForm(SearchForm::class, $data);
+        $form = $this->createForm(SearchFormType::class, $data);
         $form->handleRequest($request);
         $users = $userRepository->findSearch($data);
 
@@ -94,8 +91,6 @@ class UsersController extends AbstractController
             'users' => $users, 'form' => $form->createView()
         ]);
     }
-
-
 
     /**
      * @IsGranted("ROLE_ADMIN")

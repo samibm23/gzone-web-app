@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Form;
 
 use App\Data\SearchData;
@@ -11,10 +10,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Repository\ProductsRepository;
-
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-class SearchForm extends AbstractType
+
+class SearchFormType extends AbstractType
 {
 
 
@@ -26,21 +25,15 @@ class SearchForm extends AbstractType
                 'method'     => 'GET',
                 'csrf_protection' => false,
                 'user'=>null
-             
-
         ]);
     }
 
     public function fetBlockPrefix(){
-
         return '';
     }
 
-
-    
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-    
         $builder
         ->add('q', TextType::class, [
             'label' => false,
@@ -55,11 +48,6 @@ class SearchForm extends AbstractType
             'attr' => [
                 'placeholder' => 'entrez le Prenom'
             ]
-        ])
-
-
-        ;
-
-
+        ]);
     }
 }

@@ -18,8 +18,6 @@ class TournamentsType extends AbstractType
             ->add('teamSize')
             ->add('requestable')
             ->add('approved')
-         
-            ->add('admin')
             ->add('game')
         ;
     }
