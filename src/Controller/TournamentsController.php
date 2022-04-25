@@ -30,6 +30,7 @@ class TournamentsController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $tournament = new Tournaments();
+        $tournament->setAdmin($this->getUser());
         $form = $this->createForm(TournamentsType::class, $tournament);
         $form->handleRequest($request);
         $date = new \DateTime('now'); 
