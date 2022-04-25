@@ -33,7 +33,7 @@ class CommentsController extends AbstractController
         $form = $this->createForm(CommentsType::class, $comment);
         $form->handleRequest($request);
         $date = new \DateTime('now'); 
-        $commentDate->setCommentDate($date);
+        $comment->setCommentDate($date);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($comment);
