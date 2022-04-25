@@ -100,7 +100,7 @@ class SecurityController extends AbstractController
                 ->subject('PASSWORD RESET')
                 ->htmlTemplate('security/reset_email.html.twig')
                 ->context([
-                    'fullname' => $user->getFirstname() . " " .$user->getLastname(),
+                    'fullname' => $user->getFullName(),
                     'url' => $url,
                 ]);
 
@@ -122,7 +122,7 @@ class SecurityController extends AbstractController
     {
         // search for user with the token
         $user = new Users();
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['reset_token' =>$token]);
+        $user = $this->getDoctrine()->getRepository(Users::class)->findOneBy(['reset_token' =>$token]);
 
         if ( !$user ){
             $this->addFlash('danger' , 'token not existing');

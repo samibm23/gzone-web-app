@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-
+use Knp\Component\Pager\PaginatorInterface;
 /**
  * @Route("/user")
  */
@@ -51,7 +51,14 @@ class UsersController extends AbstractController
             return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
         }
     }
-
+      /**
+     * @Route("/listDQL", name="app_users_listDql")
+     */
+    function orderByNameDQL(UsersRepository $userRepository): Response
+    {
+        $users = $userRepository->getRepository(Users::class)->orderByName();
+        return $this->render('users/index.html.twig', array("users" => $users));
+    }
 
     /**
      * @Route("/profile/edit", name="edit_profile", methods={"GET" , "POST" })
@@ -82,13 +89,20 @@ class UsersController extends AbstractController
     
      * @Route("/", name="app_users_index", methods={"GET"})
      */
-    public function index(UsersRepository $userRepository, Request $request): Response
+    public function index(UsersRepository $userRepository, Request $request,PaginatorInterface $paginator): Response
     {
         $data = new SearchData();
         $form = $this->createForm(SearchForm::class, $data);
         $form->handleRequest($request);
         $users = $userRepository->findSearch($data);
-
+        $users = $paginator->paginate(
+            // Doctrine Query, not results
+            $users,
+            // Define the page parameter
+            $request->query->getInt('page', 1),
+            // Items per page
+            3
+        );
 
         return $this->render('users/index.html.twig', [
             'users' => $users, 'form' => $form->createView()
