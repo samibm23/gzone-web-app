@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Snipe\BanBuilder\CensorWords;
+use App\Entity\UserLikesDislikes;
 
 
 #[Route('/posts')]
@@ -27,6 +28,7 @@ class PostsController extends AbstractController
 
         return $this->render('posts/index.html.twig', [
             'posts' => $posts,
+            'this' => $this,
         ]);
     }
 
@@ -59,10 +61,12 @@ class PostsController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_posts_show', methods: ['GET'])]
-    public function show(Posts $post): Response
+    public function show(Posts $post, EntityManagerInterface $entityManager): Response
     {
+        $likes = $entityManager->getRepository(UserLikesDislikes::class)->findAll(['post_id' => $post->getId(), 'like' => 1]);
         return $this->render('posts/show.html.twig', [
             'post' => $post,
+            'likes' => $likes,
         ]);
     }
 
