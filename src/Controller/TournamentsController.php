@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 use App\Security\EmailVerifier;
+use Symfony\Component\Mime\Address;
 use App\Entity\Tournaments;
+use App\Entity\Users;
 use App\Form\TournamentsType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,46 +37,35 @@ class TournamentsController extends AbstractController
 
     #[Route('/new', name: 'app_tournaments_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    {        
+        $user = $this->getUser(); 
         $tournament = new Tournaments();
         $form = $this->createForm(TournamentsType::class, $tournament);
         $form->handleRequest($request);
         $date = new \DateTime('now'); 
         $tournament->setCreateDate($date);
-
-
-       
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $form->getData();
+        if ($form->isSubmitted() && $form->isValid()) {           
             $entityManager->persist($tournament);
             $entityManager->flush();
-
              // generate a signed url and email it to the user
-             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+             $this->emailVerifier->sendEmailConfirmation('tournament_email', $user,
              (new TemplatedEmail())
                  ->from(new Address('appgzone@gmail.com', 'Gzone App'))
-                 ->to($user->getEmail())
+                 ->to('mahdi3soussi@gmail.com')
                  ->subject('Please Confirm your Email')
                  ->htmlTemplate('TournamentConfirmation/confirmation_TR.html.twig')
-         );
-         
-            
-
-            
+         );            
             return $this->redirectToRoute('app_tournaments_index', [], Response::HTTP_SEE_OTHER);
         }
-
-
         return $this->renderForm('tournaments/new.html.twig', [
             'tournament' => $tournament,
             'form' => $form,
         ]);
     }
  /**
-     * @Route("/verify/email", name="app_verify_email")
+     * @Route("/verify/tournament", name="tournament_email")
      */
-    public function verifyUserEmail(Request $request): Response
+    public function TournamentEmail(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -83,13 +75,13 @@ class TournamentsController extends AbstractController
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $exception->getReason());
 
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('app_tournaments_show');
         }
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Your email address has been verified.');
 
-        return $this->redirectToRoute('app_login');
+        return $this->redirectToRoute('app_tournaments_show');
     }
     #[Route('/{id}', name: 'app_tournaments_show', methods: ['GET'])]
     public function show(Tournaments $tournament): Response
