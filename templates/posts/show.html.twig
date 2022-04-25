@@ -31,6 +31,10 @@
                 <th>PostDate</th>
                 <td>{{ post.postDate ? post.postDate|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
+            <tr>
+                <th>Action</th>
+                <td><a href="{{ path('app_posts_like', {'id': post.id}) }}">Like</a> | <a href="{{ path('app_posts_dislike', {'id': post.id}) }}">Dislike</a></td>
+            </tr>
         </tbody>
     </table>
 

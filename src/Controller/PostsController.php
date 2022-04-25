@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Posts;
+use App\Entity\Users;
+use App\Entity\UserLikesDislikes;
 use App\Form\PostsType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -62,6 +64,58 @@ class PostsController extends AbstractController
         return $this->render('posts/show.html.twig', [
             'post' => $post,
         ]);
+    }
+
+    #[Route('/like/{id}', name: 'app_posts_like', methods: ['GET'])]
+    public function like(Request $req, Posts $post, EntityManagerInterface $entityManager): Response
+    {
+        $userLike = $entityManager->getRepository(UserLikesDislikes::class)->findOneBy(["post" => $post, "user" => $this->getUser()]);
+        if ($userLike != null)
+        {
+            if ($userLike->getLike()) {
+                $entityManager->remove($userLike);
+            } else {
+                $userLike->setLike(true);
+                $entityManager->flush();
+            }
+        }
+        else
+        {
+            $userLike = new UserLikesDislikes();
+            $userLike->setUser($this->getUser());
+            $userLike->setPost($post);
+            $userLike->setLike(true);
+            $entityManager->persist($userLike);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_posts_show', ["id" => $req->get('id')]);
+    }
+
+    #[Route('/dislike/{id}', name: 'app_posts_dislike', methods: ['GET'])]
+    public function dislike(Request $req, Posts $post, EntityManagerInterface $entityManager): Response
+    {
+        $userLike = $entityManager->getRepository(UserLikesDislikes::class)->findOneBy(["post" => $post, "user" => $this->getUser()]);
+        if ($userLike != null)
+        {
+            if ($userLike->getLike() == false) {
+                $entityManager->remove($userLike);
+            } else {
+                $userLike->setLike(false);
+                $entityManager->flush();
+            }
+        }
+        else
+        {
+            $userLike = new UserLikesDislikes();
+            $userLike->setUser($this->getUser());
+            $userLike->setPost($post);
+            $userLike->setLike(false);
+            $entityManager->persist($userLike);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_posts_show', ["id" => $req->get('id')]);
     }
 
     #[Route('/{id}/edit', name: 'app_posts_edit', methods: ['GET', 'POST'])]
