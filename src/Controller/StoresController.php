@@ -10,8 +10,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
 // Include paginator interface
-use Knp\Component\Pager\PaginatorInterface;
+
 
 use \Twilio\Rest\Client;
 
@@ -20,21 +21,17 @@ class StoresController extends AbstractController
 {
     private $twilio;
 
+
+
+
+
     #[Route('/', name: 'app_stores_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager,PaginatorInterface $paginator, Request $request): Response
+    public function index(EntityManagerInterface $entityManager): Response
     {
         $stores = $entityManager
             ->getRepository(Stores::class)
             ->findAll();
-        // Paginate the results of the query
-        $stores = $paginator->paginate(
-        // Doctrine Query, not results
-            $stores,
-            // Define the page parameter
-            $request->query->getInt('page', 1),
-            // Items per page
-            5
-        );
+
 
         return $this->render('stores/index.html.twig', [
             'stores' => $stores,
@@ -44,8 +41,13 @@ class StoresController extends AbstractController
 
     #[Route('/new', name: 'app_stores_new', methods: ['GET', 'POST'])]
 
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+
+
+
+
+
+public function new(Request $request, EntityManagerInterface $entityManager,Client $twilio)
+    { $this->twilio = $twilio;
         $store = new Stores();
         $form = $this->createForm(StoresType::class, $store);
         $form->handleRequest($request);
@@ -67,12 +69,16 @@ class StoresController extends AbstractController
 
         foreach($entityManager->getRepository(Users::class)->findAll() as $user) {
             $twilio->messages->create(
-            $user->getPhoneNumber(), // Text any number
+            "+216" , $user->getPhoneNumber(), // Text any number
             array(
                 'from' => '+19378263094', // From a Twilio number in your account
                 'body' => "Bonjour , un nouveau store a été crée "
             )
         );
+           
+
+
+
         }
 
         return new Response("Sent messages ");
