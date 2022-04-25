@@ -195,6 +195,10 @@ Additional Classes:
                                 </div>
 
                                 <div class="nk-post-by">
+                                    <a href="action.php?t=like&id=">Like</a>
+                                    <br>
+                                    <a href="#">Dislike</a>
+
                                 </div>
                             </div>
                         </div>
@@ -208,28 +212,23 @@ Additional Classes:
 
 
 
-                  {#<!-- START: Pagination -->
+                  <!-- START: Pagination -->
                     <div class="nk-pagination nk-pagination-center">
                         <a href="#" class="nk-pagination-prev">
                             <span class="ion-ios-arrow-back"></span>
                         </a>
                         <nav>
-                            <a class="nk-pagination-current" href="#">1</a>
-                            <a href="#">2</a>
-                            <a href="#">3</a>
-                            <a href="#">4</a>
-                            <span>...</span>
-                            <a href="#">14</a>
+                            <a class="nk-pagination-current" href="{{ knp_pagination_render(games) }}">1</a>
+
                         </nav>
                         <a href="#" class="nk-pagination-next">
-                            <span class="ion-ios-arrow-forward"></span>
                         </a>
                     </div>
-                    <!-- END: Pagination -->#}
+                    <!-- END: Pagination -->
                 </div>
-                <!-- END: Posts List -->
 
-            </div>
+                <!-- END: Posts List -->
+                
             <div class="col-lg-4">
                 <!--
                     START: Sidebar
@@ -244,7 +243,7 @@ Additional Classes:
                         <div class="nk-widget-content">
                             <form action="#" class="nk-form nk-form-style-1" novalidate="novalidate">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="Type something...">
+                                    <input type="text" id="search" class="form-control" placeholder="Type something...">
                                     <button class="nk-btn nk-btn-color-main-1"><span class="ion-search"></span></button>
                                 </div>
                             </form>

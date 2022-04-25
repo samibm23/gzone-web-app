@@ -81,4 +81,13 @@ class Badges
         return $this->title;
     }
 
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+    
+
 }

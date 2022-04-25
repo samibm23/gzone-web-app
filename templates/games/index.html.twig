@@ -3,19 +3,29 @@
 {% block title %}Games index{% endblock %}
 
 {% block body %}
-    <h1>Games </h1>
+    <link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
+    <script src="//code.jquery.com/jquery.js"></script>
+    <script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
+    <!-- Include Flashy default partial -->
+    {{ include('@MercurySeriesFlashy/flashy.html.twig') }}
 
-    <table class="table">
+
+    <h1>Games </h1>
+    <script src="{{ asset('admin/js/jquery.min.js') }}"></script>
+    <input type="text" id="search" class="form-control form-control-no-border mr-sm-2" placeholder=" search">
+
+    <table class="table table-bordered dataTable" id="t"   role="grid" aria-describedby="dataTable_info" style="width: 100%;">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Image</th>
-                <th>Description</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Description</th>
+            <th>actions</th>
+        </tr>
         </thead>
         <tbody>
+
         {% for game in games %}
             <tr>
                 <td>{{ game.id }}</td>
@@ -32,12 +42,40 @@
 
                 </td>
             </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
+
+      {#<script>
+                $(document).ready(function(){
+                    $('#search').keyup(function(){
+                        search_table($(this).val());
+                    });
+                    function search_table(value){
+                        $('#t tbody tr').each(function(){
+                            var found = 'false';
+                            $(this).each(function(){
+                                if($(this).text().toLowerCase().indexOf(value.toLowerCase()) >= 0)
+                                {
+                                    found = 'true';
+                                }
+                            });
+                            if(found == 'true')
+                            {
+                                $(this).show();
+
+                            }
+                            else
+                            {
+                                $(this).hide();
+
+                            }
+                        });
+                    }
+                });
+            </script>
+       #}
         {% endfor %}
         </tbody>
+
+
     </table>
 
     <a href="{{ path('app_games_new') }}">Create new</a>

@@ -3,21 +3,26 @@
 namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Games;
 
 #[Route('/games/front')]
 class FrontController extends AbstractController
 {
     #[Route('/', name: 'app_front', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(Request $request, PaginatorInterface $paginator): Response
     {
 
-        $games = $entityManager
-            ->getRepository(Games::class)
-            ->findAll();
+          $repository=$this->getDoctrine()->getRepository(Games::class);
+            $games= $repository->findAll();
+            $games = $paginator->paginate(
+            $games,
+            $request->query->getInt('page', 1), 2
+        );
         return $this->render('front/index.html.twig', [
             'games' => $games,
                 ]);
@@ -29,5 +34,7 @@ class FrontController extends AbstractController
         return $this->render('front/details.html.twig', [
             'game'=>$game,
         ]);
+
 }
+
 }
