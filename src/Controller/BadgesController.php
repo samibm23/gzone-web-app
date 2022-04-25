@@ -81,4 +81,6 @@ class BadgesController extends AbstractController
 
         return $this->redirectToRoute('app_badges_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
 }
