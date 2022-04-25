@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Matches;
+use App\Entity\JoinRequests;
 use App\Form\MatchesType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,8 +34,25 @@ class MatchesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($match);
-            $entityManager->flush();
+
+            if (
+                $match->getWinnerTeam() == null
+                && $match->getTeam1()->getId() != $match->getTeam2()->getId()
+                && count($entityManager->getRepository(JoinRequests::class)->findBy([
+                    "team" => $match->getTeam1(),
+                    "tournament" => $match->getTournament(),
+                    "accepted" => true
+                    ])) == 1
+                && count($entityManager->getRepository(JoinRequests::class)->findBy([
+                    "team" => $match->getTeam2(),
+                    "tournament" => $match->getTournament(),
+                    "accepted" => true
+                    ])) == 1
+            )
+            {
+                $entityManager->persist($match);
+                $entityManager->flush();
+            }
 
             return $this->redirectToRoute('app_matches_index', [], Response::HTTP_SEE_OTHER);
         }
