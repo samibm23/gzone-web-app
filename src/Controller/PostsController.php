@@ -13,17 +13,27 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Snipe\BanBuilder\CensorWords;
+use Knp\Component\Pager\PaginatorInterface;
 
 #[Route('/posts')]
 class PostsController extends AbstractController
 {
     #[Route('/', name: 'app_posts_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager,Request $request, PaginatorInterface $paginator): Response
     {
         $posts = $entityManager
             ->getRepository(Posts::class)
             ->findAll();
 
+
+            $posts = $paginator->paginate(
+                // Doctrine Query, not results
+                $posts,
+                // Define the page parameter
+                $request->query->getInt('page', 1),
+                // Items per page
+                5
+            );
         return $this->render('posts/index.html.twig', [
             'posts' => $posts,
             'this' => $this,
@@ -155,4 +165,6 @@ class PostsController extends AbstractController
 
         return $this->redirectToRoute('app_posts_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    
 }

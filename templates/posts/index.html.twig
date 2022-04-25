@@ -2,11 +2,30 @@
 
 {% block title %}Posts index{% endblock %}
 
+
+
 {% block body %}
     <h1>Posts index</h1>
+     {% block stylesheets%}
+  <input type="text" id="search" class="form-control" placeholder="Search">
 
-    <table class="table">
+   
+    <script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            $("#search").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+    {% endblock %}
+    <table class="table" id="tr">
+    
         <thead>
+        
             <tr>
                 <th>Id</th>
                 <th>Resolved</th>
@@ -38,6 +57,20 @@
         {% endfor %}
         </tbody>
     </table>
+    <script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            $("#search").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#Ytable tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
 
+ <div class="navigation">
+            {{ knp_pagination_render(posts) }}
+        </div>
     <a href="{{ path('app_posts_new') }}">Create new</a>
 {% endblock %}
