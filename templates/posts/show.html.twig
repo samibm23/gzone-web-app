@@ -31,6 +31,10 @@
                 <th>PostDate</th>
                 <td>{{ post.postDate ? post.postDate|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
+            <tr>
+                <th>Like Count</th>
+                <td>{{ likes | length }}</td>
+            </tr>
         </tbody>
     </table>
 
