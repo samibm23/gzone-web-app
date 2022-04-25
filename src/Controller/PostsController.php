@@ -13,8 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Snipe\BanBuilder\CensorWords;
-use App\Entity\UserLikesDislikes;
-
 
 #[Route('/posts')]
 class PostsController extends AbstractController

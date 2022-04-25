@@ -29,17 +29,6 @@
                 <td>
                     <a href="{{ path('app_posts_show', {'id': post.id}) }}" class="a.btn.btn-link">show  |</a>
                     <a href="{{ path('app_posts_edit', {'id': post.id}) }}" class="a.btn.btn-link">  edit  |</a>
-                    <a href="#" class="a.btn.btn-link">
-                    {% if app.user and post.LikedUser(app.user)%}
-                    <i class="far fa-thumbs-up"></i>
-                    {% else %}
-                    <i class="far fa-thumbs-up"></i>
-                    {% endif %}
-                        <span class="js-likes">{{likes | length}}</span>
-                        
-                        <span class="js-label">Like</span>
-                    
-                    </a>
                 </td>
             </tr>
         {% else %}
