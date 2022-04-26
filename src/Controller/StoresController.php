@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use \Twilio\Rest\Client;
 
 use App\Entity\Stores;
+use App\Entity\MarketItems;
 use App\Entity\Users;
 use App\Form\StoresType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -34,6 +35,7 @@ public function __construct(Client $twilio) {
     #[Route('/', name: 'app_stores_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
+        $bestStore = $entityManager->getRepository(Stores::class)->find($entityManager->getRepository(MarketItems::class)->getBestStore());
         $stores = $entityManager
             ->getRepository(Stores::class)
             ->findAll();
@@ -49,6 +51,7 @@ public function __construct(Client $twilio) {
 
         return $this->render('stores/index.html.twig', [
             'stores' => $stores,
+            'bestStore' => $bestStore
         ]);
     }
 
