@@ -1,0 +1,58 @@
+{#<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Image</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for game in games %}
+        <tr>
+            <td>{{ game.name }}</td>
+            <td>{{ game.description }}</td>
+
+            <td><img style="height: 100px; width: 100px" src="{{ asset('images/games/'~game.photo_url) }}" ></td>
+
+
+
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="5">no records found</td>
+        </tr>  {% endfor %}
+    </tbody>
+</table>#}
+
+
+{% block title %}<h1>List of Games</h1>{% endblock %}
+
+{% block body %}
+
+
+
+
+    <table class="table table-bordered dataTable" id="t"   role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for game in games %}
+            <tr>
+                <td>{{ game.name }}</td>
+                <td><img style="height: 100px; width: 100px" src="{{ asset('images/games/'~game.photo_url) }}" ></td>
+                <td>{{ game.description }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+
+    </table>
+
+
+{% endblock %}

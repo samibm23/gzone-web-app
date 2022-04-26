@@ -17,14 +17,8 @@ class GamesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('mots', SearchType::class,[
-                'label'=>false,
-                'attr'=>[
-                    'class'=>'form-control',
-                    'placeholder'=>'entrez un ou plusieurs mots'
-                ]
-            ])
-            ->add('Rechercher', SubmitType::class)
+
+
             ->add('name')
             ->add('description')
             ->add('photo_url',FileType::class,[

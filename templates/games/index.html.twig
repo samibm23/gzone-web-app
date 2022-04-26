@@ -3,16 +3,31 @@
 {% block title %}Games index{% endblock %}
 
 {% block body %}
-    <link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
-    <script src="//code.jquery.com/jquery.js"></script>
-    <script src="{{ asset('bundles/mercuryseriesflashy/js/flashy.js') }}"></script>
+    {% block stylesheets%}
+        <input type="text" id="search" class="form-control" placeholder="Search">
+
+
+        <script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js') }}"></script>
+        <script>
+            $(document).ready(function(){
+                $("#search").on("keyup", function() {
+                    var value = $(this).val().toLowerCase();
+                    $("tr").filter(function() {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+            });
+        </script>
+    {% endblock %}
+
     <!-- Include Flashy default partial -->
-    {{ include('@MercurySeriesFlashy/flashy.html.twig') }}
 
 
     <h1>Games </h1>
+    <div class="text-left">
+        <a type="submit" class="btn btn-primary btn-sm " style="margin:50px"  href="{{ path('app_tri' )}}">  <strong>Tri ASC</strong></a>
+    </div>
     <script src="{{ asset('admin/js/jquery.min.js') }}"></script>
-    <input type="text" id="search" class="form-control form-control-no-border mr-sm-2" placeholder=" search">
 
     <table class="table table-bordered dataTable" id="t"   role="grid" aria-describedby="dataTable_info" style="width: 100%;">
         <thead>
@@ -43,7 +58,7 @@
                 </td>
             </tr>
 
-      {#<script>
+      <script>
                 $(document).ready(function(){
                     $('#search').keyup(function(){
                         search_table($(this).val());
@@ -71,7 +86,7 @@
                     }
                 });
             </script>
-       #}
+
         {% endfor %}
         </tbody>
 
@@ -79,4 +94,9 @@
     </table>
 
     <a href="{{ path('app_games_new') }}">Create new</a>
+
+    <div class="text-center">
+        <a type="submit" class="btn btn-primary btn-sm " style="margin:100px"  href="{{ path('impr' )}}">  <strong>save as PDF</strong></a>
+    </div>
+
 {% endblock %}

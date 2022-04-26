@@ -25,6 +25,8 @@ class HappyHoursController extends AbstractController
         ]);
     }
 
+
+
     #[Route('/new', name: 'app_happy_hours_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {

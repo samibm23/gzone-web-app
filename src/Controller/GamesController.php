@@ -6,6 +6,8 @@ use App\Entity\Games;
 use App\Form\GamesType;
 use App\Repository\GamesRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Knp\Component\Pager\PaginatorInterface;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,8 +29,94 @@ class GamesController extends AbstractController
         return $this->render('games/index.html.twig', [
             'games' => $games,
         ]);
+
+    }
+    /**
+     * @Route("/tri", name="app_tri")
+     */
+    public function Tri(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+
+        $query = $em->createQuery(
+            'SELECT a FROM App\Entity\Games a 
+            ORDER BY a.name ASC'
+        );
+
+        $games = $query->getResult();
+
+        return $this->render('games/index.html.twig',
+            array('games' => $games));
+
+    }
+    /**
+     * @Route("/imp", name="impr")
+     */
+    public function imprimer(GamesRepository $repository,EntityManagerInterface $entityManager): Response
+
+    {
+        // Configure Dompdf according to your needs
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+
+        $game = $entityManager
+            ->getRepository(Games::class)
+            ->findAll();
+
+        // Retrieve the HTML generated in our twig file
+        $html = $this->renderView('games/Pdf.html.twig', [
+            'games' => $game,
+        ]);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (inline view)
+        $dompdf->stream("list of games.pdf", [
+            "Attachment" => true
+
+        ]);
     }
 
+    #[Route('/stat', name: 'app_games_stat')]
+    public function stat(GamesRepository $repository): Response
+    {
+
+        $games = $repository->stat();
+        $data = [['rate', 'games']];
+        foreach ($games as $nb) {
+            $data[] = array($nb['id'], $nb['name']);
+        }
+        $bar = new barchart();
+        $bar->getData()->setArrayToDataTable(
+            $data
+        );
+
+        $bar->getOptions()->getTitleTextStyle()->setColor('#07600');
+        $bar->getOptions()->getTitleTextStyle()->setFontSize(50);
+        return $this->render('games/stat.html.twig', array('barchart' => $bar, 'nbs' => $games));
+    }
+    /**
+     * @param GamesRepository $repository
+     * @return Response
+     * @Route ("/listDQL", name="ListDQL")
+     */
+
+    function orderByNameDQL(GamesRepository $repository): Response
+    {
+        $games = $repository->orderByName();
+        return $this->render('games/index.html.twig', array("games" => $games));
+    }
     #[Route('/new', name: 'app_games_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, FlashyNotifier $flashy): Response
     {
@@ -62,8 +150,7 @@ class GamesController extends AbstractController
 
             $entityManager->persist($game);
             $entityManager->flush();
-            //$flashy->success('Event created!', 'http://your-awesome-link.com');
-
+            $flashy->success('Success');
             return $this->redirectToRoute('app_games_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -71,6 +158,7 @@ class GamesController extends AbstractController
             'game' => $game,
             'form' => $form,
         ]);
+
     }
 
     #[Route('/{id}', name: 'app_games_show', methods: ['GET'])]
@@ -129,35 +217,7 @@ class GamesController extends AbstractController
         return $this->redirectToRoute('app_games_index', [], Response::HTTP_SEE_OTHER);
     }
 
-#[Route('/stat', name: 'app_games_stat')]
-    public function stat(GamesRepository $repository): Response
-    {
 
-        $games = $repository->stat();
-        $data = [['rate', 'games']];
-        foreach ($games as $nb) {
-            $data[] = array($nb['id'], $nb['name']);
-        }
-        $bar = new barchart();
-        $bar->getData()->setArrayToDataTable(
-            $data
-        );
-
-        $bar->getOptions()->getTitleTextStyle()->setColor('#07600');
-        $bar->getOptions()->getTitleTextStyle()->setFontSize(50);
-        return $this->render('games/stat.html.twig', array('barchart' => $bar, 'nbs' => $games));
-    }
-    /**
-     * @param GamesRepository $repository
-     * @return Response
-     * @Route ("/listDQL", name="ListDQL")
-     */
-
-    function orderByNameDQL(GamesRepository $repository): Response
-    {
-        $games = $repository->orderByName();
-        return $this->render('games/index.html.twig', array("games" => $games));
-    }
 }
 
 /*

@@ -116,4 +116,12 @@ public function findGameByName($name){
 
 
     } */
+    public function stat()
+    {
+        $qb = $this->createQueryBuilder('v')
+            ->select('COUNT(v.createDate) AS createDate, SUBSTRING(v.id, 1, 100000) AS id')
+            ->groupBy('id');
+        return $qb->getQuery()
+            ->getResult();
+    }
 }
