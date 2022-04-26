@@ -21,9 +21,15 @@ class PostsController extends AbstractController
     #[Route('/', name: 'app_posts_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager,Request $request, PaginatorInterface $paginator): Response
     {
-        $posts = $entityManager
-            ->getRepository(Posts::class)
-            ->findAll();
+        $em = $this->getDoctrine()->getManager();
+
+
+    $query = $em->createQuery(
+        'SELECT a FROM App\Entity\Posts a 
+        ORDER BY a.title ASC'
+    );
+
+    $posts = $query->getResult();
 
 
             $posts = $paginator->paginate(
@@ -34,10 +40,8 @@ class PostsController extends AbstractController
                 // Items per page
                 5
             );
-        return $this->render('posts/index.html.twig', [
-            'posts' => $posts,
-            'this' => $this,
-        ]);
+            return $this->render('posts/index.html.twig',
+            array('posts' => $posts));
     }
 
     #[Route('/new', name: 'app_posts_new', methods: ['GET', 'POST'])]
@@ -165,6 +169,24 @@ class PostsController extends AbstractController
 
         return $this->redirectToRoute('app_posts_index', [], Response::HTTP_SEE_OTHER);
     }
+         /**
+ * @Route("/tri", name="app_tri")
+ */
+public function Tri(Request $request)
+{
+    $em = $this->getDoctrine()->getManager();
+
+
+    $query = $em->createQuery(
+        'SELECT a FROM App\Entity\Comments a 
+        ORDER BY a.name ASC'
+    );
+
+    $posts = $query->getResult();
+
+    return $this->render('comments/index.html.twig',
+        array('comments' => $comments));
+}
 
     
 }
