@@ -11,14 +11,15 @@
                 <th>Id</th>
                 <td>{{ team.id }}</td>
             </tr>
-            <tr>
-                <th>PhotoUrl</th>
-                <td>{{ team.photoUrl }}</td>
-            </tr>
-            <tr>
+              <tr>
                 <th>Name</th>
                 <td>{{ team.name }}</td>
             </tr>
+            <tr>
+                <th>PhotoUrl</th>
+                <td> <img src="..\..\uploads\team\{{team.PhotoUrl}}"></img></td>
+            </tr>
+         
             <tr>
                 <th>Description</th>
                 <td>{{ team.description }}</td>
@@ -38,6 +39,10 @@
             <tr>
                 <th>CreateDate</th>
                 <td>{{ team.createDate ? team.createDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+            <th>winrate</th>
+            <td>{{winrate}} %</td>
             </tr>
         </tbody>
     </table>
