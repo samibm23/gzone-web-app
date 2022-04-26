@@ -3,9 +3,25 @@
 {% block title %}Users{% endblock %}
 
 {% block body %}
-    <h1>Users </h1>
 
-    <table class="table" style="color: whitesmoke;">
+    <h1>Users </h1>
+ {% block stylesheets%}
+  <input type="text" id="search" class="form-control" placeholder="Search">
+
+   
+    <script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            $("#search").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+{% endblock %}
+    <table class="table" style="color: whitesmoke;" id = "tr">
    
         <thead>
             <tr>
@@ -51,6 +67,9 @@
         {% endfor %}
         </tbody>
     </table>
+      <div class="navigation">
+            {{ knp_pagination_render(users) }}
+        </div>
 
     <a href="{{ path('app_register') }}" >Create new</a>
 {% endblock %}

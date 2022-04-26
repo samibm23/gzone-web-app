@@ -70,6 +70,14 @@ class UsersRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
+
+    public function orderByName()
+{
+    $em =$this->getEntityManager();
+    $query=$em->createQuery('select o from App\Entity\Users o order by o.username ASC');
+    return $query->getResult();
+}
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */
