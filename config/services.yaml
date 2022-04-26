@@ -4,8 +4,19 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-
+    twilio_sid: AC6b9ee76a0f1dcdd8d34bc515d3950e7d
+    twilio_token: ba71c684d1da5c964e25166b8cf87e58
+    twilio_number: '+19378263094'
+    team_directory: '%kernel.project_dir%/public/uploads/team'
+    
 services:
+    twilio.client:
+        class: Twilio\Rest\Client
+        arguments: [ '%twilio_sid%', '%twilio_token%' ]
+
+    # Add an alias for the twilio.client service
+    Twilio\Rest\Client: '@twilio.client'
+
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
@@ -22,3 +33,4 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    

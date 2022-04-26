@@ -1,0 +1,338 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Games index{% endblock %}
+
+{#{% block body %}
+    <h1>Games </h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Description</th>
+            <th>Details</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for game in games %}
+            <tr>
+                <td>{{ game.name }}</td>
+                <td><img style="height: 100px; width: 100px" src="{{ asset('images/games/'~game.photo_url) }}" ></td>
+                <td>{{ game.description }}</td>
+    <td> <a href="{{ path('app_front_details', {'id': game.id}) }}">Details</a> </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+#}
+{#{% block body %}
+
+    <div class="layout_padding promoted_sectipon">
+        <div class="container">
+            <h1 class="promoted_text"> <span style="border-bottom: 5px solid #4bc714;">GAMES</span></h1>
+            <div class="images_main">
+                <div class="row">
+                   {% for game in games %}
+                      <div>
+                          {{ game.name }}
+                      </div>
+                        <div class="col-sm-6 col-md-6 col-lg-3">
+
+                            <div> <img style="height: 100px; width: 100px" src="{{ asset('images/games/'~game.photo_url) }}" >
+                            </div>
+                            <a  href="{{ path('app_front_details', {'id': game.id}) }}"> details game'</a>
+                        </div>
+                    {% else %}
+                        <tr>
+                            <td colspan="7">no records found</td>
+                        </tr>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+#}
+{#{% block body %}
+
+<div class="row text-center">
+    {% for game in games %}
+
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card-body">
+            <h4 class="card-title">
+                {{ game.name }}
+            </h4>
+        </div>
+        <div class="card h-100">
+
+            <div>
+                <img style="height: 100px; width: 100px" src="{{ asset('images/games/'~game.photo_url) }}" >
+            </div>
+
+
+            <div>
+                {{ game.description }}
+
+            </div>
+
+            <div class="card-footer">
+                <a href="#" class="btn btn-primary">Find Out More!</a>
+            </div>
+
+
+
+        </div>
+
+    </div>
+    {% endfor %}
+
+
+</div>
+{% endblock %}
+#}
+
+{% block body %}
+<html lang="en">
+
+<body>
+<!--
+START: Navbar Mobile
+
+Additional Classes:
+.nk-navbar-left-side
+.nk-navbar-right-side
+.nk-navbar-lg
+.nk-navbar-overlay-content
+-->
+<div id="nk-nav-mobile" class="nk-navbar nk-navbar-side nk-navbar-right-side nk-navbar-overlay-content d-lg-none">
+    <div class="nano">
+        <div class="nano-content">
+            <a href="index.html" class="nk-nav-logo">
+                <img src="assets/images/logo.png" alt="" width="120">
+            </a>
+            <div class="nk-navbar-mobile-content">
+                <ul class="nk-nav">
+                    <!-- Here will be inserted menu from [data-mobile-menu="#nk-nav-mobile"] -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END: Navbar Mobile -->
+
+
+
+<div class="nk-main">
+
+    <!-- START: Breadcrumbs -->
+    <div class="nk-gap-1"></div>
+    <div class="container">
+        <ul class="nk-breadcrumbs">
+
+
+
+
+
+            <li><span class="fa fa-angle-right"></span></li>
+
+
+
+            <li><span class="fa fa-angle-right"></span></li>
+
+            <li><span>Game List</span></li>
+
+        </ul>
+    </div>
+    <div class="nk-gap-1"></div>
+    <!-- END: Breadcrumbs -->
+
+
+
+
+    <div class="container">
+        <div class="row vertical-gap">
+            <div class="col-lg-8">
+
+                <!-- START: Posts List -->
+                <div class="nk-blog-list">
+
+
+                    <!-- START: Post -->
+                    <div class="nk-blog-post">
+                        {% for game in games %}
+
+                        <div class="row vertical-gap">
+
+                            <div class="col-md-5 col-lg-6">
+                                <a href="{{ path('app_front_details', {'id': game.id}) }}" class="nk-post-img">
+                                    <img style="height: 100px; width: 100px" src="{{ asset('images/games/'~game.photo_url) }}" >
+                                </a>
+                                <br>
+
+                            </div>
+                            <div class="col-md-7 col-lg-6">
+                            <h3> {{ game.name }}</h3>
+
+                                <div class="nk-post-text ">
+                                    <p>
+                                        {{ game.description }}
+
+                                    </p>
+                                    <a  href="{{ path('app_front_details', {'id': game.id}) }}"> details </a>
+
+                                </div>
+
+                                <div class="nk-post-by">
+                                    <a href="action.php?t=like&id=">Like</a>
+                                    <br>
+                                    <a href="#">Dislike</a>
+
+                                </div>
+                            </div>
+                        </div>
+                            <br>
+                            <br><br>
+                        {% endfor %}
+
+                    </div>
+                    <!-- END: Post -->
+
+
+
+
+                  <!-- START: Pagination -->
+                    <div class="nk-pagination nk-pagination-center">
+                        <a href="#" class="nk-pagination-prev">
+                            <span class="ion-ios-arrow-back"></span>
+                        </a>
+                        <nav>
+                            <a class="nk-pagination-current" href="{{ knp_pagination_render(games) }}">1</a>
+
+                        </nav>
+                        <a href="#" class="nk-pagination-next">
+                        </a>
+                    </div>
+                    <!-- END: Pagination -->
+                </div>
+
+                <!-- END: Posts List -->
+                
+            <div class="col-lg-4">
+                <!--
+                    START: Sidebar
+
+                    Additional Classes:
+                        .nk-sidebar-left
+                        .nk-sidebar-right
+                        .nk-sidebar-sticky
+                -->
+                <aside class="nk-sidebar nk-sidebar-right nk-sidebar-sticky">
+                    <div class="nk-widget">
+                        <div class="nk-widget-content">
+                            <form action="#" class="nk-form nk-form-style-1" novalidate="novalidate">
+                                <div class="input-group">
+                                    <input type="text" id="search" class="form-control" placeholder="Type something...">
+                                    <button class="nk-btn nk-btn-color-main-1"><span class="ion-search"></span></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="nk-widget nk-widget-highlighted">
+                        <h4 class="nk-widget-title"><span><span class="text-main-1">Top 3</span> Recent</span></h4>
+                        <div class="nk-widget-content">
+
+                            <div class="nk-widget-post">
+                                <a href="blog-article.html" class="nk-post-image">
+                                    <img src="assets/images/post-1-sm.jpg" alt="">
+                                </a>
+                                <h3 class="nk-post-title"><a href="blog-article.html">Smell magic in the air. Or maybe barbecue</a></h3>
+                                <div class="nk-post-date"><span class="fa fa-calendar"></span> Sep 18, 2018</div>
+                            </div>
+
+                            <div class="nk-widget-post">
+                                <a href="blog-article.html" class="nk-post-image">
+                                    <img src="assets/images/post-2-sm.jpg" alt="">
+                                </a>
+                                <h3 class="nk-post-title"><a href="blog-article.html">Grab your sword and fight the Horde</a></h3>
+                                <div class="nk-post-date"><span class="fa fa-calendar"></span> Sep 5, 2018</div>
+                            </div>
+
+                            <div class="nk-widget-post">
+                                <a href="blog-article.html" class="nk-post-image">
+                                    <img src="assets/images/post-3-sm.jpg" alt="">
+                                </a>
+                                <h3 class="nk-post-title"><a href="blog-article.html">We found a witch! May we burn her?</a></h3>
+                                <div class="nk-post-date"><span class="fa fa-calendar"></span> Aug 27, 2018</div>
+                            </div>
+
+                        </div>
+                    </div>
+{#                    <div class="nk-widget nk-widget-highlighted">
+                        <h4 class="nk-widget-title"><span><span class="text-main-1">Most</span> Popular</span></h4>
+                        <div class="nk-widget-content">
+
+                            <div class="nk-widget-post">
+                                <a href="store-product.html" class="nk-post-image">
+                                    <img src="assets/images/product-1-xs.jpg" alt="So saying he unbuckled">
+                                </a>
+                                <h3 class="nk-post-title"><a href="store-product.html">So saying he unbuckled</a></h3>
+                                <div class="nk-product-rating" data-rating="4"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="far fa-star"></i></div>
+                                <div class="nk-product-price">€ 23.00</div>
+                            </div>
+
+                            <div class="nk-widget-post">
+                                <a href="store-product.html" class="nk-post-image">
+                                    <img src="assets/images/product-2-xs.jpg" alt="However, I have reason">
+                                </a>
+                                <h3 class="nk-post-title"><a href="store-product.html">However, I have reason</a></h3>
+                                <div class="nk-product-rating" data-rating="2.5"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fas fa-star-half"></i> <i class="far fa-star"></i> <i class="far fa-star"></i></div>
+                                <div class="nk-product-price">€ 32.00</div>
+                            </div>
+
+                            <div class="nk-widget-post">
+                                <a href="store-product.html" class="nk-post-image">
+                                    <img src="assets/images/product-3-xs.jpg" alt="It was some time before">
+                                </a>
+                                <h3 class="nk-post-title"><a href="store-product.html">It was some time before</a></h3>
+                                <div class="nk-product-rating" data-rating="5"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i></div>
+                                <div class="nk-product-price">€ 14.00</div>
+                            </div>
+
+                        </div>
+                    </div>
+#}
+                </aside>
+                <!-- END: Sidebar -->
+            </div>
+        </div>
+    </div>
+
+    <div class="nk-gap-2"></div>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+</body>
+</html>
+{% endblock %}

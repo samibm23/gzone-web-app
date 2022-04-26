@@ -4,12 +4,16 @@ namespace App\Controller;
 
 use App\Entity\Games;
 use App\Form\GamesType;
+use App\Repository\GamesRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use CMEN\GoogleChartsBundle\GoogleCharts\Charts\BarChart;
 #[Route('/games')]
 class GamesController extends AbstractController
 {
@@ -26,7 +30,7 @@ class GamesController extends AbstractController
     }
 
     #[Route('/new', name: 'app_games_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, FlashyNotifier $flashy): Response
     {
         $game = new Games();
         $form = $this->createForm(GamesType::class, $game);
@@ -38,8 +42,8 @@ class GamesController extends AbstractController
 
                 // this is needed to safely include the file name as part of the URL
 
-                $newFilename = md5(uniqid()).'.'.$ImageFile->guessExtension();
-                $destination = $this->getParameter('kernel.project_dir').'/public/images/games';
+                $newFilename = md5(uniqid()) . '.' . $ImageFile->guessExtension();
+                $destination = $this->getParameter('kernel.project_dir') . '/public/images/games';
                 // Move the file to the directory where brochures are stored
                 try {
                     $ImageFile->move(
@@ -58,6 +62,7 @@ class GamesController extends AbstractController
 
             $entityManager->persist($game);
             $entityManager->flush();
+            //$flashy->success('Event created!', 'http://your-awesome-link.com');
 
             return $this->redirectToRoute('app_games_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -85,8 +90,8 @@ class GamesController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $ImageFile = $form->get('photo_url')->getData();
             if ($ImageFile) {
-                $newFilename = md5(uniqid()).'.'.$ImageFile->guessExtension();
-                $destination = $this->getParameter('kernel.project_dir').'/public/images/games';
+                $newFilename = md5(uniqid()) . '.' . $ImageFile->guessExtension();
+                $destination = $this->getParameter('kernel.project_dir') . '/public/images/games';
                 // Move the file to the directory where brochures are stored
                 try {
                     $ImageFile->move(
@@ -116,7 +121,7 @@ class GamesController extends AbstractController
     #[Route('/{id}', name: 'app_games_delete', methods: ['POST'])]
     public function delete(Request $request, Games $game, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$game->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $game->getId(), $request->request->get('_token'))) {
             $entityManager->remove($game);
             $entityManager->flush();
         }
@@ -124,6 +129,47 @@ class GamesController extends AbstractController
         return $this->redirectToRoute('app_games_index', [], Response::HTTP_SEE_OTHER);
     }
 
-   
+#[Route('/stat', name: 'app_games_stat')]
+    public function stat(GamesRepository $repository): Response
+    {
 
+        $games = $repository->stat();
+        $data = [['rate', 'games']];
+        foreach ($games as $nb) {
+            $data[] = array($nb['id'], $nb['name']);
+        }
+        $bar = new barchart();
+        $bar->getData()->setArrayToDataTable(
+            $data
+        );
+
+        $bar->getOptions()->getTitleTextStyle()->setColor('#07600');
+        $bar->getOptions()->getTitleTextStyle()->setFontSize(50);
+        return $this->render('games/stat.html.twig', array('barchart' => $bar, 'nbs' => $games));
+    }
+    /**
+     * @param GamesRepository $repository
+     * @return Response
+     * @Route ("/listDQL", name="ListDQL")
+     */
+
+    function orderByNameDQL(GamesRepository $repository): Response
+    {
+        $games = $repository->orderByName();
+        return $this->render('games/index.html.twig', array("games" => $games));
+    }
 }
+
+/*
+ #[Route('/TrierParName', name: 'TrierParName')]
+
+public function TrierParName(Request $request): Response
+{
+    $repository = $this->getDoctrine()->getRepository(Games::class);
+    $game = $repository->findByName();
+
+    return $this->render('games/index.html.twig', [
+        'game' => $game,
+    ]);
+}}
+*/

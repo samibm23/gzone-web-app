@@ -34,7 +34,6 @@ class Badges
      *      minMessage = "Your description must be at least {{ 2 }} characters long",
      *      maxMessage = "Your description cannot be longer than {{ 50 }} characters"
      * )
-     *      @Assert\Unique
 
      */
     private $title;
@@ -81,5 +80,14 @@ class Badges
     {
         return $this->title;
     }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+    
 
 }
