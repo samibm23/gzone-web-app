@@ -34,10 +34,11 @@ class EmailVerifier
         );
 
         $context = $email->getContext();
-        $context['signedUrl'] = $signatureComponents->getSignedUrl();
+        $context['signedUrl'] = path('ActivateAccountWithCode');
         $context['expiresAtMessageKey'] = $signatureComponents->getExpirationMessageKey();
         $context['expiresAtMessageData'] = $signatureComponents->getExpirationMessageData();
         $context['fullName'] = $user->getFullName();
+        $context['verificationCode'] = $user->getVerificationCode();
 
 
         $email->context($context);

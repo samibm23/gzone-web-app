@@ -58,6 +58,15 @@
                 <td>
                     <a href="{{ path('app_users_show', {'id': user.id}) }}">show</a>
                     <a href="{{ path('app_users_edit', {'id': user.id}) }}">edit</a>
+                     {% if (app.user.id == user.id) %}
+                                                    <a class="btn btn-outline-dark btn-fw" href="{{ path('disable_user', {'id': user.id}) }}" style="pointer-events: none">disable</a>
+                                                {% else %}
+                                                    {% if ( user.disabletoken) %}
+                                                        <a class="btn btn-outline-success btn-fw" href="{{ path('enable_user', {'id': user.id}) }}">enable</a>
+                                                    {% else %}
+                                                        <a class="btn btn-outline-danger btn-fw" href="{{ path('disable_user', {'id': user.id}) }}">disable</a>
+                                                    {% endif %}
+                                                {% endif %}
                 </td>
             </tr>
         {% else %}
