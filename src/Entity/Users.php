@@ -348,7 +348,7 @@ class Users implements UserInterface
     /**
      * Get the value of activation_token
      */ 
-    public function getActivation_token()
+    public function getActivationToken()
     {
         return $this->activation_token;
     }
@@ -358,7 +358,7 @@ class Users implements UserInterface
      *
      * @return  self
      */ 
-    public function setActivation_token($activation_token)
+    public function setActivationToken($activation_token)
     {
         $this->activation_token = $activation_token;
 
@@ -368,7 +368,7 @@ class Users implements UserInterface
     /**
      * Get the value of reset_token
      */ 
-    public function getReset_token()
+    public function getResetToken()
     {
         return $this->reset_token;
     }
@@ -378,7 +378,7 @@ class Users implements UserInterface
      *
      * @return  self
      */ 
-    public function setReset_token($reset_token)
+    public function setResetToken($reset_token)
     {
         $this->reset_token = $reset_token;
 
@@ -388,7 +388,7 @@ class Users implements UserInterface
     /**
      * Get the value of disable_token
      */ 
-    public function getDisable_token()
+    public function getDisableToken()
     {
         return $this->disable_token;
     }
@@ -398,7 +398,7 @@ class Users implements UserInterface
      *
      * @return  self
      */ 
-    public function setDisable_token($disable_token)
+    public function setDisableToken($disable_token)
     {
         $this->disable_token = $disable_token;
 

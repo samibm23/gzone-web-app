@@ -27,8 +27,6 @@
                                 {{ form_widget(form.phone_number , {'attr' : {'class' : 'form-control' }}) }}
                                 <span class="icon_mobile"></span>
                             </div>
-
-
                             <ul>
                                 <li><button style="background-color: #ff4343;border-radius: 4px;color: #ffffff; display: block;font-size: 13px;font-weight: 700;letter-spacing: 2px;text-transform: uppercase;width: 460px;padding: 14px 0;position: relative;margin: 0 auto; " type="submit" class="btn btn-danger btn-fw">{{ button_label|default('Save') }}</button></li>
                             </ul>
@@ -38,7 +36,7 @@
                     <div class="col-lg-6">
                         <div style="display: grid" class="login__register">
                             <h3>Dont’t Have An Account?</h3>
-                            <a  class="primary-btn" href="{{ path('profile_edit_password') }}">Edit Password</a>
+                            <a  class="primary-btn" href="{{ path('edit_profile_password') }}">Edit Password</a>
                             <a  class="primary-btn" href="{{ path('profile') }}">Back</a>
                             <form  method="post" action="{{ path('delete_profile') }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
