@@ -22,6 +22,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Knp\Component\Pager\PaginatorInterface;
+
 /**
  * @Route("/user")
  */
@@ -53,7 +54,7 @@ class UsersController extends AbstractController
             return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
         }
     }
-      /**
+    /**
      * @Route("/listDQL", name="app_users_listDql")
      */
 
@@ -65,8 +66,8 @@ class UsersController extends AbstractController
     // }
 
 
-    
-       /**
+
+    /**
      * @Route("/profile/editPassword", name="edit_profile_password", methods={"GET", "POST"})
      */
     public function edituserpassword(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $userPasswordEncoder): Response
@@ -75,7 +76,7 @@ class UsersController extends AbstractController
         $form = $this->createForm(PasswordProfileType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid() ) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword(
                 $userPasswordEncoder->encodePassword(
                     $user,
@@ -102,8 +103,8 @@ class UsersController extends AbstractController
         $user = $this->getUser();
         $form = $this->createForm(ProfileType::class, $user);
         $form->handleRequest($request);
-       
-        
+
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($user);
             $entityManager->flush();
@@ -121,12 +122,17 @@ class UsersController extends AbstractController
     
      * @Route("/", name="app_users_index", methods={"GET"})
      */
-    public function index(UsersRepository $userRepository, Request $request,PaginatorInterface $paginator): Response
+    public function index(UsersRepository $userRepository, Request $request, PaginatorInterface $paginator): Response
     {
-        $data = new SearchData();
-        $form = $this->createForm(SearchFormType::class, $data);
-        $form->handleRequest($request);
-        $users = $userRepository->findSearch($data);
+        $em = $this->getDoctrine()->getManager();
+
+
+        $query = $em->createQuery(
+            'SELECT a FROM App\Entity\Users a 
+        ORDER BY a.username ASC'
+        );
+
+        $users = $query->getResult();
         $users = $paginator->paginate(
             // Doctrine Query, not results
             $users,
@@ -136,11 +142,40 @@ class UsersController extends AbstractController
             3
         );
 
-        return $this->render('users/index.html.twig', [
-            'users' => $users, 'form' => $form->createView()
-        ]);
+        return $this->render(
+            'users/index.html.twig',
+            array('users' => $users)
+        );
+    }
+    /**
+     * @Route("/tri", name="sorted_users")
+     */
+    public function Tri(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+
+        $query = $em->createQuery(
+            'SELECT a FROM App\Entity\Users a 
+        ORDER BY a.username ASC'
+        );
+
+        $users = $query->getResult();
+
+        return $this->render(
+            'users/index.html.twig',
+            array('users' => $users)
+        );
     }
 
+
+    /**
+     * @Route("/DisabledAccount", name="DisabledAccount")
+     */
+    public function DisabledAccount(): Response
+    {
+        return $this->render('users/DisabledAccount.html.twig');
+    }
     /**
      * @IsGranted("ROLE_ADMIN")
      * @Route("/{id}", name="app_users_show", methods={"GET"})
@@ -183,5 +218,55 @@ class UsersController extends AbstractController
         }
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+    }
+    /**
+     * @IsGranted("ROLE_USER")
+     * @Route("/ActivateAccountWithCode", name="ActivateAccountWithCode", methods={"GET","POST"})
+     */
+    public function ActivateAccountWithCode(EntityManagerInterface $entityManager): Response
+    {
+        $error = null;
+        if ($request->isMethod('POST')) {
+            $code = $request->request->get('verificationcode');
+            $codeUser = $this->getUser()->getVerificationCode();
+            if ($code == $codeUser) {
+                $user = $this->getUser();
+                $user->setVerificationCode(null);
+                $entityManager->persist($user);
+                $entityManager->flush();
+                return $this->redirectToRoute("profile");
+            } else {
+                $error = "Please Verify your Code";
+                return $this->render('security/ActivateAccountWithCode.html.twig', [
+                    'error' => $error,
+                ]);
+            }
+        }
+        return $this->render('security/ActivateAccountWithCode.html.twig', [
+            'error' => $error,
+        ]);
+    }
+
+    /**
+     * @Route("/disable_user/{id}", name="disable_user", methods={"GET", "POST"})
+     */
+    public function disable_user(Request $request, Users $user, EntityManagerInterface $entityManager): Response
+    {
+        $user->setDisableToken("1");
+        $entityManager->persist($user);
+        $entityManager->flush();
+        return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/enable_user/{id}", name="enable_user", methods={"GET", "POST"})
+     */
+    public function enable_user(Request $request, Users $user, EntityManagerInterface $entityManager): Response
+    {
+        $user->setDisableToken(null);
+        $entityManager->persist($user);
+        $entityManager->flush();
+        //$link = $request->headers->get("referer");
+        return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
     }
 }

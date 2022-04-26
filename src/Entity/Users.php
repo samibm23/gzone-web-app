@@ -137,7 +137,7 @@ class Users implements UserInterface
     private $reset_token;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="string")
      */
     private $disable_token;
 

@@ -66,16 +66,13 @@
 .buttons button:nth-child(1) {
     border: 1px solid #e6922e !important;
     color: #e6922e;
-    position: center;
     height: 40px
 }
 
 .buttons button:nth-child(1):hover {
     border: 1px solid #e6922e !important;
-    color: #00000;
+    color: #fff;
     height: 40px;
-        position: center;
-
     background-color: #e6922e
 }
 
@@ -83,8 +80,6 @@
     border: 1px solid #e6922e !important;
     background-color: #e6922e;
     color: #fff;
-        position: center;
-
     height: 40px
 }
      </style>
@@ -95,7 +90,7 @@
                 <div class="text-center"> 
                 <img src={{user.photoURL}} width="15%" class="rounded-circle">
                  </div>
-                <div class="text-center mt-3"> <span class="bg-secondary p-1 px-4 rounded text-white">USER PROFILE</span>
+                <div class="text-center mt-3"> <span class="bg-secondary p-1 px-4 rounded text-white">PROFILE</span>
                     <h5 class="mt-2 mb-0">Welcome {{ user.fullName}}</h5> <span>{{user.username}}</span>
                     <div class="px-4 mt-1">
                         <ul>
@@ -110,9 +105,9 @@
                     </div>
                    
                    <div class="col-lg-6 col-md-6">
-                                    <div class="anime__details__btn" style="display: flex">
+                                    <div class="anime__details__btn" style="display: flex"style="font-style:bold;position:relative;left:50%;right:50%">
 
-                                    <form  method="get" action="{{ path('edit_profile') }}">
+                                    <form  method="get" action="{{ path('edit_profile') }}" >
                                             <button  class="btn btn-success btn-fw"><i
                                                         class="fa fa-angle-right"></i> edit Account</button>
                                         </form>
