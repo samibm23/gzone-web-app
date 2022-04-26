@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Posts;
 use App\Entity\Comments;
 use App\Form\CommentsType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,7 +39,7 @@ class CommentsController extends AbstractController
         $comment->setCommentDate($date);
         $comment->setCommenter($user);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && $comment->getPost()->getResolved()== false) {
             $entityManager->persist($comment);
             $entityManager->flush();
 
@@ -50,7 +51,31 @@ class CommentsController extends AbstractController
             'form' => $form,
         ]);
     }
+    #[Route('/new/post/{id}', name: 'app_comments_new_post', methods: ['GET', 'POST'])]
+    public function newByPost(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $user= $this->getUser();
+        
+        $comment = new Comments();
+        $comment->setPost($entityManager->getRepository(Posts::class)->find($request->get('id')));
+        $form = $this->createForm(CommentsType::class, $comment);
+        $form->handleRequest($request);
+        $date = new \DateTime('now'); 
+        $comment->setCommentDate($date);
+        $comment->setCommenter($user);
 
+        if ($form->isSubmitted() && $form->isValid() && $comment->getPost()->getResolved()== false) {
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_comments_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('comments/new.html.twig', [
+            'comment' => $comment,
+            'form' => $form,
+        ]);
+    }
     #[Route('/{id}', name: 'app_comments_show', methods: ['GET'])]
     public function show(Comments $comment): Response
     {

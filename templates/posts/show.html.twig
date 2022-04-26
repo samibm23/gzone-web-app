@@ -4,7 +4,8 @@
 
 {% block body %}
     <h1>Posts</h1>
-    <a href={{ path('app_comments_new') }} target="modal">Comment</a>
+    {#<a href={{ path('app_comments_new_post'  , {"id" : post.id}) }} target="modal">Comment</a>#}
+    <a href="{{ path('app_comments_new_post', {'id': post.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">Comment</a>
 
     <table class="table">
         <tbody>
@@ -41,9 +42,11 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_posts_index') }}">back to list</a>
+    {#<a href="{{ path('app_posts_index') }}">back to list</a>#}
+        <a href="{{ path('app_posts_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-white">back to list</a>
 
-    <a href="{{ path('app_posts_edit', {'id': post.id}) }}">edit</a>
+
+    <a href="{{ path('app_posts_edit', {'id': post.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-white">edit</a>
 
     {{ include('posts/_delete_form.html.twig') }}
 {% endblock %}
