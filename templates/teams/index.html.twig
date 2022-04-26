@@ -1,11 +1,29 @@
 {% extends 'base.html.twig' %}
 
+
 {% block title %}Teams index{% endblock %}
 
+
 {% block body %}
+ {% block stylesheets%}
+  <input type="text" id="search" class="form-control" placeholder="Search">
+
+   
+    <script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            $("#search").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+    {% endblock %}
     <h1>Teams index</h1>
 
-    <table class="table">
+    <table class="table" id="tr">
         <thead>
             <tr>
                 <th>Id</th>
