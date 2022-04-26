@@ -4,13 +4,14 @@
 
      <style>
      body {
-    background: white
+    background: #141d2b
 }
 
 .card {
     border: none;
     position: relative;
     overflow: hidden;
+    background-color: #141d2b;
     border-radius: 8px;
     cursor: pointer
 }
@@ -22,7 +23,7 @@
     top: 0;
     width: 4px;
     height: 100%;
-    background-color: white;
+    background-color: #141d2b;
     transform: scaleY(1);
     transition: all 0.5s;
     transform-origin: bottom
@@ -35,7 +36,7 @@
     top: 0;
     width: 4px;
     height: 100%;
-    background-color: #e6922e;
+    background-color: #9fef00;
     transform: scaleY(0);
     transition: all 0.5s;
     transform-origin: bottom
@@ -65,13 +66,16 @@
 .buttons button:nth-child(1) {
     border: 1px solid #e6922e !important;
     color: #e6922e;
+    position: center;
     height: 40px
 }
 
 .buttons button:nth-child(1):hover {
     border: 1px solid #e6922e !important;
-    color: #fff;
+    color: #00000;
     height: 40px;
+        position: center;
+
     background-color: #e6922e
 }
 
@@ -79,17 +83,17 @@
     border: 1px solid #e6922e !important;
     background-color: #e6922e;
     color: #fff;
+        position: center;
+
     height: 40px
 }
      </style>
 	<div class="container mt-5" style="margin-top:10%; margin-bottom:5%">
-    <div class="row d-flex justify-content-center" style='background-color:whotesmoke;display: flex;
-  justify-content: center;
-  align-items: center;' >
+    <div class="row d-flex justify-content-center" style='display: flex;justify-content: center;align-items: center;' >
         <div class="col-md-7" >
             <div class="card p-3 py-4">
                 <div class="text-center"> 
-                <img src="{{user.photoURL}}" width="40%" class="rounded-circle">
+                <img src={{user.photoURL}} width="15%" class="rounded-circle">
                  </div>
                 <div class="text-center mt-3"> <span class="bg-secondary p-1 px-4 rounded text-white">USER PROFILE</span>
                     <h5 class="mt-2 mb-0">Welcome {{ user.fullName}}</h5> <span>{{user.username}}</span>
