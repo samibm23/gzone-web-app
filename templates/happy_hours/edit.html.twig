@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.html.twig' %}
 
 {% block title %}Edit HappyHours{% endblock %}
 
@@ -7,7 +7,6 @@
 
     {{ include('happy_hours/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_happy_hours_index') }}">back to list</a>
 
-    {{ include('happy_hours/_delete_form.html.twig') }}
+
 {% endblock %}

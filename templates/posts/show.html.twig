@@ -5,6 +5,7 @@
 {% block body %}
     <h1>Posts</h1>
     <a href={{ path('app_comments_new') }} target="modal">Comment</a>
+
     <table class="table">
         <tbody>
             <tr>
@@ -30,6 +31,12 @@
             <tr>
                 <th>PostDate</th>
                 <td>{{ post.postDate ? post.postDate|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Action</th>
+                <td><a href="{{ path('app_posts_like', {'id': post.id}) }}">Like</a> | <a href="{{ path('app_posts_dislike', {'id': post.id}) }}">Dislike</a></td>
+                <th>Like Count</th>
+                <td>{{ likes | length }}</td>
             </tr>
         </tbody>
     </table>

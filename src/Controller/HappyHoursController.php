@@ -32,6 +32,8 @@ class HappyHoursController extends AbstractController
         $form = $this->createForm(HappyHoursType::class, $happyHour);
         $form->handleRequest($request);
 
+
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($happyHour);
             $entityManager->flush();
@@ -61,10 +63,8 @@ class HappyHoursController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
             return $this->redirectToRoute('app_happy_hours_index', [], Response::HTTP_SEE_OTHER);
         }
-
         return $this->renderForm('happy_hours/edit.html.twig', [
             'happy_hour' => $happyHour,
             'form' => $form,

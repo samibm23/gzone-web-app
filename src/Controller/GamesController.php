@@ -33,7 +33,7 @@ class GamesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $ImageFile = $form->get('image')->getData();
+            $ImageFile = $form->get('photo_url')->getData();
             if ($ImageFile) {
 
                 // this is needed to safely include the file name as part of the URL
@@ -51,7 +51,7 @@ class GamesController extends AbstractController
                 }
                 // updates the 'ImageFilename' property to store the PDF file name
                 // instead of its contents
-                $game->setImage($newFilename);
+                $game->setPhotoUrl($newFilename);
 
 
             }
@@ -83,7 +83,7 @@ class GamesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $ImageFile = $form->get('image')->getData();
+            $ImageFile = $form->get('photo_url')->getData();
             if ($ImageFile) {
                 $newFilename = md5(uniqid()).'.'.$ImageFile->guessExtension();
                 $destination = $this->getParameter('kernel.project_dir').'/public/images/games';
@@ -99,16 +99,17 @@ class GamesController extends AbstractController
 
                 // updates the 'ImageFilename' property to store the PDF file name
                 // instead of its contents
-                $game->setImage($newFilename);
+                $game->setPhotoUrl($newFilename);
             }
-            $entityManager->flush();
+            $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('app_games_index', [], Response::HTTP_SEE_OTHER);
+
+            return $this->redirectToRoute('app_games_index');
         }
 
-        return $this->renderForm('games/edit.html.twig', [
+        return $this->render('games/edit.html.twig', [
             'game' => $game,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
@@ -122,4 +123,7 @@ class GamesController extends AbstractController
 
         return $this->redirectToRoute('app_games_index', [], Response::HTTP_SEE_OTHER);
     }
+
+   
+
 }

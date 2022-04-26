@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Mailer\MailerInterface;
 
 
 #[Route('/tournaments')]
@@ -32,18 +33,36 @@ class TournamentsController extends AbstractController
     }
 
     #[Route('/new', name: 'app_tournaments_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {        
-        
+    public function new(Request $request, EntityManagerInterface $entityManager, \Swift_Mailer $mailer): Response
+    {
         $tournament = new Tournaments();
         $form = $this->createForm(TournamentsType::class, $tournament);
         $form->handleRequest($request);
         $date = new \DateTime('now'); 
         $tournament->setCreateDate($date);
-        if ($form->isSubmitted() && $form->isValid()) {           
+
+
+       
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $form->getData();
             $entityManager->persist($tournament);
             $entityManager->flush();
-                    
+
+            dump($entityManager);
+            
+
+            
+            $message = (new \Swift_Message('You Got Mail From G-ZONE'))
+            ->setFrom($cantactFromData['email'])
+            ->setTo('bensalemiheb9669@gmail.com')
+            ->setBody(
+                $cantactFromData['message'],
+           
+            'text/html'
+        );
+         $mailer->send($message);
+
             return $this->redirectToRoute('app_tournaments_index', [], Response::HTTP_SEE_OTHER);
         }
         return $this->renderForm('tournaments/new.html.twig', [

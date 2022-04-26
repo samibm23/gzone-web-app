@@ -3,6 +3,7 @@
 namespace App\Controller;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use App\Entity\Matches;
+use App\Entity\JoinRequests;
 use App\Form\MatchesType;
 use App\Entity\Users;
 use Symfony\Component\Mailer\MailerInterface;
@@ -43,18 +44,36 @@ class MatchesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($match);
-            $entityManager->flush();
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation(
-                'tournament_email',
-                $user,
-                (new TemplatedEmail())
-                    ->from(new Address('appgzone@gmail.com', 'Gzone App'))
-                    ->to('mahdi3soussi@gmail.com')
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('TournamentConfirmation/confirmation_TR.html.twig')
-            );
+
+            if (
+                $match->getWinnerTeam() == null
+                && $match->getTeam1()->getId() != $match->getTeam2()->getId()
+                && count($entityManager->getRepository(JoinRequests::class)->findBy([
+                    "team" => $match->getTeam1(),
+                    "tournament" => $match->getTournament(),
+                    "accepted" => true
+                    ])) == 1
+                && count($entityManager->getRepository(JoinRequests::class)->findBy([
+                    "team" => $match->getTeam2(),
+                    "tournament" => $match->getTournament(),
+                    "accepted" => true
+                    ])) == 1
+            )
+            {
+                $entityManager->persist($match);
+                $entityManager->flush();
+                // generate a signed url and email it to the user
+                $this->emailVerifier->sendEmailConfirmation(
+                    'tournament_email',
+                    $user,
+                    (new TemplatedEmail())
+                        ->from(new Address('appgzone@gmail.com', 'Gzone App'))
+                        ->to('mahdi3soussi@gmail.com')
+                        ->subject('Please Confirm your Email')
+                        ->htmlTemplate('TournamentConfirmation/confirmation_TR.html.twig')
+                );
+            }
+
             return $this->redirectToRoute('app_matches_index', [], Response::HTTP_SEE_OTHER);
         }
 

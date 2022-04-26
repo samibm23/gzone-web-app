@@ -15,7 +15,7 @@ class CommentsType extends AbstractType
             ->add('commentBody')
             ->add('commentDate')
             ->add('post')
-            ->add('commenter')
+            
         ;
     }
 
