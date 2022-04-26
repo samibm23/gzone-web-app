@@ -70,8 +70,8 @@ class JoinRequestsController extends AbstractController
                 && (
                     $joinRequest->getUser() != null
                     || (
-                        $joinRequest->getTeam()->getTeamSize() == $joinRequest->getTournament()->getTeamSize()
-                        && $joinRequest->getTeam()->getGame()->getId() == $joinRequest->getTournament()->getGame()->getId()
+                        $joinRequest->getTeam()?->getTeamSize() == $joinRequest->getTournament()?->getTeamSize()
+                        && $joinRequest->getTeam()?->getGame()?->getId() == $joinRequest->getTournament()?->getGame()?->getId()
                     )
                 )
                 && (
