@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * Badges
@@ -23,18 +25,27 @@ class Badges
 
     /**
      * @var string
-     *
+
      * @ORM\Column(name="title", type="string", length=50, nullable=false)
+     * @Assert\NotBlank
+    @Assert\Length(
+     *      min = 2,
+     *      max = 50,
+     *      minMessage = "Your description must be at least {{ 2 }} characters long",
+     *      maxMessage = "Your description cannot be longer than {{ 50 }} characters"
+     * )
+     *      @Assert\Unique
+
      */
     private $title;
 
     /**
      * @var \Games
      *
-     * @ORM\ManyToOne(targetEntity="Games")
-     * @ORM\JoinColumns({
+     * @ORM\ManyToOne(targetEntity="Games", cascade={"remove"} )
+     *
      *   @ORM\JoinColumn(name="game_id", referencedColumnName="id")
-     * })
+     *
      */
     private $game;
 

@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.html.twig' %}
 
 {% block title %}Games{% endblock %}
 
@@ -17,7 +17,8 @@
             </tr>
             <tr>
                 <th>Image</th>
-                <td>{{ game.image }}</td>
+                <td><img style="height: 100px; width: 100px" src="{{ asset('images/games/'~game.photo_url) }}" ></td>
+
             </tr>
             <tr>
                 <th>Description</th>
@@ -30,5 +31,6 @@
 
     <a href="{{ path('app_games_edit', {'id': game.id}) }}">edit</a>
 
-    {{ include('games/_delete_form.html.twig') }}
+
+
 {% endblock %}

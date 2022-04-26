@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin.html.twig' %}
 
 {% block title %}HappyHours{% endblock %}
 
@@ -13,7 +13,8 @@
             </tr>
             <tr>
                 <th>StartDate</th>
-                <td>{{ happy_hour.startDate ? happy_hour.startDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{  happy_hour.startDate ? happy_hour.startDate|date('Y-m-d H:i:s') : ''}}</td>
+
             </tr>
             <tr>
                 <th>EndDate</th>
@@ -24,7 +25,5 @@
 
     <a href="{{ path('app_happy_hours_index') }}">back to list</a>
 
-    <a href="{{ path('app_happy_hours_edit', {'id': happy_hour.id}) }}">edit</a>
 
-    {{ include('happy_hours/_delete_form.html.twig') }}
 {% endblock %}
