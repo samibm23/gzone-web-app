@@ -15,9 +15,6 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class SearchFormType extends AbstractType
 {
-
-
-
     public function configureOptions(OptionsResolver $resolver){
 
         $resolver->setDefaults([

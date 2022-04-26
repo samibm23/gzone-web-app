@@ -1,0 +1,92 @@
+
+{#
+
+{% if app.user %}
+<div class="mb-3">
+   You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+</div>
+{% endif %}
+
+Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+See https://symfony.com/doc/current/security/remember_me.html
+
+<div class="checkbox mb-3">
+   <label>
+       <input type="checkbox" name="_remember_me"> Remember me
+   </label>
+</div>
+#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Corona Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{{ asset('Back/assets/vendors/mdi/css/materialdesignicons.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('Back/assets/vendors/css/vendor.bundle.base.css') }}">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="{{ asset('Back/assets/css/style.css') }}">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="{{ asset('Back/assets/images/favicon.png') }}" />
+    <style>
+        .card{
+            border: 2px solid white;
+        }
+    </style>
+</head>
+<body>
+<div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="row w-100 m-0">
+            <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+                <div class="card col-lg-4 mx-auto">
+                    <div class="card-body px-5 py-5">
+                        <h3 class="card-title text-center mb-3">Insert Code</h3>
+
+
+                        <form method="post">
+                            {% if (error) %}
+                                <ul style="background-color: red;width: 100%;text-align: left;border-radius: 5px;font-size: 17px;" >
+                                    <li style="padding-left: 20px">{{ error }}</li>
+                                </ul>
+                            {% endif %}
+                            <div class="form-group">
+                                <label>Verification Code</label>
+                                <input placeholder="Code" name="verificationcode" class="form-control p_input" required autofocus>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-block enter-btn">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- content-wrapper ends -->
+        </div>
+        <!-- row ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+<!-- plugins:js -->
+<script src="{{ asset('Back/assets/vendors/js/vendor.bundle.base.js') }}"></script>
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script src="{{ asset('Back/assets/js/off-canvas.js') }}"></script>
+<script src="{{ asset('Back/assets/js/hoverable-collapse.js') }}"></script>
+<script src="{{ asset('Back/assets/js/misc.js') }}"></script>
+<script src="{{ asset('Back/assets/js/settings.js') }}"></script>
+<script src="{{ asset('Back/assets/js/todolist.js') }}"></script>
+<!-- endinject -->
+</body>
+</html>

@@ -1,0 +1,63 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+
+    <style>
+        .left-content a:hover {
+            font-size: 15px;
+        }
+    </style>
+
+</head>
+<body>
+<div class="best-features">
+    <div class="container" style="max-width: 984px;width: 100%; margin-right: auto;background-color: #0b0c2a;margin-left: auto; height: 600px; border-radius: 0px 0px 10px 10px;">
+        <div class="row">
+            <div class="col-md-12" style=" width: 100%;margin: auto;">
+                <div class="right-image" style="box-sizing: border-box;">
+                    <img style="width: 983px;" src="https://i.ibb.co/0Qd2rTr/GAMEX2.png">
+                </div>
+            </div>
+            <div class="col-md-12" style="">
+                <div class="middle-content" style="text-align:center;">
+                    <h4 style="font-size: 22px;font-family: monospace;font-style: normal;color: #ffffff;width: 43%;background-color: #b3000d;margin: auto;border-radius: 10px;border-right: 2px solid white;border-left: 2px solid white;" >Hello {{ fullName }}</h4>
+                </div>
+                <div class="left-content" style="text-align:center;">
+                    <p style ="font-weight: BOLD;color: #fcfcfc;margin: auto;font-size: 18px;padding-top: 16px;margin-bottom: 23px;font-family: ui-monospace;height: 101px;background-color: #0b0c2a;border-bottom: 2px dotted red;border-top: 2px dotted red;margin-top: 20px;"> To activate your Gzone Account. <br> please verify your email address.
+                        Your account will not be created until your email address is confirmed. <br>
+                        This link will expire in {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
+                    </p>
+                    <button id="btn" style="height: 42px;background-color: #b3000d;border-radius: 5px;border: 1px solid #b3000d;width: 15%;margin-top: -11px;">
+                        <a style="color:white; display:contents;"class="filled-button" href="{{ signedUrl }}">Confirm Account</a>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div class="container" style="margin: auto;margin-top: 24px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="inner-content" style="padding-top: 16px;padding-bottom: 16px;color: white;">
+                            <p style="padding-top: 16px;padding-bottom: 16px;background: #b3000d;color: white;width: 38%;margin: auto;text-align: center;border-radius: 10px;border-right: 2px solid white;border-left: 2px solid white;">Copyright &copy; 2022 Gzone.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+</div>
+
+
+</body>
+</html>
+
+
+

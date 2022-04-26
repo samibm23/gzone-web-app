@@ -25,15 +25,18 @@ class CommentsController extends AbstractController
             'comments' => $comments,
         ]);
     }
-
+    
     #[Route('/new', name: 'app_comments_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $user= $this->getUser();
+        
         $comment = new Comments();
         $form = $this->createForm(CommentsType::class, $comment);
         $form->handleRequest($request);
         $date = new \DateTime('now'); 
-        $commentDate->setCommentDate($date);
+        $comment->setCommentDate($date);
+        $comment->setCommenter($user);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($comment);

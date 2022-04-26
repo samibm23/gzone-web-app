@@ -1,35 +1,56 @@
-{% extends 'front.html.twig' %}
-
-     {% block body %}
+{% extends 'base.html.twig' %}
+    {% block body %}
         <section class="login spad">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6">
 
-                        <div class="login__form" style="margin-top:20%">
-                        
-                            <div class="input__item">
+                        <div class="login__form">
+                            <h3>Login</h3>
+                            {% if not form.vars.valid %}
+                                {% for child in  form.children %}
+                                    {% for error in child.vars.errors %}
+                                        <div class="alert alert-danger">{{ error.message }}</div>
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endif %}
                             {{ form_start(form ,  {'attr' : {'novalidate' : 'novalidate'}}) }}
+                            <div class="input__item">
+                                {{ form_widget(form.email , {'attr' : {'class' : 'form-control' }}) }}
                                 <span class="icon_mail"></span>
                             </div>
-                    
+                            <div class="input__item">
+                                {{ form_widget(form.full_name , {'attr' : {'class' : 'form-control' }}) }}
+                                <span class="icon_profile"></span>
+                            </div>
+                            <div class="input__item">
+                                {{ form_widget(form.phone_number , {'attr' : {'class' : 'form-control' }}) }}
+                                <span class="icon_mobile"></span>
+                            </div>
+
 
                             <ul>
-                                <button type="submit" class="btn btn-success btn-fw" style="margin-top:10%">{{ button_label|default('Save') }}</button>
+                                <li><button style="background-color: #ff4343;border-radius: 4px;color: #ffffff; display: block;font-size: 13px;font-weight: 700;letter-spacing: 2px;text-transform: uppercase;width: 460px;padding: 14px 0;position: relative;margin: 0 auto; " type="submit" class="btn btn-danger btn-fw">{{ button_label|default('Save') }}</button></li>
                             </ul>
                                 {{ form_end(form) }}
-                            </div>
+                        </div>
                     </div>
-                    <div class="col-lg-6" style="margin-top:20%">
-                        <div style="display: grid " class="login__register">
-                            <a  class="btn btn-info" href="{{ path('profile') }}">Back</a>
-                            
+                    <div class="col-lg-6">
+                        <div style="display: grid" class="login__register">
+                            <h3>Dont’t Have An Account?</h3>
+                            <a  class="primary-btn" href="{{ path('profile_edit_password') }}">Edit Password</a>
+                            <a  class="primary-btn" href="{{ path('profile') }}">Back</a>
+                            <form  method="post" action="{{ path('delete_profile') }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                                <button  style="border: none;" class="primary-btn">Delete Account</button>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
     {% endblock %}
+
 
 
 

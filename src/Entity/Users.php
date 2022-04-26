@@ -122,6 +122,31 @@ class Users implements UserInterface
      * @ORM\Column(name="role", type="string", length=20, nullable=true, options={"default"="ROLE_USER"})
      */
     private $role;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isVerified = false;
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $activation_token;
+
+    /**
+     * @ORM\Column(type="string", length=60, nullable=true)
+     */
+    private $reset_token;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $disable_token;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @Assert\Length(min="8" , minMessage="Phone number must contain exactly 8 numbers")
+     * @Assert\Length(max="8" , maxMessage="Phone number must contain exactly 8 numbers")
+     */
+    private $verificationCode;
 
 
 
@@ -299,4 +324,104 @@ class Users implements UserInterface
         $this->id = unserialize($data);
     }
 
+
+    /**
+     * Get the value of isVerified
+     */ 
+    public function getIsVerified()
+    {
+        return $this->isVerified;
+    }
+
+    /**
+     * Set the value of isVerified
+     *
+     * @return  self
+     */ 
+    public function setIsVerified($isVerified)
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of activation_token
+     */ 
+    public function getActivation_token()
+    {
+        return $this->activation_token;
+    }
+
+    /**
+     * Set the value of activation_token
+     *
+     * @return  self
+     */ 
+    public function setActivation_token($activation_token)
+    {
+        $this->activation_token = $activation_token;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of reset_token
+     */ 
+    public function getReset_token()
+    {
+        return $this->reset_token;
+    }
+
+    /**
+     * Set the value of reset_token
+     *
+     * @return  self
+     */ 
+    public function setReset_token($reset_token)
+    {
+        $this->reset_token = $reset_token;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of disable_token
+     */ 
+    public function getDisable_token()
+    {
+        return $this->disable_token;
+    }
+
+    /**
+     * Set the value of disable_token
+     *
+     * @return  self
+     */ 
+    public function setDisable_token($disable_token)
+    {
+        $this->disable_token = $disable_token;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of verificationCode
+     */ 
+    public function getVerificationCode()
+    {
+        return $this->verificationCode;
+    }
+
+    /**
+     * Set the value of verificationCode
+     *
+     * @return  self
+     */ 
+    public function setVerificationCode($verificationCode)
+    {
+        $this->verificationCode = $verificationCode;
+
+        return $this;
+    }
 }
