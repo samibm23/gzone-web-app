@@ -33,7 +33,7 @@ class TournamentsController extends AbstractController
     }
 
     #[Route('/new', name: 'app_tournaments_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, \Swift_Mailer $mailer): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $tournament = new Tournaments();
         $tournament->setAdmin($this->getUser());
