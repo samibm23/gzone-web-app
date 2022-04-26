@@ -60,6 +60,8 @@
         {% endfor %}
         </tbody>
     </table>
-
+<div class="navigation">
+            {{ knp_pagination_render(teams) }}
+        </div>
     <a href="{{ path('app_teams_new') }}">Create new</a>
 {% endblock %}
