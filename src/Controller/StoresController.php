@@ -2,6 +2,11 @@
 
 namespace App\Controller;
 
+
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+
+use \Twilio\Rest\Client;
+
 use App\Entity\Stores;
 use App\Entity\Users;
 use App\Form\StoresType;
@@ -12,14 +17,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 // Include paginator interface
 use Knp\Component\Pager\PaginatorInterface;
-
-use \Twilio\Rest\Client;
+;
 
 #[Route('/stores')]
 class StoresController extends AbstractController
-{
+  {
     private $twilio;
-
+public function __construct(Client $twilio) {
+   $this->twilio = $twilio;
+  
+ }
     #[Route('/', name: 'app_stores_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager,PaginatorInterface $paginator, Request $request): Response
     {
@@ -66,10 +73,10 @@ class StoresController extends AbstractController
 
 
         foreach($entityManager->getRepository(Users::class)->findAll() as $user) {
-            $twilio->messages->create(
+            $twilio->messages->create("+216" .
             $user->getPhoneNumber(), // Text any number
             array(
-                'from' => '+19378263094', // From a Twilio number in your account
+                'from' => '19803242866', // From a Twilio number in your account
                 'body' => "Bonjour , un nouveau store a été crée "
             )
         );
