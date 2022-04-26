@@ -40,7 +40,7 @@ public function __construct(Client $twilio) {
             // Define the page parameter
             $request->query->getInt('page', 1),
             // Items per page
-            5
+            3
         );
 
         return $this->render('stores/index.html.twig', [
@@ -121,4 +121,5 @@ public function __construct(Client $twilio) {
 
         return $this->redirectToRoute('app_stores_index', [], Response::HTTP_SEE_OTHER);
     }
+
 }
