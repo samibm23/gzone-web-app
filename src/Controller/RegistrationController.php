@@ -43,7 +43,9 @@ class RegistrationController extends AbstractController
                 )
             );
            
-
+            $bytes = random_bytes(3);
+            $verificationCode = bin2hex($bytes);
+            $user->SetVerificationCode($verificationCode);
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email

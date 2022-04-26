@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Users;
 use Prophecy\Argument\Token\TokenInterface;
+use App\Form\ResetPassType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -178,7 +179,7 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/login", name="home", methods={"GET"})
-     */
+     */ 
     public function home(AuthenticationUtils $authenticationUtils): Response
     {
 

@@ -7,9 +7,11 @@ use App\Entity\Users;
 use App\Form\SearchForm;
 use App\Form\UsersType;
 use App\Form\ProfileType;
+use App\Form\PasswordProfileType;
 use App\Form\EditUserType;
 use App\Repository\UsersRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,10 +56,42 @@ class UsersController extends AbstractController
       /**
      * @Route("/listDQL", name="app_users_listDql")
      */
-    function orderByNameDQL(UsersRepository $userRepository): Response
+
+
+    // function orderByNameDQL(UsersRepository $userRepository): Response
+    // {
+    //     $users = $userRepository->getRepository(Users::class)->orderByName();
+    //     return $this->render('users/index.html.twig', array("users" => $users));
+    // }
+
+
+    
+       /**
+     * @Route("/profile/editPassword", name="edit_profile_password", methods={"GET", "POST"})
+     */
+    public function edituserpassword(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $userPasswordEncoder): Response
     {
-        $users = $userRepository->getRepository(Users::class)->orderByName();
-        return $this->render('users/index.html.twig', array("users" => $users));
+        $user = $this->getUser();
+        $form = $this->createForm(PasswordProfileType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid() ) {
+            $user->setPassword(
+                $userPasswordEncoder->encodePassword(
+                    $user,
+                    $form->get('password')->getData()
+                )
+            );
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('profile', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('users/profile_edit_password.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
