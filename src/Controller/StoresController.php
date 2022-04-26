@@ -37,7 +37,15 @@ public function __construct(Client $twilio) {
         $stores = $entityManager
             ->getRepository(Stores::class)
             ->findAll();
-
+        // Paginate the results of the query
+        $stores = $paginator->paginate(
+        // Doctrine Query, not results
+            $stores,
+            // Define the page parameter
+            $request->query->getInt('page', 1),
+            // Items per page
+            3
+        );
 
         return $this->render('stores/index.html.twig', [
             'stores' => $stores,
@@ -126,4 +134,5 @@ public function new(Request $request, EntityManagerInterface $entityManager,Clie
 
         return $this->redirectToRoute('app_stores_index', [], Response::HTTP_SEE_OTHER);
     }
+
 }
