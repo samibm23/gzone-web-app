@@ -12,22 +12,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\DateTime;
 
-#[Route('/join-requests')]
+#[Route('/join_requests')]
 class JoinRequestsController extends AbstractController
 {
-    #[Route('/', name: 'app_join_requests_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
-    {
-        $joinRequests = $entityManager
-            ->getRepository(JoinRequests::class)
-            ->findAll();
-
-        return $this->render('join_requests/index.html.twig', [
-            'join_requests' => $joinRequests,
-        ]);
-    }
-
-    #[Route('/new', name: 'app_join_requests_new', methods: ['GET', 'POST'])]
+#[Route('/new', name: 'app_join_requests_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $joinRequest = new JoinRequests();
@@ -70,8 +58,8 @@ class JoinRequestsController extends AbstractController
                 && (
                     $joinRequest->getUser() != null
                     || (
-                        $joinRequest->getTeam()?->getTeamSize() == $joinRequest->getTournament()?->getTeamSize()
-                        && $joinRequest->getTeam()?->getGame()?->getId() == $joinRequest->getTournament()?->getGame()?->getId()
+                        $joinRequest->getTeam()->getTeamSize() == $joinRequest->getTournament()->getTeamSize()
+                        && $joinRequest->getTeam()->getGame()->getId() == $joinRequest->getTournament()->getGame()->getId()
                     )
                 )
                 && (
@@ -97,6 +85,20 @@ class JoinRequestsController extends AbstractController
             'join_request' => $joinRequest,
             'form' => $form,
         ]);
+    }
+    #[Route('/', name: 'app_join_requests_index', methods: ['GET'])]
+
+    public function index(EntityManagerInterface $entityManager): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQuery(
+            'SELECT a FROM App\Entity\JoinRequests a 
+            ORDER BY a.message ASC'
+        );
+    
+        $joinRequests = $query->getResult();
+        return $this->render('join_requests/index.html.twig',
+        array('join_requests' => $joinRequests));
     }
 
     #[Route('/{id}', name: 'app_join_requests_show', methods: ['GET'])]

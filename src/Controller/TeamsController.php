@@ -14,24 +14,25 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\DateTime;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 #[Route('/teams')]
 class TeamsController extends AbstractController
 {
 
-        #[Route('/listDQL', name: 'app_teams_listDql')]
-    function orderByNameDQL(EntityManagerInterface $entityManager): Response
-    {
-       
-        $team = $entityManager->getRepository(Teams::class)->orderByName();
-        return $this->render('teams/index.html.twig', array("team" => $team));
-    }
-    
     #[Route('/', name: 'app_teams_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager, Request $request, PaginatorInterface $paginator): Response
     {
         $teams = $entityManager
             ->getRepository(Teams::class)
             ->findAll();
+            $teams = $paginator->paginate(
+                // Doctrine Query, not results
+                $teams,
+                // Define the page parameter
+                $request->query->getInt('page', 1),
+                // Items per page
+                5
+            );
 
         return $this->render('teams/index.html.twig', [
             'teams' => $teams,
@@ -187,5 +188,6 @@ class TeamsController extends AbstractController
 
         return $this->redirectToRoute('app_teams_index', [], Response::HTTP_SEE_OTHER);
     }
+    
 
 }
