@@ -43,7 +43,7 @@ class UsersController extends AbstractController
     }
 
     /**
-     * @Route("/profile/delete", name="delete_profile", methods={"GET"})
+     * @Route("/profile/delete", name="delete_profile", methods={"GET", "POST"})
      */
     public function delete_profile(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -54,18 +54,6 @@ class UsersController extends AbstractController
             return $this->redirectToRoute('app_login', [], Response::HTTP_SEE_OTHER);
         }
     }
-    /**
-     * @Route("/listDQL", name="app_users_listDql")
-     */
-
-
-    // function orderByNameDQL(UsersRepository $userRepository): Response
-    // {
-    //     $users = $userRepository->getRepository(Users::class)->orderByName();
-    //     return $this->render('users/index.html.twig', array("users" => $users));
-    // }
-
-
 
     /**
      * @Route("/profile/editPassword", name="edit_profile_password", methods={"GET", "POST"})
@@ -147,27 +135,6 @@ class UsersController extends AbstractController
             array('users' => $users)
         );
     }
-    /**
-     * @Route("/tri", name="sorted_users")
-     */
-    public function Tri(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-
-        $query = $em->createQuery(
-            'SELECT a FROM App\Entity\Users a 
-        ORDER BY a.username ASC'
-        );
-
-        $users = $query->getResult();
-
-        return $this->render(
-            'users/index.html.twig',
-            array('users' => $users)
-        );
-    }
-
 
     /**
      * @Route("/DisabledAccount", name="DisabledAccount")

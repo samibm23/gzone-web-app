@@ -15,6 +15,8 @@
         "doctrine/orm": "^2.11",
         "goxens/goxens-php": "^1.0",
         "knplabs/knp-paginator-bundle": "^5.8",
+        "knpuniversity/oauth2-client-bundle": "^2.10",
+        "league/oauth2-google": "^4.0",
         "liip/imagine-bundle": "^2.7",
         "mercuryseries/flashy-bundle": "^5.1",
         "phpdocumentor/reflection-docblock": "^5.3",
@@ -109,7 +111,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
+            "allow-contrib": true,
             "require": "5.4.*"
         }
     }

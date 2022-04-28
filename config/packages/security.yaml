@@ -17,11 +17,13 @@ security:
             remember_me:
                 secret: '%kernel.secret%' # required
                 lifetime: 604800
-            anonymous: lazy
+            anonymous: ~
             provider: app_user_provider
             guard:
+                entry_point: App\Security\LoginFormAuthenticator
                 authenticators:
                     - App\Security\LoginFormAuthenticator
+                    - App\Security\GoogleAuthenticator
             logout:
                 path: app_logout
                 # where to redirect after logout
