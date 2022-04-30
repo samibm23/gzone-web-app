@@ -107,7 +107,7 @@ class GoogleAuthenticator extends SocialAuthenticator
             if ( $hasAccess){
                 return new RedirectResponse($this->urlGenerator->generate('choice'));
             }else{
-                if ( !$verificationCode){
+                if ( $verificationCode){
                     return new RedirectResponse($this->urlGenerator->generate('ActivateAccountWithCode'));
                 }else{
                     if ( $disabled ){
