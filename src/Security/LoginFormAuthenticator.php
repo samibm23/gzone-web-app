@@ -32,7 +32,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     private $urlGenerator;
     private $csrfTokenManager;
     private $passwordEncoder;
-    
+
 
     public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
     {
@@ -40,8 +40,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         $this->urlGenerator = $urlGenerator;
         $this->csrfTokenManager = $csrfTokenManager;
         $this->passwordEncoder = $passwordEncoder;
-        
-
     }
 
     public function supports(Request $request)
@@ -85,8 +83,8 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     {
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
     }
-    
-     /**
+
+    /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
     public function getPassword($credentials): ?string
@@ -104,21 +102,21 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         $verificationCode = $token->getUser()->getVerificationCode();
         $disabled = $token->getUser()->getDisableToken();
 
-        if ( $activated == 1){
-            if ( $hasAccess){
+        if ($activated == 1) {
+            if ($hasAccess) {
                 return new RedirectResponse($this->urlGenerator->generate('choice'));
-            }else{
-                if ( $verificationCode){
+            } else {
+                if (!$verificationCode) {
                     return new RedirectResponse($this->urlGenerator->generate('ActivateAccountWithCode'));
-                }else{
-                    if ( $disabled ){
+                } else {
+                    if ($disabled) {
                         return new RedirectResponse($this->urlGenerator->generate('DisabledAccount'));
-                    }else{
+                    } else {
                         return new RedirectResponse($this->urlGenerator->generate('profile'));
                     }
                 }
             }
-        }else{
+        } else {
             return new RedirectResponse($this->urlGenerator->generate('denied_access'));
         }
 

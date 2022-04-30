@@ -18,7 +18,8 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class GoogleAuthenticator extends SocialAuthenticator
-{   use TargetPathTrait;
+{
+    use TargetPathTrait;
     private $clientRegistry;
     private $entityManager;
     private $router;
@@ -58,15 +59,15 @@ class GoogleAuthenticator extends SocialAuthenticator
 
         $user = $this->em->getRepository(Users::class)
             ->findOneBy(['email' => $email]);
-            
+
         if (!$user) {
-            
-            $user= new Users();
+
+            $user = new Users();
             $user->setEmail($googleUser->getEmail());
             $user->setFullName($googleUser->getName());
             $user->setUsername($googleUser->getName());
             $user->setPassword($googleUser->getName());
-            $date = new \DateTime('now'); 
+            $date = new \DateTime('now');
             $user->setJoinDate($date);
             $user->setBirthDate($date);
             $user->setRole("ROLE_USER");
@@ -82,7 +83,7 @@ class GoogleAuthenticator extends SocialAuthenticator
         return $user;
     }
 
-       /**
+    /**
      * Called when authentication is needed, but it's not sent.
      * This redirects to the 'login'.
      */
@@ -91,7 +92,7 @@ class GoogleAuthenticator extends SocialAuthenticator
         return new RedirectResponse('/login');
     }
 
-  
+
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): RedirectResponse
     {
@@ -103,24 +104,19 @@ class GoogleAuthenticator extends SocialAuthenticator
         $verificationCode = $token->getUser()->getVerificationCode();
         $disabled = $token->getUser()->getDisableToken();
 
-        if ( $activated == 1){
-            if ( $hasAccess){
+        if ($activated == 1) {
+            if ($hasAccess) {
                 return new RedirectResponse($this->urlGenerator->generate('choice'));
-            }else{
-                if ( $verificationCode){
-                    return new RedirectResponse($this->urlGenerator->generate('ActivateAccountWithCode'));
-                }else{
-                    if ( $disabled ){
-                        return new RedirectResponse($this->urlGenerator->generate('DisabledAccount'));
-                    }else{
-                        return new RedirectResponse($this->urlGenerator->generate('profile'));
-                    }
+            } else {
+                if ($disabled) {
+                    return new RedirectResponse($this->urlGenerator->generate('DisabledAccount'));
+                } else {
+                    return new RedirectResponse($this->urlGenerator->generate('profile'));
                 }
             }
-        }else{
+        } else {
             return new RedirectResponse($this->urlGenerator->generate('denied_access'));
         }
-
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
