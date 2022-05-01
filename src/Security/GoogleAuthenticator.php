@@ -54,14 +54,10 @@ class GoogleAuthenticator extends SocialAuthenticator
         /** @var GoogleUser $googleUser */
         $googleUser = $this->getGoogleClient()
             ->fetchUserFromToken($credentials);
-
         $email = $googleUser->getEmail();
-
         $user = $this->em->getRepository(Users::class)
             ->findOneBy(['email' => $email]);
-
         if (!$user) {
-
             $user = new Users();
             $user->setEmail($googleUser->getEmail());
             $user->setFullName($googleUser->getName());
@@ -78,8 +74,6 @@ class GoogleAuthenticator extends SocialAuthenticator
             $this->em->persist($user);
             $this->em->flush();
         }
-
-
         return $user;
     }
 
@@ -103,7 +97,6 @@ class GoogleAuthenticator extends SocialAuthenticator
         $hasAccess = in_array('ROLE_ADMIN', $token->getUser()->getRoles());
         $verificationCode = $token->getUser()->getVerificationCode();
         $disabled = $token->getUser()->getDisableToken();
-
         if ($activated == 1) {
             if ($hasAccess) {
                 return new RedirectResponse($this->urlGenerator->generate('choice'));

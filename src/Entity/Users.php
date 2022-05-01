@@ -305,7 +305,7 @@ class Users implements UserInterface
     }
     public function __toString(): string
     {
-        return $this->username;
+        return $this->id;
     }
     public function serialize()
     {

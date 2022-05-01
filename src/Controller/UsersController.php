@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Data\SearchData;
 use App\Entity\Users;
+use App\Repository\UserGamePreferencesRepository;
 use App\Form\SearchFormType;
 use App\Form\UsersType;
 use App\Form\ProfileType;
@@ -33,12 +34,23 @@ class UsersController extends AbstractController
     /**
      * @Route("/profile", name="profile", methods={"GET"})
      */
-    public function profile(UsersRepository $userRepository): Response
+    public function profile(UsersRepository $userRepository, UserGamePreferencesRepository $userGamePreferencesRepository): Response
     {
+        $idcurrentuser=$this->getUser()->getUserIdentifier();
+        $em = $this->getDoctrine()->getManager();
 
+
+        $query = $em->createQuery('
+        SELECT a FROM App\Entity\UserGamePreferences a
+        WHERE a.user = :id 
+    ')
+    ->setParameter('id', $idcurrentuser);
+
+        $currentuser = $query->getResult();
 
         return $this->render('users/profile.html.twig', [
             'user' => $userRepository->findOneBy(['id' => $this->getUser()->getUserIdentifier()]),
+            'favgames' => $userGamePreferencesRepository->findBy($currentuser),
         ]);
     }
 

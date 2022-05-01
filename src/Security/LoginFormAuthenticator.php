@@ -106,16 +106,14 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             if ($hasAccess) {
                 return new RedirectResponse($this->urlGenerator->generate('choice'));
             } else {
-                if (!$verificationCode) {
-                    return new RedirectResponse($this->urlGenerator->generate('ActivateAccountWithCode'));
-                } else {
+               
                     if ($disabled) {
                         return new RedirectResponse($this->urlGenerator->generate('DisabledAccount'));
                     } else {
                         return new RedirectResponse($this->urlGenerator->generate('profile'));
                     }
                 }
-            }
+            
         } else {
             return new RedirectResponse($this->urlGenerator->generate('denied_access'));
         }

@@ -28,15 +28,17 @@ class UserGamePreferencesController extends AbstractController
     #[Route('/new', name: 'app_user_game_preferences_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $currentuser= $this->getUser();
         $userGamePreference = new UserGamePreferences();
         $form = $this->createForm(UserGamePreferencesType::class, $userGamePreference);
         $form->handleRequest($request);
+        $userGamePreference->setUser($currentuser);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($userGamePreference);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_user_game_preferences_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('profile', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('user_game_preferences/new.html.twig', [
