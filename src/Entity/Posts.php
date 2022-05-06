@@ -4,12 +4,14 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Posts
  *
  * @ORM\Table(name="posts", uniqueConstraints={@ORM\UniqueConstraint(name="title", columns={"title"})}, indexes={@ORM\Index(name="poster_id", columns={"poster_id"})})
  * @ORM\Entity
+ * 
  */
 class Posts
 {
@@ -19,6 +21,7 @@ class Posts
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * Groups("post:read")
      */
     private $id;
 
@@ -26,6 +29,7 @@ class Posts
      * @var boolean
      *
      * @ORM\Column(name="resolved", type="boolean", nullable=false)
+     * Groups("post:read")
      */
     private $resolved = '0';
 
@@ -34,7 +38,7 @@ class Posts
      *
      * @ORM\Column(name="title", type="string", length=500, nullable=false)
      * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
-     * 
+     * Groups("post:read")
      */
     private $title;
 
@@ -43,6 +47,7 @@ class Posts
      *
      * @ORM\Column(name="content", type="string", length=2555, nullable=false)
      * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
+     * Groups("post:read")
      */
     private $content;
 
@@ -50,7 +55,7 @@ class Posts
      * @var string|null
      *
      * @ORM\Column(name="tags", type="string", length=255, nullable=true, options={"default"="NULL"})
-     
+     * Groups("post:read")
      */
     private $tags;
 
@@ -59,6 +64,7 @@ class Posts
      *
      * @ORM\Column(name="post_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
      * @Assert\GreaterThanOrEqual("today")
+     * Groups("post:read")
      */
     private $postDate;
 
@@ -69,6 +75,7 @@ class Posts
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="poster_id", referencedColumnName="id")
      * })
+     * Groups("post:read")
      * 
      */
     private $poster;
