@@ -1,9 +1,0 @@
-liip_imagine:
-    driver: "gd"
-    filter_sets:
-        miniature:
-            quality: 75
-            filters:
-             thumbnail:
-                size: [600, 330]
-                mode: outbound
