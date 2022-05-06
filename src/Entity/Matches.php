@@ -3,6 +3,7 @@
 namespace App\Entity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Matches
@@ -18,6 +19,7 @@ class Matches
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * Groups("post:read")
      */
     private $id;
 
@@ -26,6 +28,7 @@ class Matches
      *
      * @ORM\Column(name="start_time", type="datetime", nullable=false)
      * @Assert\GreaterThanOrEqual("today")
+     * Groups("post:read")
      */
     private $startTime;
 
@@ -33,7 +36,7 @@ class Matches
      * @var int|null
      *
      * @ORM\Column(name="round", type="integer", nullable=true, options={"default"="NULL"})
-     * 
+     * Groups("post:read")
      */
     private $round = NULL;
 
@@ -44,6 +47,7 @@ class Matches
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="tournament_id", referencedColumnName="id")
      * })
+     * Groups("post:read")
      */
     private $tournament;
 
@@ -54,6 +58,7 @@ class Matches
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="team2_id", referencedColumnName="id")
      * })
+     * Groups("post:read")
      */
     private $team2;
 
@@ -64,6 +69,7 @@ class Matches
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="team1_id", referencedColumnName="id")
      * })
+     * Groups("post:read")
      */
     private $team1;
 
@@ -74,6 +80,7 @@ class Matches
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="winner_team_id", referencedColumnName="id")
      * })
+     * Groups("post:read")
      */
     private $winnerTeam;
 
