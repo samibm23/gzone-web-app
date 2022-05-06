@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Controller;
+
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use App\Entity\Matches;
+use App\Entity\Tournaments;
+use App\Entity\Teams;
 use App\Entity\JoinRequests;
 use App\Form\MatchesType;
 use App\Entity\Users;
@@ -73,12 +76,12 @@ class MatchesController extends AbstractController
     ): Response {
         $em = $this->getDoctrine()->getManager();
         $match = new Matches();
-        $match->setStartTime($request->get('start_time'));
-        $match->setRound($request->get(''));
-        $match->setTournament($entityManager->getRepository(Tournaments::class)->find($request->get('tournament_id')));
-        $match->setTeam1($entityManager->getRepository(Teams::class)->find($request->get('team1_id')));
-        $match->setTeam2($entityManager->getRepository(Teams::class)->find($request->get('team2_id')));
-        $match->setWinnerTeam($entityManager->getRepository(Teams::class)->find($request->get('winner_team_id')));
+        $match->setStartTime(new \DateTime($request->get('start_time')));
+        $match->setRound((int)$request->get('round'));
+        $match->setTournament($entityManager->getRepository(Tournaments::class)->find((int)$request->get('tournament_id')));
+        $match->setTeam1($entityManager->getRepository(Teams::class)->find((int)$request->get('team1_id')));
+        $match->setTeam2($entityManager->getRepository(Teams::class)->find((int)$request->get('team2_id')));
+        $match->setWinnerTeam($entityManager->getRepository(Teams::class)->find((int)$request->get('winner_team_id')));
         
         $em->persist($match);
         $em->flush();
