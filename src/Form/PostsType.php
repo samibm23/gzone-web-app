@@ -15,8 +15,7 @@ class PostsType extends AbstractType
             
             ->add('title')
             ->add('content')
-            ->add('tags')
-            ->add('resolved');
+            ->add('tags');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
