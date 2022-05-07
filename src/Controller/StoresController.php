@@ -2,7 +2,13 @@
 
 namespace App\Controller;
 
+
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+
+use \Twilio\Rest\Client;
+
 use App\Entity\Stores;
+use App\Entity\MarketItems;
 use App\Entity\Users;
 use App\Form\StoresType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,44 +16,46 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
 // Include paginator interface
-
-
-use \Twilio\Rest\Client;
+use Knp\Component\Pager\PaginatorInterface;
+;
 
 #[Route('/stores')]
 class StoresController extends AbstractController
-{
+  {
     private $twilio;
-
-
-
-
-
+public function __construct(Client $twilio) {
+   $this->twilio = $twilio;
+  
+ }
     #[Route('/', name: 'app_stores_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager,PaginatorInterface $paginator, Request $request): Response
     {
+        $bestStore = $entityManager->getRepository(Stores::class)->find($entityManager->getRepository(MarketItems::class)->getBestStore());
         $stores = $entityManager
             ->getRepository(Stores::class)
             ->findAll();
-
+        // Paginate the results of the query
+        $stores = $paginator->paginate(
+        // Doctrine Query, not results
+            $stores,
+            // Define the page parameter
+            $request->query->getInt('page', 1),
+            // Items per page
+            3
+        );
 
         return $this->render('stores/index.html.twig', [
             'stores' => $stores,
+            'bestStore' => $bestStore
         ]);
     }
 
 
     #[Route('/new', name: 'app_stores_new', methods: ['GET', 'POST'])]
 
-
-
-
-
-
-public function new(Request $request, EntityManagerInterface $entityManager,Client $twilio)
-    { $this->twilio = $twilio;
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
         $store = new Stores();
         $form = $this->createForm(StoresType::class, $store);
         $form->handleRequest($request);
@@ -68,17 +76,13 @@ public function new(Request $request, EntityManagerInterface $entityManager,Clie
 
 
         foreach($entityManager->getRepository(Users::class)->findAll() as $user) {
-            $twilio->messages->create(
-            "+216" , $user->getPhoneNumber(), // Text any number
+            $twilio->messages->create("+216" .
+            $user->getPhoneNumber(), // Text any number
             array(
-                'from' => '+19378263094', // From a Twilio number in your account
+                'from' => '19803242866', // From a Twilio number in your account
                 'body' => "Bonjour , un nouveau store a été crée "
             )
         );
-           
-
-
-
         }
 
         return new Response("Sent messages ");
@@ -120,4 +124,5 @@ public function new(Request $request, EntityManagerInterface $entityManager,Clie
 
         return $this->redirectToRoute('app_stores_index', [], Response::HTTP_SEE_OTHER);
     }
+
 }

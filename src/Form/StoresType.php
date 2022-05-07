@@ -6,7 +6,7 @@ use App\Entity\Stores;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
+use VictorPrdh\RecaptchaBundle\Form\ReCaptchaType;
 class StoresType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -15,6 +15,7 @@ class StoresType extends AbstractType
             ->add('name')
             ->add('owner')
             ->add('game')
+            ->add('captcha',ReCaptchaType::class)
         ;
     }
 

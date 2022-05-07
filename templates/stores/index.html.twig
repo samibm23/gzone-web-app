@@ -3,9 +3,39 @@
 {% block title %}Stores index{% endblock %}
 
 {% block body %}
-    <h1>Stores index</h1>
-
+    <h5>Best Store</h5>
     <table class="table">
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ bestStore.id }}</td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td>{{ bestStore.name }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <hr />
+    <h1>Stores index</h1>
+    {% block stylesheets%}
+        <input type="text" id="search" class="form-control" placeholder="Search">
+        <script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js') }}"></script>
+        <script>
+            $(document).ready(function(){
+                $("#search").on("keyup", function() {
+                    var value = $(this).val().toLowerCase();
+                    $("tr").filter(function() {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                });
+            });
+        </script>
+    {% endblock %}
+
+
+
+    <table class="table" id="tr">
         <thead>
             <tr>
                 <th>Id</th>
@@ -30,7 +60,9 @@
         {% endfor %}
         </tbody>
     </table>
-
+    <div class="navigation">
+        {{ knp_pagination_render(stores) }}
+    </div>
 
     <a href="{{ path('app_stores_new') }}">Create new</a>
 {% endblock %}
