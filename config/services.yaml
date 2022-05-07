@@ -10,6 +10,7 @@ parameters:
     twilio_token: ba71c684d1da5c964e25166b8cf87e58
     twilio_number: '+19378263094'
     team_directory: '%kernel.project_dir%/public/uploads/team'
+    google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
     
 services:
 
