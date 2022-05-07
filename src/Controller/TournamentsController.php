@@ -11,7 +11,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 #[Route('/tournaments')]
 class TournamentsController extends AbstractController
@@ -30,31 +32,37 @@ class TournamentsController extends AbstractController
 
     #[Route('/json/list', name: 'app_tournaments_json_list', methods: ['GET'])]
     public function ListJson(
-        EntityManagerInterface $entityManager,
-        NormalizerInterface $normalizer
+        EntityManagerInterface $entityManager
     ): Response {
         $tournaments = $entityManager->getRepository(Tournaments::class)->findAll();
-        $jsonContent = $normalizer->normalize($tournaments, 'json', [
+	  $encoders = [new JsonEncoder()];
+	  $normalizers = [new ObjectNormalizer()];
+
+	  $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($tournaments, 'json', [
             'groups' => 'post:read',
         ]);
         // return $this->render('games/index.html.twig', [
         //   'games' => $games,
         //]);
-        return new Response(json_encode($jsonContent));
+        return new Response($jsonContent);
     }
 
     #[Route('/json/list/{id}', name: 'app_tournaments_json_list_show', methods: ['GET'])]
     public function showId(
         Request $request,
         $id,
-        NormalizerInterface $normalizer
     ): Response {
         $em = $this->getDoctrine()->getManager();
-        $tournaments = $em->getRepository(Tournaments::class)->find($id);
-        $jsonContent = $normalizer->normalize($tournament, 'json', [
+        $tournament = $em->getRepository(Tournaments::class)->find($id);
+	  $encoders = [new JsonEncoder()];
+	  $normalizers = [new ObjectNormalizer()];
+
+	  $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($tournament, 'json', [
             'groups' => 'post:read',
         ]);
-        return new Response(json_encode($jsonContent));
+        return new Response($jsonContent);
     }
 
     #[Route('/json/new', name: 'app_tournaments_json_new', methods: ['GET', 'POST'])]
