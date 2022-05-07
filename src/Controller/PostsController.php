@@ -131,7 +131,8 @@ class PostsController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response {
         $post = new Posts();
-        $post->setPoster($entityManager->getRepository(Users::class)->find((int)$request->get('poster_id')));
+        $post ->setResolved(false);
+        $post->setPoster($this->getUser());
         $form = $this->createForm(PostsType::class, $post);
         $form->handleRequest($request);
         $date = new \DateTime('now');
