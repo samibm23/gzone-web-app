@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Users;
 use App\Entity\Games;
+use App\Entity\Matches;
 use App\Entity\Tournaments;
 use App\Form\TournamentsType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -114,10 +115,12 @@ class TournamentsController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_tournaments_show', methods: ['GET'])]
-    public function show(Tournaments $tournament): Response
+    public function show(Tournaments $tournament, EntityManagerInterface $entityManager): Response
     {
+        $matches = $entityManager->getRepository(Matches::class)->findBy(['tournament' => $tournament]);
         return $this->render('tournaments/show.html.twig', [
             'tournament' => $tournament,
+            'matches' => $matches,
         ]);
     }
 
