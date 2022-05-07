@@ -5,6 +5,7 @@ namespace App\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Teams
@@ -20,6 +21,7 @@ class Teams
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups("post:read")
      */
     private $id;
 
@@ -34,8 +36,8 @@ class Teams
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message="name is required")
+     * @ORM\Column(name="name", type="string", length=255, nullable=true, options={"default"="NULL"})
+     * @Groups("post:read")
      */
     private $name;
 
@@ -44,6 +46,7 @@ class Teams
      *
      * @ORM\Column(name="description", type="string", length=500, nullable=true, options={"default"="NULL"})
      * @Assert\NotBlank(message="description is required")
+     * @Groups("post:read")
      */
     private $description;
 
@@ -51,6 +54,7 @@ class Teams
      * @var int
      *
      * @ORM\Column(name="team_size", type="integer", nullable=false, options={"default"="1"})
+     * @Groups("post:read")
      */
     private $teamSize = 1;
 
@@ -58,6 +62,7 @@ class Teams
      * @var bool
      *
      * @ORM\Column(name="requestable", type="boolean", nullable=false, options={"default"="1"})
+     * @Groups("post:read")
      */
     private $requestable = true;
 
@@ -65,6 +70,7 @@ class Teams
      * @var bool
      *
      * @ORM\Column(name="invitable", type="boolean", nullable=false, options={"default"="1"})
+     * @Groups("post:read")
      */
     private $invitable = true;
 
@@ -72,6 +78,7 @@ class Teams
      * @var \DateTime
      *
      * @ORM\Column(name="create_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
+     * @Groups("post:read")
      */
     private $createDate;
 
@@ -82,6 +89,7 @@ class Teams
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="admin_id", referencedColumnName="id")
      * })
+     * @Groups("post:read")
      */
     private $admin;
 
@@ -92,6 +100,7 @@ class Teams
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="game_id", referencedColumnName="id")
      * })
+     * @Groups("post:read")
      */
     private $game;
 
