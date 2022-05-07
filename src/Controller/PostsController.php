@@ -75,11 +75,12 @@ class PostsController extends AbstractController
     #[Route('/newJson', name: 'app_posts_newJson', methods: ['GET', 'POST'])]
     public function newJson(
         Request $request,
+        EntityManagerInterface $entityManager,
         NormalizerInterface $normalizer
     ): Response {
         $em = $this->getDoctrine()->getManager();
         $post = new Posts();
-        $post->setPoster($this->getUser());
+        $post->setPoster($entityManager->getRepository(Users::class)->find((int)$request->get('poster_id')));
         $post->setTitle($request->get('title'));
         $post->setContent($request->get('content'));
         $date = new \DateTime('now');
@@ -130,7 +131,7 @@ class PostsController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response {
         $post = new Posts();
-        $post->setPoster($this->getUser());
+        $post->setPoster($entityManager->getRepository(Users::class)->find((int)$request->get('poster_id')));
         $form = $this->createForm(PostsType::class, $post);
         $form->handleRequest($request);
         $date = new \DateTime('now');
