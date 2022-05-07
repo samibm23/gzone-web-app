@@ -24,7 +24,7 @@ class UserLikesDislikes
     /**
      * @var bool
      *
-     * @ORM\Column(name="like", type="boolean", nullable=false)
+     * @ORM\Column(name="`like`", type="boolean", nullable=false)
      */
     private $like;
 
