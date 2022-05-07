@@ -15,6 +15,14 @@
                 <th>Name</th>
                 <td>{{ store.name }}</td>
             </tr>
+            <tr>
+                <th>Action</th>
+                <td><a href="{{ path('app_user_store_likes_dislikes_new', {'user_id': user_id, 'like': 1, 'store_id': store.id}) }}">Like</a> | <a href="{{ path('app_user_store_likes_dislikes_new', {'user_id': user_id, 'like': 0, 'store_id': store.id}) }}">Dislike</a></td>
+                <th>Like Count</th>
+                <td>{{ likes | length }}</td>
+                <th>Dislike Count</th>
+                <td>{{ dislikes | length }}</td>
+            </tr>
         </tbody>
     </table>
 

@@ -10,6 +10,6 @@ class MarketItemsRepository extends EntityRepository
             ->select('IDENTITY(mi.store)')
             ->groupBy('mi.store')
             ->orderBy('count(mi.store)', 'DESC')
-            ->setMaxResults(1)->getQuery()->getSingleScalarResult();
+            ->setMaxResults(1)->getQuery()->getOneOrNullResult();
     }
 }

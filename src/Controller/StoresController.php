@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 use \Twilio\Rest\Client;
 
+use App\Entity\UserLikesDislikes;
 use App\Entity\Stores;
 use App\Entity\MarketItems;
 use App\Entity\Users;
@@ -31,7 +32,7 @@ public function __construct(Client $twilio) {
     #[Route('/', name: 'app_stores_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager,PaginatorInterface $paginator, Request $request): Response
     {
-        $bestStore = $entityManager->getRepository(Stores::class)->find($entityManager->getRepository(MarketItems::class)->getBestStore());
+        //$bestStore = $entityManager->getRepository(Stores::class)->find($entityManager->getRepository(MarketItems::class)->getBestStore());
         $stores = $entityManager
             ->getRepository(Stores::class)
             ->findAll();
@@ -47,7 +48,7 @@ public function __construct(Client $twilio) {
 
         return $this->render('stores/index.html.twig', [
             'stores' => $stores,
-            'bestStore' => $bestStore
+            //'bestStore' => $bestStore
         ]);
     }
 
@@ -89,10 +90,19 @@ public function __construct(Client $twilio) {
     }
 
     #[Route('/{id}', name: 'app_stores_show', methods: ['GET'])]
-    public function show(Stores $store): Response
+    public function show(Stores $store, EntityManagerInterface $entityManager): Response
     {
+        $likes = $entityManager
+            ->getRepository(UserLikesDislikes::class)
+            ->findBy(['store' => $store, 'like' => 1]);
+        $dislikes = $entityManager
+            ->getRepository(UserLikesDislikes::class)
+            ->findBy(['store' => $store, 'like' => 0]);
         return $this->render('stores/show.html.twig', [
             'store' => $store,
+            'likes' => $likes,
+            'dislikes' => $dislikes,
+            'user_id' => $this->getUser()->getId()
         ]);
     }
 
