@@ -48,7 +48,7 @@
     <div class="nk-match-team-left">
         <a href="{{ path('app_teams_show', {"id": match.team1.id}) }}">
             <span class="nk-match-team-logo">
-                <img src={{match.team1.photoUrl}} alt="">
+                <img src="..\..\uploads\team\{{match.team1.photoUrl}}" alt="">
             </span>
             <span class="nk-match-team-name">
                 {{ match.team1.name }}
@@ -67,7 +67,7 @@
                 {{ match.team2.name }}
             </span>
             <span class="nk-match-team-logo">
-                <img src={{match.team2.photoUrl}} alt="">
+                <img src="..\..\uploads\team\{{match.team2.photoUrl}}" alt="">
             </span>
         </a>
     </div>
