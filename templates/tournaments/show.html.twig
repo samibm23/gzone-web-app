@@ -4,6 +4,7 @@
 
 {% block body %}
     <h1>Tournaments</h1>
+    
 
     <table class="nk-table">
         <tbody>
@@ -41,6 +42,36 @@
             </tr>
         </tbody>
     </table>
+    <h4 class="nk-widget-title"><span><span class="text-main-1">Matches</span> Matches</span></h4>
+    <div class="nk-match">
+                <div class="nk-match-team-left">
+                    <a href="#">
+                        <span class="nk-match-team-logo">
+                            <img src="assets/images/team-1.jpg" alt="">
+                        </span>
+                        <span class="nk-match-team-name">
+                            SK Telecom T1  //team name 
+                        </span>
+                    </a>
+                </div>
+                <div class="nk-match-status">
+                    <a href="#">
+                        <span class="nk-match-status-vs">VS</span>   //getteams()
+                        <span class="nk-match-status-date">Apr 28, 2018 8:00 pm</span>  // getdate()
+                    </a>
+                </div>
+                <div class="nk-match-team-right">
+                    <a href="#">
+                        <span class="nk-match-team-name">
+                            Cloud 9     //team name 
+                        </span>
+                        <span class="nk-match-team-logo">
+                            <img src="assets/images/team-2.jpg" alt="">
+                        </span>
+                    </a>
+                </div>
+            </div>
+
 
     <a href="{{ path('app_tournaments_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">back to list</a>
 
