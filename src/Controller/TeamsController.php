@@ -69,12 +69,16 @@ class TeamsController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $team= new Teams();
+        $team->setPhotoUrl($request->get('photo_url'));
         $team->setName($request->get('name'));
+        $team->setTeamSize($request->get('team_size'));
+        $team->setRequestable($request->get('requestable'));
+        $team->setInvitable($request->get('invitable'));
         $team->setDescription($request->get('description'));
-        $team->setGame($entityManager->getRepository(Games::class)->find((int)$request->get("gameId")));
+        $team->setGame($entityManager->getRepository(Games::class)->find((int)$request->get("game_id")));
         $date = new \DateTime('now'); 
         $team->setCreateDate($date);
-        $team->setAdmin($entityManager->getRepository(Users::class)->find((int)$request->get("adminId")));  
+        $team->setAdmin($entityManager->getRepository(Users::class)->find((int)$request->get("admin_id")));
         $em->persist($team);
         $em->flush();
         $jsonContent = $normalizer->normalize($team, 'json', ['groups'=>'post:read']);

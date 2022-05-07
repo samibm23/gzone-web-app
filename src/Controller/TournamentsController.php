@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Users;
+use App\Entity\Games;
 use App\Entity\Tournaments;
 use App\Form\TournamentsType;
 use Doctrine\ORM\EntityManagerInterface;
