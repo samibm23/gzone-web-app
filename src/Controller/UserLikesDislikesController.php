@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Users;
+use App\Entity\Posts;
+use App\Entity\Comments;
+use App\Entity\Stores;
 use App\Entity\UserLikesDislikes;
 use App\Form\UserLikesDislikesType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,24 +29,47 @@ class UserLikesDislikesController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_user_likes_dislikes_new', methods: ['GET', 'POST'])]
+    #[Route('/new/{user_id}/{like}/{post_id?}/{comment_id?}/{store_id?}', name: 'app_user_likes_dislikes_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $userLikesDislike = new UserLikesDislikes();
-        $form = $this->createForm(UserLikesDislikesType::class, $userLikesDislike);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $userLikesDislike->setUser($entityManager->getRepository(Users::class)->find($request->get('user_id')));
+        $userLikesDislike->setLike((boolean)$request->get('like'));
+        if ($request->get('post_id')) {
+            $userLikesDislike->setPost($entityManager->getRepository(Posts::class)->find($request->get('post_id')));
+        }
+        if ($request->get('comment_id')) {
+            $userLikesDislike->setComment($entityManager->getRepository(Comments::class)->find($request->get('comment_id')));
+        }
+        if ($request->get('store_id')) {
+            $userLikesDislike->setStore($entityManager->getRepository(Stores::class)->find($request->get('store_id')));
+        }
+        if (($oldUserLikesDislike = $entityManager->getRepository(UserLikesDislikes::class)->findOneBy([
+            'user' => $userLikesDislike->getUser(),
+            'post' => $userLikesDislike->getPost(),
+            'comment' => $userLikesDislike->getComment(),
+            'store' => $userLikesDislike->getStore()
+        ])) != null) {
+            if ($oldUserLikesDislike->getLike() == $userLikesDislike->getLike()) {
+                $entityManager->remove($oldUserLikesDislike);
+                $entityManager->flush();
+            } else {
+                $oldUserLikesDislike->setLike($userLikesDislike->getLike());
+                $entityManager->flush();
+            }
+        } else {
             $entityManager->persist($userLikesDislike);
             $entityManager->flush();
-
-            return $this->redirectToRoute('app_user_likes_dislikes_index', [], Response::HTTP_SEE_OTHER);
         }
-
-        return $this->renderForm('user_likes_dislikes/new.html.twig', [
-            'user_likes_dislike' => $userLikesDislike,
-            'form' => $form,
-        ]);
+        if ($request->get('post_id')) {
+            return $this->redirectToRoute("app_posts_show", ['id' => $request->get('post_id')]);
+        }
+        if ($request->get('comment_id')) {
+            return $this->redirectToRoute("app_comments_show", ['id' => $request->get('comment_id')]);
+        }
+        if ($request->get('store_id')) {
+            return $this->redirectToRoute("app_stores_show", ['id' => $request->get('store_id')]);
+        }
     }
 
     #[Route('/{id}', name: 'app_user_likes_dislikes_show', methods: ['GET'])]

@@ -35,7 +35,7 @@
             </tr>
             <tr>
                 <th>Action</th>
-                <td><a href="{{ path('app_posts_like', {'id': post.id}) }}">Like</a> | <a href="{{ path('app_posts_dislike', {'id': post.id}) }}">Dislike</a></td>
+                <td><a href="{{ path('app_user_likes_dislikes_new', {'user_id': user_id, 'like': 1, 'post_id': post.id}) }}">Like</a> | <a href="{{ path('app_user_likes_dislikes_new', {'user_id': user_id, 'like': 0, 'post_id': post.id}) }}">Dislike</a></td>
                 <th>Like Count</th>
                 <td>{{ likes | length }}</td>
             </tr>
