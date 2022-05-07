@@ -46,7 +46,7 @@ class TeamsController extends AbstractController
     #[Route('/json/list', name: 'app_teams_json_list', methods: ['GET'])]
     public function ListJson(EntityManagerInterface $entityManager, NormalizerInterface $normalizer): Response
     {
-        $games = $entityManager
+        $teams = $entityManager
             ->getRepository(Teams::class)
             ->findAll();
         $jsonContent = $normalizer->normalize($teams, 'json', ['groups'=>'post:read']);
