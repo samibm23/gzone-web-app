@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Users;
 use App\Entity\Teams;
+use App\Entity\Users;
 use App\Entity\Games;
 use App\Entity\Matches;
 use App\Form\TeamsType;
@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 class TeamsController extends AbstractController
 {
 
-    #[Route('/', name: 'app_teams_index', methods: ['GET'])]
+   #[Route('/', name: 'app_teams_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager, Request $request, PaginatorInterface $paginator): Response
     {
         $teams = $entityManager

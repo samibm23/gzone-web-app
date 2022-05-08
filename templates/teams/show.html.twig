@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Teams</h1>
 
-    <table class="table">
+    <table class="nk-table">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -17,7 +17,7 @@
             </tr>
             <tr>
                 <th>PhotoUrl</th>
-                <td> <img src="..\..\uploads\team\{{team.PhotoUrl}}"></img></td>
+                <td> <img src="..\..\uploads\team\{{team.PhotoUrl}}"width="250" height="300"></img></td>
             </tr>
          
             <tr>
@@ -25,7 +25,7 @@
                 <td>{{ team.description }}</td>
             </tr>
             <tr>
-                <th>Team Size</th>
+                <th>TeamSize</th>
                 <td>{{ team.teamSize }}</td>
             </tr>
             <tr>
