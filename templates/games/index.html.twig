@@ -11,6 +11,10 @@
 
 
     <h1>Games </h1>
+
+    <div class="text">
+        <a type="submit" class="btn btn-primary btn-sm " style="margin:10px"  href="{{ path('triid' )}}">  <strong>Tri Asc</strong></a>
+    </div>
     <script src="{{ asset('admin/js/jquery.min.js') }}"></script>
     <input type="text" id="search" class="form-control form-control-no-border mr-sm-2" placeholder=" search">
 
@@ -43,7 +47,7 @@
                 </td>
             </tr>
 
-      {#<script>
+      <script>
                 $(document).ready(function(){
                     $('#search').keyup(function(){
                         search_table($(this).val());
@@ -71,12 +75,14 @@
                     }
                 });
             </script>
-       #}
+
         {% endfor %}
         </tbody>
 
 
     </table>
-
+    <div class="text-center">
+        <a type="submit" class="btn btn-primary btn-sm " style="margin:100px"  href="{{ path('impr' )}}">  <strong>enregistrer sous forme pdf</strong></a>
+    </div>
     <a href="{{ path('app_games_new') }}">Create new</a>
 {% endblock %}

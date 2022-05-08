@@ -19,6 +19,15 @@ class GamesRepository extends ServiceEntityRepository
         parent::__construct($registry, Games::class);
     }
 
+    public function stat()
+    {
+        $qb = $this->createQueryBuilder('v')
+            ->select('COUNT(v.id) AS name, SUBSTRING(v.id, 1, 100000) AS id')
+            ->groupBy('id');
+        return $qb->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Games[] Returns an array of Games objects
     //  */
