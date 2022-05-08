@@ -32,10 +32,21 @@ public function __construct(Client $twilio) {
     #[Route('/', name: 'app_stores_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager,PaginatorInterface $paginator, Request $request): Response
     {
-        //$bestStore = $entityManager->getRepository(Stores::class)->find($entityManager->getRepository(MarketItems::class)->getBestStore());
+        $storeMap = new \Ds\Map();
         $stores = $entityManager
             ->getRepository(Stores::class)
             ->findAll();
+        foreach ($stores as $store) {
+            $likes = $entityManager
+                ->getRepository(UserLikesDislikes::class)
+                ->findBy(['store' => $store, 'like' => 1]);
+            $dislikes = $entityManager
+                ->getRepository(UserLikesDislikes::class)
+                ->findBy(['store' => $store, 'like' => 0]);
+            $storeMap->put($store, (count($likes) + count($dislikes) == 0) ? 0 : (count($likes) - count($dislikes)) / (count($likes) + count($dislikes)));
+            $storeMap->reverse();
+            $storeMap = $storeMap->slice(0, 3);
+        }
         // Paginate the results of the query
         $stores = $paginator->paginate(
         // Doctrine Query, not results
@@ -48,10 +59,9 @@ public function __construct(Client $twilio) {
 
         return $this->render('stores/index.html.twig', [
             'stores' => $stores,
-            //'bestStore' => $bestStore
+            'sortedStores' => $storeMap
         ]);
     }
-
 
     #[Route('/new', name: 'app_stores_new', methods: ['GET', 'POST'])]
 

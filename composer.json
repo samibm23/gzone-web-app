@@ -17,6 +17,7 @@
         "knplabs/knp-paginator-bundle": "^5.8",
         "liip/imagine-bundle": "^2.7",
         "mercuryseries/flashy-bundle": "^5.1",
+        "php-ds/php-ds": "^1.4",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.4",
         "sensio/framework-extra-bundle": "^6.2",
