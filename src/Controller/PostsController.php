@@ -167,9 +167,12 @@ class PostsController extends AbstractController
         $likes = $entityManager
             ->getRepository(UserLikesDislikes::class)
             ->findBy(['post' => $post, 'like' => 1]);
+        $dislikes = $entityManager
+            ->getRepository(UserLikesDislikes::class)
+            ->findBy(['post' => $post, 'like' => 0]);
         return $this->render('posts/show.html.twig', [
             'post' => $post,
-            'likes' => $likes,
+            'stars' => (count($likes) + count($dislikes) > 0)? floor(count($likes) * 5 / (count($likes) + count($dislikes))) : 0,
             'user_id' => $this->getUser()->getId(),
         ]);
     }
