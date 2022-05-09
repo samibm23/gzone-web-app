@@ -4,7 +4,7 @@
 {% block title %}Home Page{% endblock %}
 
 
-{% block body %}
+{% block header %}
 <!DOCTYPE html>
 <html lang="en" dir="ltr" height: 100%;>
 <head>
@@ -14,11 +14,15 @@
   <link rel="stylesheet" href="{{asset('../public/assets/css/homepage.css')}}">
   <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
 </head>
+{% endblock %}
+{% block body %}
 <body>
 
 
 <html lang="en" dir="ltr">
   <head>
+  <link rel="stylesheet" href="{{asset('../public/assets/css/homepage.css')}}">
+  <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Responsive Image Slider | With Manual Buttons and Autoplay Navigation Visibility</title>
@@ -379,7 +383,8 @@
     </script>
 
   </body>
-</html>
+  
+
       
     
 

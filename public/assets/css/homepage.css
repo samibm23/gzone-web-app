@@ -8,8 +8,8 @@
 }
 
 body{
-  height: 100vh;
-  display: flex;
+  height: 210vh;
+ 
   justify-content: center;
   align-items: center;
   background: #1D212B;
@@ -17,13 +17,16 @@ body{
 
 .img-slider{
   position: relative;
-  width: 800px;
+   justify-content: center;
+  align-items: center;
+  width: 900px;
   height: 500px;
   margin: 10px;
   background: #1D212B;
 }
 
 .img-slider .slide{
+  
   z-index: 1;
   position: absolute;
   width: 100%;
@@ -88,8 +91,9 @@ body{
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 }
 
-@media (max-width: 820px){
+@media (max-width: 825px){
   .img-slider{
+
     width: 600px;
     height: 375px;
   }
