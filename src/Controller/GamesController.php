@@ -6,16 +6,16 @@ use App\Entity\Games;
 use App\Form\GamesType;
 use App\Repository\GamesRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\PaginatorInterface;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use CMEN\GoogleChartsBundle\GoogleCharts\Charts\BarChart;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
 #[Route('/games')]
 class GamesController extends AbstractController
 {
@@ -31,9 +31,26 @@ class GamesController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/triid", name="triid")
+     */
+
+    public function Triid(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $query = $em->createQuery(
+            'SELECT c FROM App\Entity\Games c 
+            ORDER BY c.name'
+        );
 
 
+        $rep = $query->getResult();
 
+        return $this->render('games/index.html.twig',
+            array('games' => $rep));
+
+    }
     #[Route('/List', name: 'app_games_list', methods: ['GET'])]
     public function ListJson(EntityManagerInterface $entityManager, NormalizerInterface $normalizer): Response
     {
@@ -91,29 +108,6 @@ class GamesController extends AbstractController
     }
 
 
-
-
-
-    /**
-     * @Route("/triid", name="triid")
-     */
-
-    public function Triid(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $query = $em->createQuery(
-            'SELECT c FROM App\Entity\Games c 
-            ORDER BY c.name'
-        );
-
-
-        $rep = $query->getResult();
-
-        return $this->render('games/index.html.twig',
-            array('games' => $rep));
-
-    }
     #[Route('/stat', name: 'app_games_stat')]
     public function stat(GamesRepository $repository): Response
     {
@@ -234,17 +228,7 @@ class GamesController extends AbstractController
     }
 
 
-    /**
-     * @param GamesRepository $repository
-     * @return Response
-     * @Route ("/listDQL", name="ListDQL")
-     */
 
-    function orderByNameDQL(GamesRepository $repository): Response
-    {
-        $games = $repository->orderByName();
-        return $this->render('games/index.html.twig', array("games" => $games));
-    }
 
 
     /**
@@ -284,6 +268,12 @@ class GamesController extends AbstractController
 
         ]);
     }
+
+
+
+
+
+
 }
 
 

@@ -55,9 +55,9 @@ class Games
      * @ORM\Column(name="description", type="string", length=500, nullable=true, options={"default"="NULL"})
      * @Assert\Length(
      *      min = 2,
-     *      max = 50,
+     *      max = 500,
      *      minMessage = "Your description must be at least {{ 2 }} characters long",
-     *      maxMessage = "Your description cannot be longer than {{ 50 }} characters"
+     *      maxMessage = "Your description cannot be longer than {{ 500 }} characters"
      * )
      * @Groups("post:read")
 

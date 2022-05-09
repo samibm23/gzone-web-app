@@ -19,9 +19,11 @@
     <input type="text" id="search" class="form-control form-control-no-border mr-sm-2" placeholder=" search">
 
     <table class="table table-bordered dataTable" id="t"   role="grid" aria-describedby="dataTable_info" style="width: 100%;">
+
+            <script src="{{ asset('/js/jquery.min.js') }}"></script>
+            <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
         <thead>
         <tr>
-            <th>Id</th>
             <th>Name</th>
             <th>Image</th>
             <th>Description</th>
@@ -32,7 +34,6 @@
 
         {% for game in games %}
             <tr>
-                <td>{{ game.id }}</td>
                 <td>{{ game.name }}</td>
                 <td><img style="height: 100px; width: 100px" src="{{ asset('images/games/'~game.photo_url) }}" ></td>
                 <td>{{ game.description }}</td>
@@ -46,8 +47,7 @@
 
                 </td>
             </tr>
-
-      <script>
+    <script>
                 $(document).ready(function(){
                     $('#search').keyup(function(){
                         search_table($(this).val());
@@ -78,11 +78,11 @@
 
         {% endfor %}
         </tbody>
-
-
     </table>
     <div class="text-center">
-        <a type="submit" class="btn btn-primary btn-sm " style="margin:100px"  href="{{ path('impr' )}}">  <strong>enregistrer sous forme pdf</strong></a>
+        <a type="submit" class="btn btn-primary btn-sm " style="margin:100px"  href="{{ path('impr' )}}">  <strong>Save As PDF</strong></a>
     </div>
     <a href="{{ path('app_games_new') }}">Create new</a>
+
+
 {% endblock %}

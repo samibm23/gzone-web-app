@@ -27,6 +27,32 @@ class FrontController extends AbstractController
             'games' => $games,
                 ]);
     }
+    /**
+     * @Route("/tri", name="triname")
+     */
+    public function Tri(Request $request,PaginatorInterface $paginator)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+
+        $query = $em->createQuery(
+            'SELECT a FROM App\Entity\Games a 
+            ORDER BY a.name ASC'
+        );
+
+        $games = $query->getResult();
+
+        $games = $paginator->paginate(
+            $games,
+            $request->query->getInt('page',1),
+            2
+        );
+
+        return $this->render('front/index.html.twig', [
+            'games' => $games,
+        ]);
+
+    }
 
     #[Route('/{id}', name: 'app_front_details', methods: ['GET'])]
 

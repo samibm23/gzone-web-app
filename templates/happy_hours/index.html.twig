@@ -8,7 +8,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>StartDate</th>
                 <th>EndDate</th>
                 <th>actions</th>
@@ -17,7 +16,6 @@
         <tbody>
         {% for happy_hour in happy_hours %}
             <tr>
-                <td>{{ happy_hour.id }}</td>
 
 
                 <td>{{  happy_hour.startDate ? happy_hour.startDate|date('Y-m-d H:i:s') : ''}}</td>
