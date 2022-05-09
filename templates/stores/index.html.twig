@@ -3,9 +3,31 @@
 {% block title %}Stores index{% endblock %}
 
 {% block body %}
-    <h1>Stores index</h1>
+
     {% block stylesheets%}
-        <input type="text" id="search" class="form-control" placeholder="Search">
+        <div class="nk-gap-1"></div>
+        <div class="container">
+            <ul class="nk-breadcrumbs">
+                <li><span class="fa fa-angle-right"></span></li>
+                <li><span class="fa fa-angle-right"></span></li>
+                <li><span>STORES</span></li>
+            </ul>
+        </div>
+        
+        <div class="nk-gap-1"></div>
+        <div class="nk-widget">
+            <div class="nk-widget-content">
+                <form action="#" class="nk-form nk-form-style-1" novalidate="novalidate">
+                    <div class="input-group">
+                        <input type="text" id="search" class="form-control" placeholder="Type something...">
+                        <button class="nk-btn nk-btn-color-main-1"><span class="ion-search"></span></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="nk-gap-1"></div>
         <script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js') }}"></script>
         <script>
             $(document).ready(function(){
@@ -21,7 +43,7 @@
 
 
 
-    <table class="table" id="tr">
+    <table class="nk-table" id="tr">
         <thead>
             <tr>
                 <th>Id</th>
@@ -35,8 +57,9 @@
                 <td>{{ store.id }}</td>
                 <td>{{ store.name }}</td>
                 <td>
-                    <a href="{{ path('app_stores_show', {'id': store.id}) }}">show</a>
-                    <a href="{{ path('app_stores_edit', {'id': store.id}) }}">edit</a>
+
+                    <a href="{{ path('app_stores_show', {'id': store.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">show</a>
+                    <a href="{{ path('app_stores_edit', {'id': store.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -46,23 +69,33 @@
         {% endfor %}
         </tbody>
     </table>
-    <div class="navigation">
-        {{ knp_pagination_render(stores) }}
-    </div>
-
-    <a href="{{ path('app_stores_new') }}">Create new</a>
+    <script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js') }}"></script>
+    <script>
+        $(document).ready(function(){
+            $("#search").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#Ytable tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+<hr>
+    <a href="{{ path('app_stores_new') }} " class="nk-btn nk-btn-rounded nk-btn-color-main-1">Create new</a>
 
     <!-- START: Top 10 Best Sellers -->
-    <div class="nk-gap-3"></div>
-    <h3 class="nk-decorated-h-2"><span><span class="text-main-1">Top 3</span> Best Stores</span></h3>
-    <div class="nk-gap"></div>
-    <div class="nk-carousel nk-carousel-x4" data-autoplay="5000" data-dots="false" data-cell-align="left" data-arrows="true">
-        <div class="nk-carousel-inner">
+<div class="nk-gap-3"></div>
+<h3 class="nk-decorated-h-2"><span><span class="text-main-1">Most</span> Recommended</span></h3>
+<div class="nk-gap"></div>
+<div class="nk-carousel nk-carousel-x4" data-autoplay="5000" data-dots="false" data-cell-align="left" data-arrows="true">
+    <div class="nk-carousel-inner">
 
 
             {% for store, nb in sortedStores %}
             <div><div class="pl-5 pr-5">
                     <div class="nk-product-cat-3">
+
+                            <div class="nk-gap-1"></div>
                         <a class="nk-product-image" href="{{ path('app_stores_show', {"id":store.id}) }}">
                             <img src="assets/images/product-1-xs.jpg" alt="">
                         </a>
@@ -73,8 +106,38 @@
                         </div>
                     </div>
                 </div></div>
+    </div>
+</div>
+
+
             {% endfor %}
         </div>
     </div>
     <!-- END: Top 10 Best Sellers -->
+    <div class="nk-pagination nk-pagination-center">
+        <a href="#" class="nk-pagination-prev">
+            <span class="ion-ios-arrow-back"></span>
+        </a>
+        <nav>
+            <a class="nk-pagination-current" href="{{ knp_pagination_render(stores) }}">1</a>
+
+        </nav>
+        <a href="#" class="nk-pagination-next">
+        </a>
+    </div>
+<div class="nk-copyright">
+    <div class="container">
+        <div class="nk-copyright-left">
+
+        </div>
+        <div class="nk-copyright-right">
+            <ul class="nk-social-links-2">
+                <li><a class="nk-social-rss" href="#"><span class="fa fa-rss"></span></a></li>
+                <li><a class="nk-social-twitch" href="#"><span class="fab fa-twitch"></span></a></li>
+                <li><a class="nk-social-steam" href="#"><span class="fab fa-steam"></span></a></li>
+                <li><a class="nk-social-facebook" href="#"><span class="fab fa-facebook"></span></a></li>
+                <li><a class="nk-social-google-plus" href="#"><span class="fab fa-google-plus"></span></a></li>
+                <li><a class="nk-social-twitter" href="#" target="_blank"><span class="fab fa-twitter"></span></a></li>
+                <li><a class="nk-social-pinterest" href="#"><span class="fab fa-pinterest-p"></span></a></li>
+
 {% endblock %}

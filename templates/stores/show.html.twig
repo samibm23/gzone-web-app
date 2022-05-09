@@ -4,9 +4,9 @@
 
 {% block body %}
     <h1>Stores</h1>
-    <a href= {{  path('app_market_items_new') }} target="modal">add Item></a>
-    <table class="table">
-        <tbody>
+    <a href="{{ path('app_market_items_new', {'id': store.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">Add Item</a>
+<table class="nk-table">
+        <tr>
             <tr>
                 <th>Id</th>
                 <td>{{ store.id }}</td>
@@ -17,18 +17,25 @@
             </tr>
             <tr>
                 <th>Action</th>
-                <td><a href="{{ path('app_user_store_likes_dislikes_new', {'user_id': user_id, 'like': 1, 'store_id': store.id}) }}">Like</a> | <a href="{{ path('app_user_store_likes_dislikes_new', {'user_id': user_id, 'like': 0, 'store_id': store.id}) }}">Dislike</a></td>
-                <th>Like Count</th>
+
+                <td><a href="{{ path('app_user_store_likes_dislikes_new', {'user_id': user_id, 'like': 1, 'store_id': store.id}) }}" class = "nk-btn nk-btn-color-primary">Like</a> | <a href="{{ path('app_user_store_likes_dislikes_new', {'user_id': user_id, 'like': 0, 'store_id': store.id}) }}" class = " nk-btn nk-btn-rounded nk-btn-color-main-1">Dislike</a></td>
+            </tr>
+            <>
+                <td>Like Count</td>
                 <td>{{ likes | length }}</td>
-                <th>Dislike Count</th>
+
+        </tr>
+    <tr>
+                <td>Dislike Count</td>
                 <td>{{ dislikes | length }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_stores_index') }}">back to list</a>
+    <a href="{{ path('app_stores_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-white">back to list</a>
 
-    <a href="{{ path('app_stores_edit', {'id': store.id}) }}">edit</a>
+
+    <a href="{{ path('app_stores_edit', {'id': store.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-white">edit</a>
 
     {{ include('stores/_delete_form.html.twig') }}
 {% endblock %}

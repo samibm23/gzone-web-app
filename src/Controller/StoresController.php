@@ -112,7 +112,7 @@ public function __construct(Client $twilio) {
             'store' => $store,
             'likes' => $likes,
             'dislikes' => $dislikes,
-            'user_id' => $this->getUser()->getId()
+            'user_id' => $this->getUser()?->getId()
         ]);
     }
 
