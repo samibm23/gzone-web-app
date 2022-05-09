@@ -90,7 +90,7 @@
     </div>
     <div class="nk-match-status">
         {% if userId == tournament.admin.id %}
-        <a href="{{ path('app_matches_show', {"id": match.id}) }}">
+        <a href="{{ path('app_tournaments_matches_show', {"tid": tournament.id, "mid": match.id}) }}">
             <span class="nk-match-status-date">Round {{ match.round }}</span>
             <span class="nk-match-status-vs">VS</span>
             <span class="nk-match-status-date">{{ match.startTime | date }}</span>

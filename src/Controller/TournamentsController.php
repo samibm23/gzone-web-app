@@ -190,6 +190,37 @@ class TournamentsController extends AbstractController
         ]);
     }
 
+    #[Route('/{tid}/matches/{mid}', name: 'app_tournaments_matches_show', methods: ['GET'])]
+    public function showMatch(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        return $this->render('matches/show.html.twig', [
+            'userId' => $this->getUser()->getId(),
+            'tournament' => $entityManager->getRepository(Tournaments::class)->find((int) $request->get('tid')),
+            'match' => $entityManager->getRepository(Matches::class)->find((int)$request->get('mid')),
+        ]);
+    }
+
+    #[Route('/{tid}/matches/{mid}/edit', name: 'app_tournaments_matches_edit', methods: ['GET', 'POST'])]
+    public function editMatch(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $match = $entityManager->getRepository(Matches::class)->find((int)$request->get('mid'));
+        $tournament = $entityManager->getRepository(Tournaments::class)->find((int)$request->get('tid'));
+        $form = $this->createForm(MatchesType::class, $match);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_matches_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('matches/edit.html.twig', [
+            'tournament' => $tournament,
+            'match' => $match,
+            'form' => $form,
+        ]);
+    }
+
     #[Route('/{id}', name: 'app_tournaments_show', methods: ['GET'])]
     public function show(Tournaments $tournament, EntityManagerInterface $entityManager): Response
     {

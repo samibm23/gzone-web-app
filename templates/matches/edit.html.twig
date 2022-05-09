@@ -10,7 +10,7 @@
 
     {{ include('matches/_form.html.twig', {'button_label': 'Update'}) }}
 <div class="nk-gap-1"></div>
-    <a href="{{ path('app_matches_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">back to list</a>
+<a href="{{ path('app_tournaments_show', {'id': tournament.id}) }}">back to tournament</a>
 <div class="nk-gap-1"></div>
     {{ include('matches/_delete_form.html.twig') }}
 {% endblock %}

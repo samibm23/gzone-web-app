@@ -16,6 +16,7 @@ class MatchesType extends AbstractType
             ->add('round')
             ->add('team1')
             ->add('team2')
+            ->add('winnerTeam')
         ;
     }
 
