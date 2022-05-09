@@ -3,9 +3,14 @@
 {% block title %}New Matches{% endblock %}
 
 {% block body %}
-    <h1>Create new Matches</h1>
+<div class="nk-widget nk-widget-highlighted">
+    <h1 class="nk-widget-title"><span><span class="text-main-1">New</span> Match</span></h1>
+    <div class="nk-widget-content">
+    
+    
 
     {{ include('matches/_form.html.twig') }}
+    <div class="nk-gap-1"></div>
 
-    <a href="{{ path('app_matches_index') }}">back to list</a>
+    <a href="{{ path('app_matches_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1"> back to list</a>
 {% endblock %}

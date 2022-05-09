@@ -41,6 +41,8 @@ class TeamsType extends AbstractType
                             'image/gif',
                             'image/jpg',
                             'image/jpeg',
+                            'image/png',
+
                         ],
                         'mimeTypesMessage' => 'Please upload a valid Image',
                     ])
