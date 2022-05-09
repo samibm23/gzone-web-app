@@ -4,9 +4,9 @@
 
 {% block body %}
     <h1>Stores</h1>
-    <a href= {{  path('app_market_items_new') }} target="modal">add Item></a>
-    <table class="table">
-        <tbody>
+
+<table class="nk-table">
+        <tr>
             <tr>
                 <th>Id</th>
                 <td>{{ store.id }}</td>
@@ -17,18 +17,63 @@
             </tr>
             <tr>
                 <th>Action</th>
-                <td><a href="{{ path('app_user_store_likes_dislikes_new', {'user_id': user_id, 'like': 1, 'store_id': store.id}) }}">Like</a> | <a href="{{ path('app_user_store_likes_dislikes_new', {'user_id': user_id, 'like': 0, 'store_id': store.id}) }}">Dislike</a></td>
-                <th>Like Count</th>
+
+                <td><a href="{{ path('app_user_store_likes_dislikes_new', {'user_id': user_id, 'like': 1, 'store_id': store.id}) }}" class = "nk-btn nk-btn-color-primary">Like</a> | <a href="{{ path('app_user_store_likes_dislikes_new', {'user_id': user_id, 'like': 0, 'store_id': store.id}) }}" class = " nk-btn nk-btn-rounded nk-btn-color-main-1">Dislike</a></td>
+            </tr>
+            <>
+                <td>Like Count</td>
                 <td>{{ likes | length }}</td>
-                <th>Dislike Count</th>
+
+        </tr>
+    <tr>
+                <td>Dislike Count</td>
                 <td>{{ dislikes | length }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_stores_index') }}">back to list</a>
-
-    <a href="{{ path('app_stores_edit', {'id': store.id}) }}">edit</a>
-
+<hr>
+    <a href="{{ path('app_stores_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-white">back to list</a>
+    {% if user_id==store.owner.id %}
+    <a href="{{ path('app_stores_edit', {'id': store.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-white">edit</a>
+<hr>
     {{ include('stores/_delete_form.html.twig') }}
+{% endif %}
+    {% if user_id == store.owner.id %}
+        <h4 style="display:inline-block;margin-right:88px;" class="nk-widget-title">
+            <span><span class="text-main-1">MarketItems</span></span>
+        </h4>
+        <a class="nk-btn nk-btn-rounded nk-btn-outline nk-btn-color-warning"
+           href="{{ path('app_stores_market_items_new',{'id':store.id}) }}"
+           style="display:inline-block;">
+        Add MarketItem
+        </a>
+    {% else %}
+        <h4 class="nk-widget-title">
+            <span><span class="text-main-1">MarketItems</span></span>
+        </h4>
+    {% endif %}
+    {% for marketItem in marketItems %}
+        <div class="nk-match">
+            {% if user_id == store.owner.id %}
+            <a href="{{ path('app_market_items_show', {"id": marketItem.id}) }}">
+          {{ marketItem.title }}
+            </a>
+                {% else %}
+                    {{ marketItem.title }}
+            {% endif %}
+            <div class="nk-match-status">
+                {{ marketItem.description }}
+
+
+                        {% if marketItem.sold  %}<span class="nk-match-status-date">Sold </span>{% endif %}
+
+
+
+                        <span class="nk-match-status-date">{{ marketItem.postDate | date }}</span>
+
+
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}

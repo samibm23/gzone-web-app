@@ -13,7 +13,7 @@ class StoresType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('owner')
+
             ->add('game')
             ->add('captcha',ReCaptchaType::class)
         ;
