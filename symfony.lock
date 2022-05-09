@@ -189,6 +189,9 @@
     "phar-io/version": {
         "version": "3.2.1"
     },
+    "php-ds/php-ds": {
+        "version": "v1.4.1"
+    },
     "phpdocumentor/reflection-common": {
         "version": "2.2.0"
     },
