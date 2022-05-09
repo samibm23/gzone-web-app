@@ -7,5 +7,5 @@
 
     {{ include('comments/_form.html.twig') }}
 
-    <a href="{{ path('app_comments_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">back to list</a>
+    <a href="{{ path('app_posts_show', {'id': postId}) }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">back to post</a>
 {% endblock %}

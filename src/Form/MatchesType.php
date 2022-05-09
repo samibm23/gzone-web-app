@@ -14,9 +14,8 @@ class MatchesType extends AbstractType
         $builder
             ->add('startTime')
             ->add('round')
-            ->add('tournament')
-            ->add('team2')
             ->add('team1')
+            ->add('team2')
             ->add('winnerTeam')
         ;
     }

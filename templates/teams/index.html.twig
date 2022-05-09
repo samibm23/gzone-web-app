@@ -52,7 +52,7 @@
         {% for team in teams %}
             <tr>
                 <td>{{ team.id }}</td>
-                <td>{{ team.photoUrl }}</td>
+                <td><img src="..\..\uploads\team\{{ team.photoUrl }}" alt="" width="100" height="100"></td>
                 <td>{{ team.name }}</td>
                 <td>{{ team.description }}</td>
                 <td>{{ team.teamSize }}</td>
@@ -60,8 +60,9 @@
                 <td>{{ team.invitable ? 'Yes' : 'No' }}</td>
                 <td>{{ team.createDate ? team.createDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_teams_show', {'id': team.id}) }}"class="nk-btn nk-btn-rounded nk-btn-color-main-1">show</a>
-                    <a href="{{ path('app_teams_edit', {'id': team.id}) }}"class="nk-btn nk-btn-color-primary">edit</a>
+                    <a href="{{ path('app_teams_show', {'id': team.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">show</a>
+                    <div class="nk-gap-1"></div>
+                    <a href="{{ path('app_teams_edit', {'id': team.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -74,5 +75,6 @@
 <div class="navigation">
             {{ knp_pagination_render(teams) }}
         </div>
-    <a href="{{ path('app_teams_new') }}"class="nk-btn nk-btn-rounded nk-btn-color-main-3">Create new</a>
+        <div class="nk-gap-1"></div>
+    <a href="{{ path('app_teams_new') }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">Create new</a>
 {% endblock %}

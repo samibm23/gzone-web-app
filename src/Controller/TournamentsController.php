@@ -4,8 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Users;
 use App\Entity\Games;
+use App\Entity\Matches;
 use App\Entity\Tournaments;
+use App\Entity\Teams;
+use App\Entity\JoinRequests;
 use App\Form\TournamentsType;
+use App\Form\MatchesType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,19 +18,28 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Knp\Component\Pager\PaginatorInterface;
 
 #[Route('/tournaments')]
 class TournamentsController extends AbstractController
 {
     #[Route('/', name: 'app_tournaments_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager,Request $request, PaginatorInterface $paginator): Response
     {
         $tournaments = $entityManager
             ->getRepository(Tournaments::class)
             ->findAll();
-
-        return $this->render('tournaments/index.html.twig', [
+            $tournaments = $paginator->paginate(
+                // Doctrine Query, not results
+                $tournaments,
+                // Define the page parameter
+                $request->query->getInt('page', 1),
+                // Items per page
+                3
+            );
+            return $this->render('tournaments/index.html.twig', [
             'tournaments' => $tournaments,
+            'userId' => $this->getUser()->getId()
         ]);
     }
 
@@ -113,11 +126,133 @@ class TournamentsController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_tournaments_show', methods: ['GET'])]
-    public function show(Tournaments $tournament): Response
+    #[Route('/{id}/matches/new', name: 'app_tournaments_matches_new', methods: ['GET', 'POST'])]
+    public function newMatch(Request $request, EntityManagerInterface $entityManager, Tournaments $tournament): Response
     {
-        return $this->render('tournaments/show.html.twig', [
+        $user = $this->getUser();
+        $match = new Matches();
+        $match->setTournament($tournament);
+        $form = $this->createForm(MatchesType::class, $match);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (
+                $match->getWinnerTeam() == null
+                && $match->getTeam1()->getId() != $match->getTeam2()->getId()
+                && count($entityManager->getRepository(JoinRequests::class)->findBy([
+                    "team" => $match->getTeam1(),
+                    "tournament" => $match->getTournament(),
+                    "accepted" => true
+                    ])) == 1
+                && count($entityManager->getRepository(JoinRequests::class)->findBy([
+                    "team" => $match->getTeam2(),
+                    "tournament" => $match->getTournament(),
+                    "accepted" => true
+                    ])) == 1
+            )
+            {
+                $entityManager->persist($match);
+                $entityManager->flush();
+
+                foreach($entityManager->getRepository(JoinRequests::class)->findBy([
+                    "accepted" => true,
+                    "tournament" => null,
+                    "team" => $match->getTeam1()
+                ]) as $jr) {
+                    // generate a signed url and email it to the user
+                    $this->emailVerifier->sendEmailConfirmation(
+                        'tournament_email',
+                        $user,
+                        (new TemplatedEmail())
+                            ->from(new Address('appgzone@gmail.com', 'Gzone App'))
+                            ->to($jr->getUser()->getEmail())
+                            ->subject('Please Confirm your Email')
+                            ->htmlTemplate('TournamentConfirmation/confirmation_TR.html.twig')
+                    );
+                }
+                foreach($entityManager->getRepository(JoinRequests::class)->findBy([
+                    "accepted" => true,
+                    "tournament" => null,
+                    "team" => $match->getTeam2()
+                ]) as $jr) {
+                    // generate a signed url and email it to the user
+                    $this->emailVerifier->sendEmailConfirmation(
+                        'tournament_email',
+                        $user,
+                        (new TemplatedEmail())
+                            ->from(new Address('appgzone@gmail.com', 'Gzone App'))
+                            ->to($jr->getUser()->getEmail())
+                            ->subject('Please Confirm your Email')
+                            ->htmlTemplate('TournamentConfirmation/confirmation_TR.html.twig')
+                    );
+                }
+            }
+
+            return $this->redirectToRoute('app_tournaments_show', ["id" => $tournament->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('matches/new.html.twig', [
+            'tournamentId' => $tournament->getId(),
+            'match' => $match,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/{tid}/matches/{mid}', name: 'app_tournaments_matches_show', methods: ['GET'])]
+    public function showMatch(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        return $this->render('matches/show.html.twig', [
+            'userId' => $this->getUser()->getId(),
+            'tournament' => $entityManager->getRepository(Tournaments::class)->find((int) $request->get('tid')),
+            'match' => $entityManager->getRepository(Matches::class)->find((int)$request->get('mid')),
+        ]);
+    }
+
+    #[Route('/{tid}/matches/{mid}/edit', name: 'app_tournaments_matches_edit', methods: ['GET', 'POST'])]
+    public function editMatch(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $match = $entityManager->getRepository(Matches::class)->find((int)$request->get('mid'));
+        $tournament = $entityManager->getRepository(Tournaments::class)->find((int)$request->get('tid'));
+        $form = $this->createForm(MatchesType::class, $match);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_matches_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('matches/edit.html.twig', [
             'tournament' => $tournament,
+            'match' => $match,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}', name: 'app_tournaments_show', methods: ['GET'])]
+    public function show(Tournaments $tournament, EntityManagerInterface $entityManager): Response
+    {
+        $matches = $entityManager->getRepository(Matches::class)->findBy(['tournament' => $tournament]);
+        $joinedTeams = count($entityManager->getRepository(JoinRequests::class)->findBy([
+            "tournament" => $tournament,
+            "accepted" => true
+        ]));
+
+        return $this->render('tournaments/show.html.twig', [
+            'userId' => $this->getUser()->getId(),
+            'tournament' => $tournament,
+            'matches' => $matches,
+            'joinedTeams' => $joinedTeams,
+            'teams' => ($tournament->getRequiredTeams() - $joinedTeams == 0)? null : $entityManager->getRepository(Teams::class)->findBy([
+                "admin" => $this->getUser(),
+                "teamSize" => $tournament->getTeamSize(),
+                "game" => $tournament->getGame()
+            ]),
+            'requestingTeamId' => $entityManager->getRepository(Teams::class)->findOneBy([
+                "admin" => $this->getUser(),
+                "teamSize" => $tournament->getTeamSize(),
+                "game" => $tournament->getGame()
+            ])?->getId()
         ]);
     }
 

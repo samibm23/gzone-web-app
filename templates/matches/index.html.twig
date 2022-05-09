@@ -5,7 +5,7 @@
 {% block body %}
     <h1>Matches index</h1>
 
-    <table class="table">
+    <table class="nk-table">
         <thead>
             <tr>
                 <th>Id</th>
@@ -21,8 +21,8 @@
                 <td>{{ match.startTime ? match.startTime|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ match.round }}</td>
                 <td>
-                    <a href="{{ path('app_matches_show', {'id': match.id}) }}">show</a>
-                    <a href="{{ path('app_matches_edit', {'id': match.id}) }}">edit</a>
+                    <a href="{{ path('app_matches_show', {'id': match.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">show</a>
+                    <a href="{{ path('app_matches_edit', {'id': match.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -32,6 +32,7 @@
         {% endfor %}
         </tbody>
     </table>
+    <div class="nk-gap-1"></div>
 
-    <a href="{{ path('app_matches_new') }}">Create new</a>
+    <a href="{{ path('app_matches_new') }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">Create new</a>
 {% endblock %}
