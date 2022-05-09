@@ -6,6 +6,8 @@ use App\Entity\Users;
 use App\Entity\Games;
 use App\Entity\Matches;
 use App\Entity\Tournaments;
+use App\Entity\Teams;
+use App\Entity\JoinRequests;
 use App\Form\TournamentsType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -118,9 +120,20 @@ class TournamentsController extends AbstractController
     public function show(Tournaments $tournament, EntityManagerInterface $entityManager): Response
     {
         $matches = $entityManager->getRepository(Matches::class)->findBy(['tournament' => $tournament]);
+        $joinedTeams = count($entityManager->getRepository(JoinRequests::class)->findBy([
+            "tournament" => $tournament,
+            "accepted" => true
+        ]));
+
         return $this->render('tournaments/show.html.twig', [
             'tournament' => $tournament,
             'matches' => $matches,
+            'joinedTeams' => $joinedTeams,
+            'teams' => ($tournament->getRequiredTeams() - $joinedTeams == 0)? null : $entityManager->getRepository(Teams::class)->findBy([
+                "admin" => $this->getUser(),
+                "teamSize" => $tournament->getTeamSize(),
+                "game" => $tournament->getGame()
+            ])
         ]);
     }
 
