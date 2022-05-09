@@ -134,8 +134,26 @@
     "knplabs/knp-paginator-bundle": {
         "version": "v5.8.0"
     },
+    "knpuniversity/oauth2-client-bundle": {
+        "version": "2.10",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "1.20",
+            "ref": "1ff300d8c030f55c99219cc55050b97a695af3f6"
+        },
+        "files": [
+            "./config/packages/knpu_oauth2_client.yaml"
+        ]
+    },
     "laminas/laminas-code": {
         "version": "4.5.1"
+    },
+    "league/oauth2-client": {
+        "version": "2.6.1"
+    },
+    "league/oauth2-google": {
+        "version": "4.0.0"
     },
     "liip/imagine-bundle": {
         "version": "2.7",
@@ -161,6 +179,9 @@
     },
     "nikic/php-parser": {
         "version": "v4.13.2"
+    },
+    "paragonie/random_compat": {
+        "version": "v9.99.100"
     },
     "phar-io/manifest": {
         "version": "2.0.3"
