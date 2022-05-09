@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Posts;
+use App\Entity\Comments;
 use App\Entity\Users;
 use App\Entity\UserLikesDislikes;
 use App\Form\PostsType;
+use App\Form\CommentsType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -159,6 +161,66 @@ class PostsController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/comments/new', name: 'app_posts_comments_new', methods: ['GET', 'POST'])]
+    public function newComment(Request $request, EntityManagerInterface $entityManager, Posts $post): Response
+    {
+        $user= $this->getUser();
+        
+        $comment = new Comments();
+        $comment->setPost($post);
+        $form = $this->createForm(CommentsType::class, $comment);
+        $form->handleRequest($request);
+        $date = new \DateTime('now'); 
+        $comment->setCommentDate($date);
+        $comment->setCommenter($user);
+
+        if ($form->isSubmitted() && $form->isValid() && $comment->getPost()->getResolved()== false) {
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_posts_show', ['id' => $post->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('comments/new.html.twig', [
+            'postId' => $post->getId(),
+            'comment' => $comment,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/{pid}/comments/{cid}', name: 'app_posts_comments_show', methods: ['GET'])]
+    public function showComment(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $comment = $entityManager->getRepository(Comments::class)->find((int)$request->get('cid'));
+        return $this->render('comments/show.html.twig', [
+            'postId' => (int)$request->get('pid'),
+            'comment' => $comment,
+        ]);
+    }
+
+    #[Route('/{pid}/comments/{cid}/edit', name: 'app_posts_comments_edit', methods: ['GET', 'POST'])]
+    public function editComment(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $comment = $entityManager->getRepository(Comments::class)->find((int)$request->get('cid'));
+        if ($this->getUser()->getId() != $comment->getCommenter()->getId()) {
+            return $this->redirectToRoute('app_comments_index', [], Response::HTTP_SEE_OTHER);
+        }
+        $form = $this->createForm(CommentsType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_posts_comments_show', ['pid' => (int)$request->get('pid'), 'cid' => (int)$request->get('cid')], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('comments/edit.html.twig', [
+            'postId' => (int)$request->get('pid'),
+            'comment' => $comment,
+            'form' => $form,
+        ]);
+    }
+
     #[Route('/{id}', name: 'app_posts_show', methods: ['GET'])]
     public function show(
         Posts $post,
@@ -171,6 +233,7 @@ class PostsController extends AbstractController
             'post' => $post,
             'likes' => $likes,
             'user_id' => $this->getUser()->getId(),
+            'comments' => $entityManager->getRepository(Comments::class)->findBy(['post' => $post])
         ]);
     }
 

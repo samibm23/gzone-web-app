@@ -12,10 +12,7 @@ class CommentsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('commentBody')
-            ->add('commentDate')
-            ->add('post')
-            
+            ->add('commentBody')            
         ;
     }
 
