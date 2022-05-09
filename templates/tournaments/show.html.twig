@@ -4,9 +4,12 @@
 
 {% block body %}
 {% if tournament.requestable and tournament.requiredTeams > joinedTeams and requestingTeamId is not null %}
-<h1 style="display:inline-block;margin-right:20px;">Tournaments</h1>
-<a href="{{ path('app_tournament_join_requests_new', {'team_id': requestingTeamId, 'invitation': 0, 'message': "accept me", 'tournament_id': tournament.id}) }}" style="display:inline-block;"">Request</a>
-<strong>{{requestingTeamId}}</strong>
+<h1 style="display:inline-block;margin-right:88px;">Tournaments</h1>
+<a class="nk-btn nk-btn-outline nk-btn-color-success"
+   href="{{ path('app_tournament_join_requests_new', {'team_id': requestingTeamId, 'invitation': 0, 'message': "accept me", 'tournament_id': tournament.id}) }}"
+   style="display:inline-block;"">
+                        Request
+</a>
 {% else %}
 <h1>Tournaments</h1>
 {% endif %}
@@ -47,7 +50,29 @@
         </tr>
     </tbody>
 </table>
-<h4 class="nk-widget-title"><span><span class="text-main-1">Matches</span> Matches</span></h4>
+
+<a href="{{ path('app_tournaments_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">back to list</a>
+
+<a href="{{ path('app_tournaments_edit', {'id': tournament.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>
+
+{{ include('tournaments/_delete_form.html.twig') }}
+
+<hr />
+
+{% if userId == tournament.admin.id %}
+<h4 style="display:inline-block;margin-right:88px;" class="nk-widget-title">
+    <span><span class="text-main-1">Matches</span></span>
+</h4>
+<a class="nk-btn nk-btn-rounded nk-btn-outline nk-btn-color-warning"
+   href="{{ path('app_matches_new') }}"
+   style="display:inline-block;"">
+                        Add Matches
+</a>
+{% else %}
+<h4 class="nk-widget-title">
+    <span><span class="text-main-1">Matches</span></span>
+</h4>
+{% endif %}
 {% for match in matches %}
 <div class="nk-match">
     <div class="nk-match-team-left">
@@ -61,11 +86,17 @@
         </a>
     </div>
     <div class="nk-match-status">
+        {% if userId == tournament.admin.id %}
         <a href="{{ path('app_matches_show', {"id": match.id}) }}">
             <span class="nk-match-status-date">Round {{ match.round }}</span>
             <span class="nk-match-status-vs">VS</span>
             <span class="nk-match-status-date">{{ match.startTime | date }}</span>
         </a>
+        {% else %}
+            <span class="nk-match-status-date">Round {{ match.round }}</span>
+            <span class="nk-match-status-vs">VS</span>
+            <span class="nk-match-status-date">{{ match.startTime | date }}</span>
+        {% endif %}
     </div>
     <div class="nk-match-team-right">
         <a href="{{ path('app_teams_show', {"id": match.team2.id}) }}">
@@ -80,10 +111,4 @@
 </div>
 {% endfor %}
 
-
-<a href="{{ path('app_tournaments_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">back to list</a>
-
-<a href="{{ path('app_tournaments_edit', {'id': tournament.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>
-
-{{ include('tournaments/_delete_form.html.twig') }}
 {% endblock %}

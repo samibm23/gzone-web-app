@@ -126,6 +126,7 @@ class TournamentsController extends AbstractController
         ]));
 
         return $this->render('tournaments/show.html.twig', [
+            'userId' => $this->getUser()->getId(),
             'tournament' => $tournament,
             'matches' => $matches,
             'joinedTeams' => $joinedTeams,
