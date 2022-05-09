@@ -4,6 +4,10 @@
 
 {% block body %}
     <h1>Posts</h1>
+    {#<a href={{ path('app_comments_new_post'  , {"id" : post.id}) }} target="modal">Comment</a>#}
+    <a href="{{ path('app_comments_new_post', {'id': post.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">Comment</a>
+    <blockquote class="nk-blockquote"></blockquote>
+
     <table class="nk-table">
         <tbody>
             <tr>
@@ -32,53 +36,36 @@
             </tr>
             <tr>
                 <th>Action</th>
-                <td><a href="{{ path('app_user_likes_dislikes_new', {'user_id': user_id, 'like': 1, 'post_id': post.id}) }}" class="nk-btn nk-btn-outline nk-btn-color-success">Like</a> | <a href="{{ path('app_user_likes_dislikes_new', {'user_id': user_id, 'like': 0, 'post_id': post.id}) }}" class="nk-btn nk-btn-rounded nk-btn-outline nk-btn-color-warning">Dislike</a></td>
-                <th>Like Count</th>
-                <td>{{ likes | length }}</td>
+                <td><a href="{{ path('app_user_post_likes_dislikes_new', {'user_id': user_id, 'like': 1, 'post_id': post.id}) }}" class="nk-btn nk-btn-outline nk-btn-color-success">Like</a> | <a href="{{ path('app_user_post_likes_dislikes_new', {'user_id': user_id, 'like': 0, 'post_id': post.id}) }}" class="nk-btn nk-btn-rounded nk-btn-outline nk-btn-color-warning">Dislike</a></td>
+                {% if stars == 0 %}
+                    <td>
+                    {% for i in range(1,5) %}
+                    ☆
+                    {% endfor %}
+                    </td>
+                {% endif %}
+                {% if stars > 0 %}
+                    <td>
+                    {% for i in range(1, stars) %}
+                    ⭐
+                    {% endfor %}
+                    {% if 5-stars > 0 %}
+                        {% for i in range(0, 4-stars) %}
+                        ☆
+                        {% endfor %}
+                    {% endif %}
+                    </td>
+                {% endif %}
             </tr>
         </tbody>
     </table>
 
-
-    <div class="nk-gap-1"></div>
+    {#<a href="{{ path('app_posts_index') }}">back to list</a>#}
         <a href="{{ path('app_posts_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-white">back to list</a>
 
-<div class="nk-gap-1"></div>
 
     <a href="{{ path('app_posts_edit', {'id': post.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-white">edit</a>
-    <div class="nk-gap-1"></div>
+    <blockquote class="nk-blockquote"></blockquote>
 
     {{ include('posts/_delete_form.html.twig') }}
-    <hr />
-    <h3 style="display:inline-block;margin-right:88px;">Comments</h3>
-    <a style="display:inline-block;" href="{{ path('app_posts_comments_new', {'id': post.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">Comment</a>
-    <table class="nk-table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Comments</th>
-                <th>Date</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for comment in comments %}
-                <tr>
-                    <td>{{ comment.id }}</td>
-                    <td>{{ comment.commentBody }}</td>
-                    <td>{{ comment.commentDate ? comment.commentDate|date('Y-m-d H:i:s') : '' }}</td>
-                    <td>
-                        <a href="{{ path('app_posts_comments_show', {'pid': post.id, 'cid': comment.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">show</a>
-                        {% if comment.commenter.id == user_id %}
-                        <a href="{{ path('app_posts_comments_edit', {'pid': post.id, 'cid': comment.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>
-                        {% endif %}
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="4">no records found</td>
-                </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 {% endblock %}

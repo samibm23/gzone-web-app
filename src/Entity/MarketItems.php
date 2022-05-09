@@ -10,7 +10,7 @@ use Acme\CascadeBundle\Entity;
  * MarketItems
  *
  * @ORM\Table(name="market_items", indexes={@ORM\Index(name="store_id", columns={"store_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\MarketItemsRepository")
  */
 class MarketItems
 {
