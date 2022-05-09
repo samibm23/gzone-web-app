@@ -7,7 +7,10 @@
 
     {{ include('posts/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_posts_index') }}">back to list</a>
+       <blockquote class="nk-blockquote"></blockquote>
+
 
     {{ include('posts/_delete_form.html.twig') }}
+    <blockquote class="nk-blockquote"></blockquote>
+     <a href="{{ path('app_posts_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">back to list</a>
 {% endblock %}

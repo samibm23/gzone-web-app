@@ -6,6 +6,7 @@
     <h1>Create new Comments</h1>
 
     {{ include('comments/_form.html.twig') }}
+    <blockquote class="nk-blockquote"></blockquote>
 
     <a href="{{ path('app_posts_show', {'id': postId}) }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">back to post</a>
 {% endblock %}

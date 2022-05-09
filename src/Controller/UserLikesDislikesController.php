@@ -29,26 +29,17 @@ class UserLikesDislikesController extends AbstractController
         ]);
     }
 
-    #[Route('/new/{user_id}/{like}/{post_id?}/{comment_id?}/{store_id?}', name: 'app_user_likes_dislikes_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/p/{user_id}/{like}/{post_id}', name: 'app_user_post_likes_dislikes_new', methods: ['GET', 'POST'])]
+    public function newPost(Request $request, EntityManagerInterface $entityManager): Response
     {
         $userLikesDislike = new UserLikesDislikes();
         $userLikesDislike->setUser($entityManager->getRepository(Users::class)->find($request->get('user_id')));
         $userLikesDislike->setLike((boolean)$request->get('like'));
-        if ($request->get('post_id')) {
-            $userLikesDislike->setPost($entityManager->getRepository(Posts::class)->find($request->get('post_id')));
-        }
-        if ($request->get('comment_id')) {
-            $userLikesDislike->setComment($entityManager->getRepository(Comments::class)->find($request->get('comment_id')));
-        }
-        if ($request->get('store_id')) {
-            $userLikesDislike->setStore($entityManager->getRepository(Stores::class)->find($request->get('store_id')));
-        }
+        $userLikesDislike->setPost($entityManager->getRepository(Posts::class)->find($request->get('post_id')));
+
         if (($oldUserLikesDislike = $entityManager->getRepository(UserLikesDislikes::class)->findOneBy([
             'user' => $userLikesDislike->getUser(),
             'post' => $userLikesDislike->getPost(),
-            'comment' => $userLikesDislike->getComment(),
-            'store' => $userLikesDislike->getStore()
         ])) != null) {
             if ($oldUserLikesDislike->getLike() == $userLikesDislike->getLike()) {
                 $entityManager->remove($oldUserLikesDislike);
@@ -61,15 +52,33 @@ class UserLikesDislikesController extends AbstractController
             $entityManager->persist($userLikesDislike);
             $entityManager->flush();
         }
-        if ($request->get('post_id')) {
-            return $this->redirectToRoute("app_posts_show", ['id' => $request->get('post_id')]);
+        return $this->redirectToRoute("app_posts_show", ['id' => $request->get('post_id')]);
+    }
+
+    #[Route('/s/{user_id}/{like}/{store_id}', name: 'app_user_store_likes_dislikes_new', methods: ['GET', 'POST'])]
+    public function newStore(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $userLikesDislike = new UserLikesDislikes();
+        $userLikesDislike->setUser($entityManager->getRepository(Users::class)->find($request->get('user_id')));
+        $userLikesDislike->setLike((boolean)$request->get('like'));
+        $userLikesDislike->setStore($entityManager->getRepository(Stores::class)->find($request->get('store_id')));
+
+        if (($oldUserLikesDislike = $entityManager->getRepository(UserLikesDislikes::class)->findOneBy([
+                'user' => $userLikesDislike->getUser(),
+                'store' => $userLikesDislike->getStore(),
+            ])) != null) {
+            if ($oldUserLikesDislike->getLike() == $userLikesDislike->getLike()) {
+                $entityManager->remove($oldUserLikesDislike);
+                $entityManager->flush();
+            } else {
+                $oldUserLikesDislike->setLike($userLikesDislike->getLike());
+                $entityManager->flush();
+            }
+        } else {
+            $entityManager->persist($userLikesDislike);
+            $entityManager->flush();
         }
-        if ($request->get('comment_id')) {
-            return $this->redirectToRoute("app_comments_show", ['id' => $request->get('comment_id')]);
-        }
-        if ($request->get('store_id')) {
-            return $this->redirectToRoute("app_stores_show", ['id' => $request->get('store_id')]);
-        }
+        return $this->redirectToRoute("app_stores_show", ['id' => $request->get('store_id')]);
     }
 
     #[Route('/{id}', name: 'app_user_likes_dislikes_show', methods: ['GET'])]
