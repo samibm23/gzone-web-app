@@ -1,0 +1,27 @@
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">id</th>
+        <th scope="col">name</th>
+        <th scope="col">description</th>
+        <th scope="col">photo_url</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for game in games %}
+        <tr>
+            <td>{{ game.id }}</td>
+            <td>{{ game.name }}</td>
+            <td>{{ game.description }}</td>
+            <td>{{ game.photo_url }}</td>
+
+
+
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="5">no records found</td>
+        </tr>  {% endfor %}
+    </tbody>
+</table>

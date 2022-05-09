@@ -6,6 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * HappyHours
@@ -21,6 +22,8 @@ class HappyHours
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups("post:read")
+
      */
     private $id;
 
@@ -29,6 +32,7 @@ class HappyHours
       *
      * @ORM\Column(name="start_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
       * @Assert\GreaterThanOrEqual("today")
+      * @Groups("post:read")
 
      */
     private $startDate;
@@ -37,6 +41,8 @@ class HappyHours
      * @var \DateTime
      * @ORM\Column(name="end_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
      * @Assert\GreaterThanOrEqual(propertyPath="startDate", message="the End Date should be greater than Start date")
+     * @Groups("post:read")
+     *
 
      */
     private $endDate;
@@ -47,7 +53,8 @@ class HappyHours
      * @ORM\ManyToOne(targetEntity="Badges", cascade={"remove"})
      *
      *   @ORM\JoinColumn(name="badge_id", referencedColumnName="id")
-     *
+     * @Groups("post:read")
+
      */
     private $badge;
 

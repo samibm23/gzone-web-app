@@ -9,6 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 #[Route('/happy-hours')]
 class HappyHoursController extends AbstractController
@@ -25,8 +29,67 @@ class HappyHoursController extends AbstractController
         ]);
     }
 
+    #[Route('/newJson', name: 'app_happy_hours_new', methods: ['GET', 'POST'])]
+    public function newJson(Request $request,  NormalizerInterface $normalizer): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $happyHour= new HappyHours();
+        $happyHour->setStartDate($request->get('startDate'));
+        $happyHour->setEndDate($request->get('endDate'));
+        $happyHour->setBadge($request->get('badge'));
+        $em->persist($happyHour);
+        $em->flush();
+        $jsonContent = $normalizer->normalize($happyHour, 'json', ['groups'=>'post:read']);
+        return new Response(json_encode($jsonContent));
+
+    }
+    #[Route('/List', name: 'app_happy_hours_list', methods: ['GET'])]
+    public function ListJson(EntityManagerInterface $entityManager, NormalizerInterface $normalizer): Response
+    {
+        $happyHour = $entityManager
+            ->getRepository(HappyHours::class)
+            ->findAll();
+        $jsonContent = $normalizer->normalize($happyHour, 'json', ['groups'=>'post:read']);
+
+        return new Response(json_encode($jsonContent));
+    }
+
+
+    #[Route('/deleteJson/{id}', name: 'app_games_deleteJson', methods: ['GET', 'POST'])]
+    public function deleteJson(Request $request, NormalizerInterface $normalizer, $id): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $happyHours= $em->getRepository(HappyHours::class)->find($id);
+        $em->remove($happyHours);
+        $em->flush();
+        $jsonContent = $normalizer->normalize($happyHours, 'json', ['groups'=>'post:read']);
+        return new Response("HappyHour deleted".json_encode($jsonContent));
+    }
+
+#[Route('/list/{id}', name: 'app_happy_hours_list', methods: ['GET'])]
+    public function showId(Request $request, $id, NormalizerInterface $normalizer): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $happyHours = $em->getRepository(HappyHours::class)->find($id);
+        $jsonContent = $normalizer->normalize($happyHours, 'json', ['groups'=>'post:read']);
+        return new Response(json_encode($jsonContent));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     #[Route('/new', name: 'app_happy_hours_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
     {
         $happyHour = new HappyHours();
         $form = $this->createForm(HappyHoursType::class, $happyHour);
@@ -37,6 +100,18 @@ class HappyHoursController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($happyHour);
             $entityManager->flush();
+
+            $email = (new  TemplatedEmail())
+                ->from('noreplysahti@gmail.com')
+                // On attribue le destinataire
+                ->to('chayma.dhahri@esprit.tn')
+                // On crée le texte avec la vue
+                ->subject('new HappyHour')
+                ->htmlTemplate('happy_hours/email.html.twig')
+                ->context([
+                    'happy_hours' => $happyHour,
+                ]);
+            $mailer->send($email);
 
             return $this->redirectToRoute('app_happy_hours_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -81,4 +156,12 @@ class HappyHoursController extends AbstractController
 
         return $this->redirectToRoute('app_happy_hours_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+
+
+
+
+
+
 }

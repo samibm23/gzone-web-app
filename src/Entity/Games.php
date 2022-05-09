@@ -4,6 +4,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Games
@@ -19,6 +20,7 @@ class Games
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups("post:read")
      */
     private $id;
 
@@ -26,6 +28,7 @@ class Games
      * @var string
      * @Assert\NotBlank
      * @ORM\Column(name="name", type="string", length=255)
+     * @Groups("post:read")
 
 
      */
@@ -40,7 +43,9 @@ class Games
      *     maxWidth = 400,
      *     minHeight = 200,
      *     maxHeight = 400
+
      * )
+
      */
     private $photo_url	;
 
@@ -50,10 +55,12 @@ class Games
      * @ORM\Column(name="description", type="string", length=500, nullable=true, options={"default"="NULL"})
      * @Assert\Length(
      *      min = 2,
-     *      max = 50,
+     *      max = 500,
      *      minMessage = "Your description must be at least {{ 2 }} characters long",
-     *      maxMessage = "Your description cannot be longer than {{ 50 }} characters"
+     *      maxMessage = "Your description cannot be longer than {{ 500 }} characters"
      * )
+     * @Groups("post:read")
+
      */
      
     private $description;
