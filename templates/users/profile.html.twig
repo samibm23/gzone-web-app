@@ -90,30 +90,33 @@
                 <div class="text-center"> 
                 <img src={{user.photoURL}} width="15%" class="rounded-circle">
                  </div>
-                <div class="text-center mt-3"> <span class="bg-secondary p-1 px-4 rounded text-white">PROFILE</span>
-                    <h5 class="mt-2 mb-0">Welcome {{ user.fullName}}</h5> <span>{{user.username}}</span>
+                <div class="text-center"> <span class="bg-secondary p-1 px-4 rounded text-white">PROFILE</span>
+                    <h5 class="mt-2 mb-0">Welcome {{ user.fullName}}</h5> </br>
                     <div class="px-4 mt-1">
                         <ul>
-                                        <li><span>Email :</span>{{ user.email }}</li>
-                                        <li><span>Name :</span>{{ user.fullName }}</li>
+                                        <li><span style="font-style:bold;color:white;">Email :</span>{{ user.email }}</li>
+                                        <li><span style="font-style:bold;color:white;">Name :</span>{{ user.fullName }}</li>
                                         
-                                        <li><span>Phone Number:</span> {{ user.phoneNumber }}</li>
-                                        <li><span>Username:</span> {{ user.username }}</li>
-                                        <li><span>Birthdate :</span>{{ user.birthDate | date("d-m-Y")}}</li>
-                                        <li><span>Bio :</span>{{ user.bio }}</li>
-                                        
+                                        <li><span style="font-style:bold;color:white;" >Phone Number:</span> {{ user.phoneNumber }}</li>
+                                        <li><span style="font-style:bold;color:white;">Username:</span> {{ user.username }}</li>
+                                        <li><span style="font-style:bold;color:white;">Birthdate :</span>{{ user.birthDate | date("d-m-Y")}}</li>
+                                        <li><span style="font-style:bold;color:white;">Bio :</span>{{ user.bio }}</li>
+                                         <li><span style="font-style:bold;color:white;">Favorite Games :</span></li>
+                                         {% for favgame in favgames %}
+                                        <li>{{ favgame.game }}</li>
+                                         {% endfor %}
                     </div>
-                   
+                   <p class="sign-up" style="font-style:bold;color:white;">Wanna tell us what are your favorite games?<a href="{{ path('app_user_game_preferences_new') }}"> Go Now!</a></p>
                    <div class="col-lg-6 col-md-6">
-                                    <div class="anime__details__btn" style="display: flex"style="font-style:bold;position:relative;left:50%;right:50%">
+                                    <div style="font-style:bold;position:relative;right:50%;left:50%;">
 
                                     <form  method="get" action="{{ path('edit_profile') }}" >
                                             <button  class="btn btn-success btn-fw"><i
-                                                        class="fa fa-angle-right"></i> edit Account</button>
+                                                        class="fa "></i> Edit Account</button>
                                         </form>
 
                                     </div>
-                                    <div class="text-center">
+                                    <div class="text-center" style="font-style:bold;position:relative;right:50%;left:50%;">
                                 <a class="btn btn-danger btn-block enter-btn" href="{{ path('app_logout') }}"><i class="mdi mdi-arrow-right-bold-hexagon-outline"></i> Log out </a>
                             </div>
                 </div>

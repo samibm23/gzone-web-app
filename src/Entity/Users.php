@@ -1,11 +1,9 @@
 <?php
-
 namespace App\Entity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Users
  *
@@ -29,7 +27,7 @@ class Users implements UserInterface
      *
      * @ORM\Column(name="phone_number", type="string", length=255, nullable=true, options={"default"="NULL"})
      *  @Assert\NotBlank(message="Le Champ Titre est obligatoire")
-      * @Assert\Length(
+     * @Assert\Length(
      *      min = 8,
      *      max = 8,
      *      minMessage="le numero de telephone doit etre 8 chiffres",
@@ -51,8 +49,8 @@ class Users implements UserInterface
      * @var string
      *
      * @ORM\Column(name="username", type="string", length=255, nullable=false)
-      * @Assert\NotBlank(message="le champs ne doit pas etre vide")
-      * @Assert\Length(
+     * @Assert\NotBlank(message="le champs ne doit pas etre vide")
+     * @Assert\Length(
      *     min=3,
      *     max=50,
      *     minMessage="The username must be at least 3 characters long",
@@ -277,30 +275,26 @@ class Users implements UserInterface
     public function getRoles(): array
     {
         $role = $this->role;
-        if (strcmp($role, "ROLE_USER")==0){
+        if (strcmp($role, "ROLE_USER") == 0) {
             return $roles = array("ROLE_USER");
-        }else{
+        } else {
             return $roles = array("ROLE_ADMIN");
         }
-        
     }
     public function getRole(): ?string
     {
         return $this->role;
     }
-
     public function setRole(?string $role): self
     {
         $this->role = $role;
 
         return $this;
     }
-
     public function getSalt()
     {
         // TODO: Implement getSalt() method.
     }
-
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
@@ -309,115 +303,102 @@ class Users implements UserInterface
     {
         return $this->id;
     }
-    
     public function __toString(): string
     {
-        return $this->username;
+        return $this->id;
     }
     public function serialize()
     {
         return serialize($this->id);
     }
-
     public function unserialize($data)
     {
         $this->id = unserialize($data);
     }
-
-
     /**
      * Get the value of isVerified
-     */ 
+     */
     public function getIsVerified()
     {
         return $this->isVerified;
     }
-
     /**
      * Set the value of isVerified
      *
      * @return  self
-     */ 
+     */
     public function setIsVerified($isVerified)
     {
         $this->isVerified = $isVerified;
 
         return $this;
     }
-
     /**
      * Get the value of activation_token
-     */ 
+     */
     public function getActivationToken()
     {
         return $this->activation_token;
     }
-
     /**
      * Set the value of activation_token
      *
      * @return  self
-     */ 
+     */
     public function setActivationToken($activation_token)
     {
         $this->activation_token = $activation_token;
 
         return $this;
     }
-
     /**
      * Get the value of reset_token
-     */ 
+     */
     public function getResetToken()
     {
         return $this->reset_token;
     }
-
     /**
      * Set the value of reset_token
      *
      * @return  self
-     */ 
+     */
     public function setResetToken($reset_token)
     {
         $this->reset_token = $reset_token;
 
         return $this;
     }
-
     /**
      * Get the value of disable_token
-     */ 
+     */
     public function getDisableToken()
     {
         return $this->disable_token;
     }
-
     /**
      * Set the value of disable_token
      *
      * @return  self
-     */ 
+     */
     public function setDisableToken($disable_token)
     {
         $this->disable_token = $disable_token;
 
         return $this;
     }
-
     /**
      * Get the value of verificationCode
-     */ 
+     */
     public function getVerificationCode()
     {
         return $this->verificationCode;
     }
-
     /**
      * Set the value of verificationCode
      *
      * @return  self
-     */ 
+     */
     public function setVerificationCode($verificationCode)
     {
         $this->verificationCode = $verificationCode;
