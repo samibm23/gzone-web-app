@@ -133,7 +133,12 @@ class TournamentsController extends AbstractController
                 "admin" => $this->getUser(),
                 "teamSize" => $tournament->getTeamSize(),
                 "game" => $tournament->getGame()
-            ])
+            ]),
+            'requestingTeamId' => $entityManager->getRepository(Teams::class)->findOneBy([
+                "admin" => $this->getUser(),
+                "teamSize" => $tournament->getTeamSize(),
+                "game" => $tournament->getGame()
+            ])?->getId()
         ]);
     }
 

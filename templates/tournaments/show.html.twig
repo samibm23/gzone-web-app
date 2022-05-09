@@ -3,8 +3,13 @@
 {% block title %}Tournaments{% endblock %}
 
 {% block body %}
+{% if tournament.requestable and tournament.requiredTeams > joinedTeams and requestingTeamId is not null %}
+<h1 style="display:inline-block;margin-right:20px;">Tournaments</h1>
+<a href="{{ path('app_tournament_join_requests_new', {'team_id': requestingTeamId, 'invitation': 0, 'message': "accept me", 'tournament_id': tournament.id}) }}" style="display:inline-block;"">Request</a>
+<strong>{{requestingTeamId}}</strong>
+{% else %}
 <h1>Tournaments</h1>
-
+{% endif %}
 
 <table class="nk-table">
     <tbody>
