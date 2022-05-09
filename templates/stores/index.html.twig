@@ -59,8 +59,11 @@
                 <td>
 
                     <a href="{{ path('app_stores_show', {'id': store.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">show</a>
+                    {% if user_id==store.owner.id %}
                     <a href="{{ path('app_stores_edit', {'id': store.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>
+                    {% endif %}
                 </td>
+
             </tr>
         {% else %}
             <tr>
@@ -85,24 +88,27 @@
 
     <!-- START: Top 10 Best Sellers -->
 <div class="nk-gap-3"></div>
-<h3 class="nk-decorated-h-2"><span><span class="text-main-1">Most</span> Recommended</span></h3>
+<h3 class="nk-decorated-h-2"><span><span class="text-main-1">Most </span> Recommended</span></h3>
 <div class="nk-gap"></div>
 <div class="nk-carousel nk-carousel-x4" data-autoplay="5000" data-dots="false" data-cell-align="left" data-arrows="true">
     <div class="nk-carousel-inner">
 
+        <div><div class="pl-5 pr-5">
+                <div class="nk-product-cat-3">
 
+                    <div class="nk-gap-1"></div>
+                    <div class="nk-product-cont">
+                        <div class="nk-gap-1"></div>
             {% for store, nb in sortedStores %}
-            <div><div class="pl-5 pr-5">
-                    <div class="nk-product-cat-3">
-
-                            <div class="nk-gap-1"></div>
                         <a class="nk-product-image" href="{{ path('app_stores_show', {"id":store.id}) }}">
                             <img src="assets/images/product-1-xs.jpg" alt="">
                         </a>
-                        <div class="nk-product-cont">
-                            <div class="nk-gap-1"></div>
+
                             <h3 class="nk-product-title h5"><a href="">{{ store.name }}</a></h3>
+
+
                             <div class="nk-gap-1"></div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div></div>
@@ -110,7 +116,6 @@
 </div>
 
 
-            {% endfor %}
         </div>
     </div>
     <!-- END: Top 10 Best Sellers -->

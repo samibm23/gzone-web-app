@@ -14,9 +14,9 @@ class MarketItemsType extends AbstractType
         $builder
             ->add('title')
             ->add('description')
-            ->add('sold')
+
             
-            ->add('store')
+
         ;
     }
 
