@@ -43,8 +43,10 @@ public function __construct(Client $twilio) {
             $dislikes = $entityManager
                 ->getRepository(UserLikesDislikes::class)
                 ->findBy(['store' => $store, 'like' => 0]);
-            $storeMap->put($store, (count($likes) + count($dislikes) == 0) ? 0 : (count($likes) - count($dislikes)) / (count($likes) + count($dislikes)));
-            $storeMap->reverse();
+            $storeMap->put($store, (count($likes) - count($dislikes)));
+            $storeMap->sort(function ($a, $b) {
+                return $b <=> $a;
+            });
             $storeMap = $storeMap->slice(0, 3);
         }
         // Paginate the results of the query
@@ -56,7 +58,7 @@ public function __construct(Client $twilio) {
             // Items per page
             3
         );
-
+ dump ($storeMap);
         return $this->render('stores/index.html.twig', [
             'stores' => $stores,
             'sortedStores' => $storeMap
