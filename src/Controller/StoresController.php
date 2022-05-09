@@ -1,141 +1,78 @@
-<?php
+ojuhvfndf ndf nlkllllllllllllllllllll
+Aller au contenu
+Afficher / masquer la barre latérale
 
-namespace App\Controller;
+Wikipédial'encyclopédie libre
+Rechercher sur Wikipédia
+Créer un compte
 
+Outils personnels
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+ArticleDiscussion
+LireModifierModifier le codeVoir l’historique
+Accueil
+Portails thématiques
+Article au hasard
+Contact
+Contribuer
+Débuter sur Wikipédia
+Aide
+Communauté
+Modifications récentes
+Faire un don
+Outils
+Pages liées
+Suivi des pages liées
+Téléverser un fichier
+Pages spéciales
+Lien permanent
+Informations sur la page
+Citer cette page
+Élément Wikidata
+Modifier les liens interlangues
+Imprimer / exporter
+Créer un livre
+Télécharger comme PDF
+Version imprimable
+Langues
+Sur cette version linguistique de Wikipédia, les liens interlangues sont placés en haut à droite du titre de l’article.
+Aller en haut.
 
-use \Twilio\Rest\Client;
+GG
+Page d’aide sur l’homonymie	
+Pour l’article ayant un titre homophone, voir Gégé.
 
-use App\Entity\Stores;
-use App\Entity\MarketItems;
-use App\Entity\Users;
-use App\Form\StoresType;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+Sur les autres projets Wikimedia :
 
-// Include paginator interface
+GG, sur le Wiktionnaire
+Page d’aide sur l’homonymie	
+Cette page d’homonymie répertorie les différents sujets et articles partageant un même nom.
 
+► Sigles de 2 caractères
+  Sigles de 3 caractères
+  Sigles de 4 caractères
+  Sigles de 5 caractères
+  Sigles de 6 caractères
+  Sigles de 7 caractères
+  Sigles de 8 caractères
+GG, gG ou gg est un code, qui signifie :
 
-use \Twilio\Rest\Client;
-use Knp\Component\Pager\PaginatorInterface;
-;
+Guernesey, selon la liste des Internet TLD (Top level domain): .gg ;
+Guernesey, selon la norme ISO 3166-1, alpha-2 (liste des codes pays) ;
+Géorgie, selon la liste (désuète) des codes pays utilisés par l'OTAN, code alpha-2 ;
+gG est un mode de fonctionnement de fusible.
+GG est un sigle, qui signifie :
 
-#[Route('/stores')]
-class StoresController extends AbstractController
-  {
-    private $twilio;
-public function __construct(Client $twilio) {
-   $this->twilio = $twilio;
-  
- }
-    #[Route('/', name: 'app_stores_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
-    {
-        $bestStore = $entityManager->getRepository(Stores::class)->find($entityManager->getRepository(MarketItems::class)->getBestStore());
-        $stores = $entityManager
-            ->getRepository(Stores::class)
-            ->findAll();
-        // Paginate the results of the query
-        $stores = $paginator->paginate(
-        // Doctrine Query, not results
-            $stores,
-            // Define the page parameter
-            $request->query->getInt('page', 1),
-            // Items per page
-            3
-        );
+Gadu-Gadu : messagerie instantanée ;
+Good Game, équivalent de bon jeu ou bonne partie en anglais, souvent utilisé par les gamers en fin de partie pour féliciter leur adversaire ou leurs coéquipiers ;
+Gouverneur général, représentant d'un monarque dans un royaume indépendant, ou par le passé dans d'anciennes colonies et territoires étrangers ;
+Grand Gala national des arts et métiers, un bal annuel organisé par les élèves d'Arts et Métiers ParisTech ;
+Game Genie, une série de cartouches de triche conçues par Codemasters, et distribuées par Camerica et Galoob ;
+Les Grandes Gueules, parfois abrégée en Les GG, émission de radio diffusée sur RMC.
+Gg est également un digramme de l'alphabet latin.
 
-        return $this->render('stores/index.html.twig', [
-            'stores' => $stores,
-            'bestStore' => $bestStore
-        ]);
-    }
-
-
-    #[Route('/new', name: 'app_stores_new', methods: ['GET', 'POST'])]
-
-
-
-
-
-
-public function new(Request $request, EntityManagerInterface $entityManager,Client $twilio)
-    { $this->twilio = $twilio;
-        $store = new Stores();
-        $form = $this->createForm(StoresType::class, $store);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($store);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_stores_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('stores/new.html.twig', [
-            'store' => $store,
-            'form' => $form,
-        ]);
-        $twilio = $this->get('twilio.client');
-
-
-
-        foreach($entityManager->getRepository(Users::class)->findAll() as $user) {
-            $twilio->messages->create("+216" .
-            $user->getPhoneNumber(), // Text any number
-            array(
-                'from' => '19803242866', // From a Twilio number in your account
-                'body' => "Bonjour , un nouveau store a été crée "
-            )
-        );
-           
-
-
-
-        }
-
-        return new Response("Sent messages ");
-    }
-
-    #[Route('/{id}', name: 'app_stores_show', methods: ['GET'])]
-    public function show(Stores $store): Response
-    {
-        return $this->render('stores/show.html.twig', [
-            'store' => $store,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_stores_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Stores $store, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(StoresType::class, $store);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_stores_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('stores/edit.html.twig', [
-            'store' => $store,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_stores_delete', methods: ['POST'])]
-    public function delete(Request $request, Stores $store, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$store->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($store);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_stores_index', [], Response::HTTP_SEE_OTHER);
-    }
-
-}
+Catégories : HomonymieSigle de 2 caractèresCode
+La dernière modification de cette page a été faite le 3 décembre 2021 à 10:55.
+Droit d'auteur : les textes sont disponibles sous licence Creative Commons attribution, partage dans les mêmes conditions ; d’autres conditions peuvent s’appliquer. Voyez les conditions d’utilisation pour plus de détails, ainsi que les crédits graphiques. En cas de réutilisation des textes de cette page, voyez comment citer les auteurs et mentionner la licence.
+Wikipedia® est une marque déposée de la Wikimedia Foundation, Inc., organisation de bienfaisance régie par le paragraphe 501(c)(3) du code fiscal des États-Unis.
+Politique de confidentialitéÀ propos de WikipédiaAvertissementsContactVersion mobileDéveloppeursStatistiquesDéclaration sur les témoins (cookies)Wikimedia FoundationPowered by MediaWiki
