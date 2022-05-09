@@ -18,18 +18,26 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Knp\Component\Pager\PaginatorInterface;
 
 #[Route('/tournaments')]
 class TournamentsController extends AbstractController
 {
     #[Route('/', name: 'app_tournaments_index', methods: ['GET'])]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager,Request $request, PaginatorInterface $paginator): Response
     {
         $tournaments = $entityManager
             ->getRepository(Tournaments::class)
             ->findAll();
-
-        return $this->render('tournaments/index.html.twig', [
+            $tournaments = $paginator->paginate(
+                // Doctrine Query, not results
+                $tournaments,
+                // Define the page parameter
+                $request->query->getInt('page', 1),
+                // Items per page
+                3
+            );
+            return $this->render('tournaments/index.html.twig', [
             'tournaments' => $tournaments,
             'userId' => $this->getUser()->getId()
         ]);

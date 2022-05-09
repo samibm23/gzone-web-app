@@ -79,4 +79,15 @@
     </table>
 
     <a href="{{ path('app_tournaments_new') }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">Create new</a>
+    <div class="nk-pagination nk-pagination-center">
+                        <a href="#" class="nk-pagination-prev">
+                            <span class="ion-ios-arrow-back"></span>
+                        </a>
+                        <nav>
+                            <a class="nk-pagination-current" href="{{ knp_pagination_render(tournaments) }}">1</a>
+
+                        </nav>
+                        <a href="#" class="nk-pagination-next">
+                        </a>
+                    </div>
 {% endblock %}
