@@ -9,6 +9,7 @@ use App\Entity\Tournaments;
 use App\Entity\Teams;
 use App\Entity\JoinRequests;
 use App\Form\TournamentsType;
+use App\Form\MatchesType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,6 +31,7 @@ class TournamentsController extends AbstractController
 
         return $this->render('tournaments/index.html.twig', [
             'tournaments' => $tournaments,
+            'userId' => $this->getUser()->getId()
         ]);
     }
 
@@ -112,6 +114,78 @@ class TournamentsController extends AbstractController
 
         return $this->renderForm('tournaments/new.html.twig', [
             'tournament' => $tournament,
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/{id}/matches/new', name: 'app_tournaments_matches_new', methods: ['GET', 'POST'])]
+    public function newMatch(Request $request, EntityManagerInterface $entityManager, Tournaments $tournament): Response
+    {
+        $user = $this->getUser();
+        $match = new Matches();
+        $match->setTournament($tournament);
+        $form = $this->createForm(MatchesType::class, $match);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (
+                $match->getWinnerTeam() == null
+                && $match->getTeam1()->getId() != $match->getTeam2()->getId()
+                && count($entityManager->getRepository(JoinRequests::class)->findBy([
+                    "team" => $match->getTeam1(),
+                    "tournament" => $match->getTournament(),
+                    "accepted" => true
+                    ])) == 1
+                && count($entityManager->getRepository(JoinRequests::class)->findBy([
+                    "team" => $match->getTeam2(),
+                    "tournament" => $match->getTournament(),
+                    "accepted" => true
+                    ])) == 1
+            )
+            {
+                $entityManager->persist($match);
+                $entityManager->flush();
+
+                foreach($entityManager->getRepository(JoinRequests::class)->findBy([
+                    "accepted" => true,
+                    "tournament" => null,
+                    "team" => $match->getTeam1()
+                ]) as $jr) {
+                    // generate a signed url and email it to the user
+                    $this->emailVerifier->sendEmailConfirmation(
+                        'tournament_email',
+                        $user,
+                        (new TemplatedEmail())
+                            ->from(new Address('appgzone@gmail.com', 'Gzone App'))
+                            ->to($jr->getUser()->getEmail())
+                            ->subject('Please Confirm your Email')
+                            ->htmlTemplate('TournamentConfirmation/confirmation_TR.html.twig')
+                    );
+                }
+                foreach($entityManager->getRepository(JoinRequests::class)->findBy([
+                    "accepted" => true,
+                    "tournament" => null,
+                    "team" => $match->getTeam2()
+                ]) as $jr) {
+                    // generate a signed url and email it to the user
+                    $this->emailVerifier->sendEmailConfirmation(
+                        'tournament_email',
+                        $user,
+                        (new TemplatedEmail())
+                            ->from(new Address('appgzone@gmail.com', 'Gzone App'))
+                            ->to($jr->getUser()->getEmail())
+                            ->subject('Please Confirm your Email')
+                            ->htmlTemplate('TournamentConfirmation/confirmation_TR.html.twig')
+                    );
+                }
+            }
+
+            return $this->redirectToRoute('app_tournaments_show', ["id" => $tournament->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('matches/new.html.twig', [
+            'tournamentId' => $tournament->getId(),
+            'match' => $match,
             'form' => $form,
         ]);
     }

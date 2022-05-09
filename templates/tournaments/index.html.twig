@@ -67,7 +67,7 @@
                 <td>{{ tournament.createDate ? tournament.createDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('app_tournaments_show', {'id': tournament.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">show</a>
-                    <a href="{{ path('app_tournaments_edit', {'id': tournament.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>
+                    {% if tournament.admin.id == userId%}<a href="{{ path('app_tournaments_edit', {'id': tournament.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>{% endif %}
                 </td>
             </tr>
         {% else %}

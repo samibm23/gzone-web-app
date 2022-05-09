@@ -7,5 +7,5 @@
 
     {{ include('matches/_form.html.twig') }}
 
-    <a href="{{ path('app_matches_index') }}">back to list</a>
+    <a href="{{ path('app_tournaments_show', {'id': tournamentId}) }}">back to tournament</a>
 {% endblock %}
