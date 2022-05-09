@@ -30,20 +30,11 @@ use Knp\Component\Pager\PaginatorInterface;
  */
 class UsersController extends AbstractController
 {
-
-
     /**
      * @Route("/profile", name="profile", methods={"GET"})
      */
     public function profile(UsersRepository $userRepository, UserGamePreferencesRepository $userGamePreferencesRepository, EntityManagerInterface $entityManager): Response
     {
-       
-
-
-      
-
-       
-
         return $this->render('users/profile.html.twig', [
             'user' => $userRepository->findOneBy(['id' => $this->getUser()->getUserIdentifier()]),
             'favgames' => $entityManager->getRepository(UserGamePreferences::class)->findBy(['user'=>$this->getUser()]),
@@ -244,4 +235,5 @@ class UsersController extends AbstractController
         //$link = $request->headers->get("referer");
         return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
     }
+    
 }
