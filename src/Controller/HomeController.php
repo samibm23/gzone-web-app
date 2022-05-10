@@ -17,13 +17,19 @@ class HomeController extends AbstractController
     {
 
         $httpClient = HttpClient::create(['headers' => [
-            'X-RapidAPI-Host' => 'rawg-video-games-database.p.rapidapi.com',
+            'X-RapidAPI-Host' => 'free-to-play-games-database.p.rapidapi.com',
             'X-RapidAPI-Key' => 'e5a466d3efmsh7027ddb554dd829p14c940jsne6021b74bb7b'
         ]]);
     
 
-        $response = $httpClient->request('GET', 'https://rawg-video-games-database.p.rapidapi.com/games/7f47c38abab24b96be4c93f4ac1627fc');
-        echo $response->getContent() . "\n";
+        $response = $httpClient->request('GET', 'https://free-to-play-games-database.p.rapidapi.com/api/game',[
+            'query' => [
+                'id' => '4'
+            ]
+        ]);
+       $response = dump($response->toArray());
+       echo($response);
+        
 
         return $this->render('home/index.html.twig');
     }
