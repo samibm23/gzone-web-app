@@ -112,8 +112,6 @@ class UsersController extends AbstractController
     public function index(UsersRepository $userRepository, Request $request, PaginatorInterface $paginator): Response
     {
         $em = $this->getDoctrine()->getManager();
-
-
         $query = $em->createQuery(
             'SELECT a FROM App\Entity\Users a 
         ORDER BY a.username ASC'
@@ -172,7 +170,6 @@ class UsersController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
     /**
      *  @IsGranted("ROLE_ADMIN")
      * @Route("/delete/{id}", name="app_users_delete", methods={"GET","POST"})

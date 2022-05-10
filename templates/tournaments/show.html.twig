@@ -45,6 +45,7 @@
     <a href="{{ path('app_tournaments_index') }}">back to list</a>
 
     <a href="{{ path('app_tournaments_edit', {'id': tournament.id}) }}">edit</a>
+    <a href="{{ path('app_reports_new' , {'reportType' : 1 , 'id' : tournament.id }) }}">Report</a>
 
     {{ include('tournaments/_delete_form.html.twig') }}
 {% endblock %}

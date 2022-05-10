@@ -21,6 +21,7 @@
     <a href="{{ path('app_stores_index') }}">back to list</a>
 
     <a href="{{ path('app_stores_edit', {'id': store.id}) }}">edit</a>
+    <a href="{{ path('app_reports_new' , ['reportType' => 2 , 'id' => store.id]) }}">Report</a>
 
     {{ include('stores/_delete_form.html.twig') }}
 {% endblock %}

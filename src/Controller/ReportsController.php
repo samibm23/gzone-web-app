@@ -2,7 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\MarketItemReports;
+use App\Entity\PostReports;
+use App\Entity\Posts;
 use App\Entity\Reports;
+use App\Entity\StoreReports;
+use App\Entity\Stores;
+use App\Entity\TournamentReports;
+use App\Entity\Tournaments;
 use App\Form\ReportsType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,18 +32,48 @@ class ReportsController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_reports_new', methods: ['GET', 'POST'])]
+    #[Route('/new/reportType/id', name: 'app_reports_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $type = $request->get('reportType');
+        $id = $request->get('id');
         $report = new Reports();
+        $reportTournament = new TournamentReports();
+        $reportStore = new StoreReports();
+        $reportPost = new PostReports();
+        $reportMarketItem = new MarketItemReports();
         $form = $this->createForm(ReportsType::class, $report);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($report);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_reports_index', [], Response::HTTP_SEE_OTHER);
+            if ($type==1){
+                $reportTournament->setReport($report);
+                $reportTournament->setTournament($entityManager->getRepository(Tournaments::class)->findOneBy(['id'=>$id]));
+                $entityManager->persist($reportTournament);
+                $entityManager->persist($report);
+                $entityManager->flush();
+                return $this->redirectToRoute('profile', [], Response::HTTP_SEE_OTHER);
+            }else if ($type==2){
+                $reportStore->setReport($report);
+                $reportStore->setStore($entityManager->getRepository(Stores::class)->findOneBy(['id'=>$id]));
+                $entityManager->persist($reportStore);
+                $entityManager->persist($report);
+                $entityManager->flush();
+                return $this->redirectToRoute('profile', [], Response::HTTP_SEE_OTHER);
+            }else if ($type==3){
+                $reportPost->setReport($report);
+                $reportPost->setPost($entityManager->getRepository(Posts::class)->findOneBy(['id'=>$id]));
+                $entityManager->persist($reportPost);
+                $entityManager->persist($report);
+                $entityManager->flush();
+                return $this->redirectToRoute('profile', [], Response::HTTP_SEE_OTHER);
+            }else if ($type==4){
+                $reportMarketItem->setReport($report);
+                $reportMarketItem->setMarketItem($entityManager->getRepository(MarketItems::class)->findOneBy(['id'=>$id]));
+                $entityManager->persist($reportMarketItem);
+                $entityManager->persist($report);
+                $entityManager->flush();
+                return $this->redirectToRoute('profile', [], Response::HTTP_SEE_OTHER);
+            }
         }
 
         return $this->renderForm('reports/new.html.twig', [
@@ -75,6 +112,7 @@ class ReportsController extends AbstractController
     public function delete(Request $request, Reports $report, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$report->getId(), $request->request->get('_token'))) {
+            
             $entityManager->remove($report);
             $entityManager->flush();
         }
