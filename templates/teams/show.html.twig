@@ -6,10 +6,12 @@
 {% if team.requestable %}
 <h1 style="display:inline-block;margin-right:50px;">Teams</h1>
 
-{% if jr is null %}
+{% if jr is null  %}
+{% if team.teamSize > joinedUsers  %}
 <a class="nk-btn nk-btn-outline nk-btn-color-success" 
 href="{{ path('app_user_join_requests_new', {'user_id': requestingUserId, 'invitation': 0, 'message': "accept me", 'team_id': team.id}) }}" 
 style="display:inline-block;">Request</a>
+{% endif %}
 {% elseif jr.accepted or jr.accepted is null %}
 <a class="nk-btn nk-btn-outline nk-btn-color-danger" 
 href="{{ path('app_user_join_requests_new', {'user_id': requestingUserId, 'invitation': 0, 'message': "accept me", 'team_id': team.id}) }}" 
@@ -40,6 +42,10 @@ style="display:inline-block;">Cancel Request</a>
                                     <tr>
                                         <td><strong class="h5">Name:</strong>&nbsp;&nbsp;&nbsp;</td>
                                         <td><strong class="h5">{{ team.name }}</strong></td>
+                                    </tr>
+                                      <tr>
+                                        <td><strong class="h5">Users Joined:</strong>&nbsp;&nbsp;&nbsp;</td>
+                                        <td><strong class="h5">{{joinedUsers}}/{{ team.teamSize }}</strong></td>
                                     </tr>
                                     <tr>
                                         <td><strong class="h5">Created date:</strong>&nbsp;&nbsp;&nbsp;</td>
