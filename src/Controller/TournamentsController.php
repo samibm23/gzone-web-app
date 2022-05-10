@@ -232,7 +232,7 @@ class TournamentsController extends AbstractController
     #[Route('/{id}', name: 'app_tournaments_show', methods: ['GET'])]
     public function show(Tournaments $tournament, EntityManagerInterface $entityManager): Response
     {
-        $matches = $entityManager->getRepository(Matches::class)->findBy(['tournament' => $tournament], ['startTime' => 'ASC']);
+        $matches = $entityManager->getRepository(Matches::class)->findBy(['tournament' => $tournament], ['round' => 'ASC', 'startTime' => 'ASC']);
         $joinedTeams = count($entityManager->getRepository(JoinRequests::class)->findBy([
             "tournament" => $tournament,
             "accepted" => true
