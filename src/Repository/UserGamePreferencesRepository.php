@@ -52,19 +52,12 @@ class UserGamePreferencesRepository extends ServiceEntityRepository
     public function findSearch(SearchData $search ) : array
     {
         $query = $this->createQueryBuilder('u')->select('u');
-        
-      
-
         if ($search->q || $search->p ) {
             $query =
                 $query
                     ->where('u.name;e LIKE :q')
                     ->setParameter('q','%' .$search->q .'%');
         }
-
-      
-
-
         return $query->getQuery()->getResult();
     }
 

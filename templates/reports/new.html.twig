@@ -3,9 +3,6 @@
 {% block title %}New Reports{% endblock %}
 
 {% block body %}
-    <h1>Create new Reports</h1>
-
+    <h1 style="position:relative; left: 30%; top:50%">Write your report</h1>
     {{ include('reports/_form.html.twig') }}
-
-    <a href="{{ path('app_reports_index') }}">back to list</a>
 {% endblock %}

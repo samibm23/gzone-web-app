@@ -16,7 +16,6 @@ class ReportsType extends AbstractType
             ->add('head')
             ->add('body')
             ->add('reportDate')
-            ->add('reporter')
         ;
     }
 
