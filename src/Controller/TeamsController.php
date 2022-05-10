@@ -107,41 +107,7 @@ class TeamsController extends AbstractController
         $jsonContent = $normalizer->normalize($team, 'json', ['groups'=>'post:read']);
         return new Response("Game deleted".json_encode($jsonContent));
     }
-    #[Route('/{id}', name: 'app_teams_show', methods: ['GET'])]
-    public function show(Teams $team,EntityManagerInterface $entityManager,Request $request,  $id): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $team= $em->getRepository(Teams::class)->find($id);
-        $playedMatchesCount = count($entityManager
-        ->getRepository(Matches::class)
-        ->matching(
-            Criteria::create()
-                ->where(Criteria::expr()->eq('team1', $entityManager->getRepository(Teams::class)->find($request->get('id'))))
-                ->orWhere(Criteria::expr()->eq('team2', $entityManager->getRepository(Teams::class)->find($request->get('id')))
-            )
-        ));
-
-        $wonMatchesCount = count($entityManager
-        ->getRepository(Matches::class)
-        ->findBy(["winnerTeam" => $entityManager->getRepository(Teams::class)->find($request->get('id'))]));
-
-        if($playedMatchesCount !=0){
-        return $this->render('teams/show.html.twig', [
-            'team' => $team,
-            'requestingUserId' =>$this -> getUser()->getId() ,
-            'winrate' => ($wonMatchesCount *100) / ($playedMatchesCount),
-        ]);
-   
-    }
-    else{
-        return $this->render('teams/show.html.twig', [
-            'team' => $team,
-            'requestingUserId' =>$this->getUser()->getId(),
-            'winrate' => 0,
-        ]);
-
-    }
-}
+    
     #[Route('/new', name: 'app_teams_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, FlashyNotifier $flashy, SluggerInterface $slugger): Response
     {
@@ -192,6 +158,43 @@ class TeamsController extends AbstractController
             'form' => $form,
         ]);
     }
+    #[Route('/{id}', name: 'app_teams_show', methods: ['GET'])]
+    public function show(Teams $team,EntityManagerInterface $entityManager,Request $request,  $id): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $team= $em->getRepository(Teams::class)->find($id);
+        $playedMatchesCount = count($entityManager
+        ->getRepository(Matches::class)
+        ->matching(
+            Criteria::create()
+                ->where(Criteria::expr()->eq('team1', $entityManager->getRepository(Teams::class)->find($request->get('id'))))
+                ->orWhere(Criteria::expr()->eq('team2', $entityManager->getRepository(Teams::class)->find($request->get('id')))
+            )
+        ));
+
+        $wonMatchesCount = count($entityManager
+        ->getRepository(Matches::class)
+        ->findBy(["winnerTeam" => $entityManager->getRepository(Teams::class)->find($request->get('id'))]));
+
+
+        if($playedMatchesCount !=0){
+        return $this->render('teams/show.html.twig', [
+            'team' => $team,
+            'requestingUserId' => $this->getUser()->getId(),
+            'jr' => $entityManager->getRepository(JoinRequests::class)->findOneBy(['user'=> $this->getUser(), 'team' =>$team]),
+            'winrate' => ($wonMatchesCount *100) / ($playedMatchesCount),
+        ]);
+   
+    } else {
+        return $this->render('teams/show.html.twig', [
+            'team' => $team,
+            'requestingUserId' =>$this->getUser()->getId(),
+            'jr' => $entityManager->getRepository(JoinRequests::class)->findOneBy(['user'=> $this->getUser(), 'team' =>$team]),
+            'winrate' => 0,
+        ]);
+
+    }
+}
     #[Route('/{id}/accept-join-request/{jrid}', name: 'app_join_requests_accept_team', methods: ['GET', 'POST'])]
     public function acceptTeam(Request $request, EntityManagerInterface $entityManager): Response
     {
