@@ -78,7 +78,7 @@
     {% for match in matches %}
     <div class="nk-match">
         <div class="nk-match-team-left">
-            <a href="{{ path('app_teams_show', {" id": match.team1.id}) }}">
+            <a href="{{ path('app_teams_show', {"id": match.team1.id}) }}">
                 <span class="nk-match-team-logo">
                     <img src="..\..\uploads\team\{{match.team1.photoUrl}}" alt="" width="100" height="100">
                 </span>
@@ -89,7 +89,7 @@
         </div>
         <div class="nk-match-status">
             {% if userId == tournament.admin.id %}
-            <a href="{{ path('app_tournaments_matches_show', {" tid": tournament.id, "mid" : match.id}) }}">
+            <a href="{{ path('app_tournaments_matches_show', {"tid": tournament.id, "mid" : match.id}) }}">
                 <span class="nk-match-status-date">Round {{ match.round }}</span>
                 <span class="nk-match-status-vs">VS</span>
                 <span class="nk-match-status-date">{{ match.startTime | date }}</span>
@@ -101,7 +101,7 @@
             {% endif %}
         </div>
         <div class="nk-match-team-right">
-            <a href="{{ path('app_teams_show', {" id": match.team2.id}) }}">
+            <a href="{{ path('app_teams_show', {"id": match.team2.id}) }}">
                 <span class="nk-match-team-name">
                     {{ match.team2.name }}
                 </span>
