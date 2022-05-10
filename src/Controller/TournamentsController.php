@@ -153,39 +153,6 @@ class TournamentsController extends AbstractController
             {
                 $entityManager->persist($match);
                 $entityManager->flush();
-
-                foreach($entityManager->getRepository(JoinRequests::class)->findBy([
-                    "accepted" => true,
-                    "tournament" => null,
-                    "team" => $match->getTeam1()
-                ]) as $jr) {
-                    // generate a signed url and email it to the user
-                    $this->emailVerifier->sendEmailConfirmation(
-                        'tournament_email',
-                        $user,
-                        (new TemplatedEmail())
-                            ->from(new Address('appgzone@gmail.com', 'Gzone App'))
-                            ->to($jr->getUser()->getEmail())
-                            ->subject('Please Confirm your Email')
-                            ->htmlTemplate('TournamentConfirmation/confirmation_TR.html.twig')
-                    );
-                }
-                foreach($entityManager->getRepository(JoinRequests::class)->findBy([
-                    "accepted" => true,
-                    "tournament" => null,
-                    "team" => $match->getTeam2()
-                ]) as $jr) {
-                    // generate a signed url and email it to the user
-                    $this->emailVerifier->sendEmailConfirmation(
-                        'tournament_email',
-                        $user,
-                        (new TemplatedEmail())
-                            ->from(new Address('appgzone@gmail.com', 'Gzone App'))
-                            ->to($jr->getUser()->getEmail())
-                            ->subject('Please Confirm your Email')
-                            ->htmlTemplate('TournamentConfirmation/confirmation_TR.html.twig')
-                    );
-                }
             }
 
             return $this->redirectToRoute('app_tournaments_show', ["id" => $tournament->getId()], Response::HTTP_SEE_OTHER);
