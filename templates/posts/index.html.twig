@@ -4,99 +4,101 @@
 
 
 {% block body %}
-    <div class="nk-gap-1"></div>
-    <div class="container">
-        <ul class="nk-breadcrumbs">
-            <li><span class="fa fa-angle-right"></span></li>
-            <li><span class="fa fa-angle-right"></span></li>
-            <li><span>POSTS</span></li>
-        </ul>
+<div class="nk-gap-1"></div>
+<div class="container">
+    <ul class="nk-breadcrumbs">
+        <li><span class="fa fa-angle-right"></span></li>
+        <li><span class="fa fa-angle-right"></span></li>
+        <li><span>POSTS</span></li>
+    </ul>
+</div>
+<div class="nk-gap-1"></div>
+{% block stylesheets%}
+{#<input type="text" id="search" class="form-control" placeholder="Search">#}
+<div class="nk-widget">
+    <div class="nk-widget-content">
+        <form action="#" class="nk-form nk-form-style-1" novalidate="novalidate">
+            <div class="input-group">
+                <input type="text" id="search" class="form-control" placeholder="Type something...">
+                <button class="nk-btn nk-btn-color-main-1"><span class="ion-search"></span></button>
+            </div>
+        </form>
     </div>
-    <div class="nk-gap-1"></div>
-     {% block stylesheets%}
-  {#<input type="text" id="search" class="form-control" placeholder="Search">#}
-  <div class="nk-widget">
-                        <div class="nk-widget-content">
-                            <form action="#" class="nk-form nk-form-style-1" novalidate="novalidate">
-                                <div class="input-group">
-                                    <input type="text" id="search" class="form-control" placeholder="Type something...">
-                                    <button class="nk-btn nk-btn-color-main-1"><span class="ion-search"></span></button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+</div>
 
-   
-    <script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js') }}"></script>
-    <script>
-        $(document).ready(function(){
-            $("#search").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
+
+<script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js') }}"></script>
+<script>
+    $(document).ready(function () {
+        $("#search").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });
-    </script>
-    {% endblock %}
-    <table class="nk-table" id="tr">
-    
-        <thead>
-        
-            <tr>
-                <th>Id</th>
-                <th>Resolved</th>
-                <th>Title</th>
-                <th>Content</th>
-                <th>Tags</th>
-                <th>PostDate</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    });
+</script>
+{% endblock %}
+<table class="nk-table" id="tr">
+
+    <thead>
+
+        <tr>
+            <th>Id</th>
+            <th>Resolved</th>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Tags</th>
+            <th>PostDate</th>
+            <th>actions</th>
+        </tr>
+    </thead>
+    <tbody>
         {% for post in posts %}
-            <tr>
-                <td>{{ post.id }}</td>
-                <td>{{ post.resolved ? 'Yes' : 'No' }}</td>
-                <td>{{ post.title }}</td>
-                <td>{{ post.content }}</td>
-                <td>{{ post.tags }}</td>
-                <td>{{ post.postDate ? post.postDate|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_posts_show', {'id': post.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">show</a>
-                    {% if userId == post.poster.id %}<a href="{{ path('app_posts_edit', {'id': post.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>{% endif %}
-                </td>
-            </tr>
+        <tr>
+            <td>{{ post.id }}</td>
+            <td>{{ post.resolved ? 'Yes' : 'No' }}</td>
+            <td>{{ post.title }}</td>
+            <td>{{ post.content }}</td>
+            <td>{{ post.tags }}</td>
+            <td>{{ post.postDate ? post.postDate|date('Y-m-d H:i:s') : '' }}</td>
+            <td>
+                <a href="{{ path('app_posts_show', {'id': post.id}) }}"
+                    class="nk-btn nk-btn-rounded nk-btn-color-main-1">show</a>
+                {% if userId == post.poster.id %}<a href="{{ path('app_posts_edit', {'id': post.id}) }}"
+                    class="nk-btn nk-btn-color-primary">edit</a>{% endif %}
+            </td>
+        </tr>
         {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
+        <tr>
+            <td colspan="7">no records found</td>
+        </tr>
         {% endfor %}
-        </tbody>
-    </table>
-    <script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js') }}"></script>
-    <script>
-        $(document).ready(function(){
-            $("#search").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("#Ytable tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
+    </tbody>
+</table>
+<script src="{{ asset('https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js') }}"></script>
+<script>
+    $(document).ready(function () {
+        $("#search").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#Ytable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         });
-    </script>
+    });
+</script>
 
- <div class="nk-pagination nk-pagination-center">
-                        <a href="#" class="nk-pagination-prev">
-                            <span class="ion-ios-arrow-back"></span>
-                        </a>
-                        <nav>
-                            <a class="nk-pagination-current" href="{{ knp_pagination_render(posts) }}">1</a>
+<div class="nk-pagination nk-pagination-center">
+    <a href="#" class="nk-pagination-prev">
+        <span class="ion-ios-arrow-back"></span>
+    </a>
+    <nav>
+        <a class="nk-pagination-current" href="{{ knp_pagination_render(posts) }}">1</a>
 
-                        </nav>
-                        <a href="#" class="nk-pagination-next">
-                        </a>
-                    </div>
-    <a href="{{ path('app_posts_new') }} " class="nk-btn nk-btn-rounded nk-btn-color-main-1">Create new</a>
-    
+    </nav>
+    <a href="#" class="nk-pagination-next">
+    </a>
+</div>
+<a href="{{ path('app_posts_new') }} " class="nk-btn nk-btn-rounded nk-btn-color-main-1">Create new</a>
+
 {% endblock %}
