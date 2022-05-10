@@ -42,8 +42,8 @@ class Comments
     /**
      * @var \Posts
      *
-     * @ORM\ManyToOne(targetEntity="Posts" , cascade={"remove"})
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Posts")
+     *
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="post_id", referencedColumnName="id")
      * })

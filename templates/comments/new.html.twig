@@ -3,7 +3,10 @@
 {% block title %}New Comments{% endblock %}
 
 {% block body %}
-    <h1>Create new Comments</h1>
+<div class="nk-widget nk-widget-highlighted">
+    <h1 class="nk-widget-title"><span><span class="text-main-1">New</span> Comment</span></h1>
+    <div class="nk-widget-content">
+    
 
     {{ include('comments/_form.html.twig') }}
     <blockquote class="nk-blockquote"></blockquote>

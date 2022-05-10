@@ -92,7 +92,7 @@ class CommentsController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_comments_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_posts_index', [], Response::HTTP_SEE_OTHER);
     }
 
     

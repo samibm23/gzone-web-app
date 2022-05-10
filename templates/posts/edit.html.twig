@@ -3,7 +3,10 @@
 {% block title %}Edit Posts{% endblock %}
 
 {% block body %}
-    <h1>Edit Posts</h1>
+<div class="nk-widget nk-widget-highlighted">
+    <h1 class="nk-widget-title"><span><span class="text-main-1">Edit</span> Post</span></h1>
+    <div class="nk-widget-content">
+   
 
     {{ include('posts/_form.html.twig', {'button_label': 'Update'}) }}
 
