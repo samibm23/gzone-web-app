@@ -12,7 +12,6 @@ class UserGamePreferencesType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('user')
             ->add('game')
         ;
     }
