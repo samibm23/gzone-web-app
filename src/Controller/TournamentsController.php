@@ -238,22 +238,40 @@ class TournamentsController extends AbstractController
             "accepted" => true
         ]));
 
-        return $this->render('tournaments/show.html.twig', [
-            'userId' => $this->getUser()->getId(),
-            'tournament' => $tournament,
-            'matches' => $matches,
-            'joinedTeams' => $joinedTeams,
-            'teams' => ($tournament->getRequiredTeams() - $joinedTeams == 0)? null : $entityManager->getRepository(Teams::class)->findBy([
-                "admin" => $this->getUser(),
-                "teamSize" => $tournament->getTeamSize(),
-                "game" => $tournament->getGame()
-            ]),
-            'requestingTeamId' => $entityManager->getRepository(Teams::class)->findOneBy([
-                "admin" => $this->getUser(),
-                "teamSize" => $tournament->getTeamSize(),
-                "game" => $tournament->getGame()
-            ])?->getId()
+        $team = $entityManager->getRepository(Teams::class)->findOneBy([
+            "admin" => $this->getUser(),
+            "teamSize" => $tournament->getTeamSize(),
+            "game" => $tournament->getGame()
         ]);
+
+        if ($team != null) {
+            return $this->render('tournaments/show.html.twig', [
+                'userId' => $this->getUser()->getId(),
+                'tournament' => $tournament,
+                'matches' => $matches,
+                'joinedTeams' => $joinedTeams,
+                'requestButton' => $entityManager->getRepository(JoinRequests::class)->findOneBy(['team' => $team, 'tournament' => $tournament, 'accepted' => null]) != null,
+                'teams' => ($tournament->getRequiredTeams() - $joinedTeams == 0)? null : $entityManager->getRepository(Teams::class)->findBy([
+                    "admin" => $this->getUser(),
+                    "teamSize" => $tournament->getTeamSize(),
+                    "game" => $tournament->getGame()
+                ]),
+                'requestingTeamId' => $team->getId()
+            ]);
+        } else {
+            return $this->render('tournaments/show.html.twig', [
+                'userId' => $this->getUser()->getId(),
+                'tournament' => $tournament,
+                'matches' => $matches,
+                'joinedTeams' => $joinedTeams,
+                'teams' => ($tournament->getRequiredTeams() - $joinedTeams == 0)? null : $entityManager->getRepository(Teams::class)->findBy([
+                    "admin" => $this->getUser(),
+                    "teamSize" => $tournament->getTeamSize(),
+                    "game" => $tournament->getGame()
+                ]),
+                'requestingTeamId' => null
+            ]);
+        }
     }
     #[Route('/{id}/accept-join-request/{jrid}', name: 'app_join_requests_accept_tournament', methods: ['GET', 'POST'])]
     public function acceptTournament(Request $request, EntityManagerInterface $entityManager): Response
