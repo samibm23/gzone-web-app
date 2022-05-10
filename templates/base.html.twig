@@ -9,6 +9,7 @@
 
     <title>Gzone</title>
     {% block stylesheet %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('bundles/mercuryseriesflashy/css/flashy.css') }}">
     {% endblock %}
 
@@ -28,7 +29,7 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href={{ asset('../public/assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}>
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- FontAwesome -->
     <script defer src=../public/assets/vendor/fontawesome-free/js/all.js></script>
     <script defer src=../public/assets/vendor/fontawesome-free/js/v4-shims.js></script>
@@ -85,67 +86,6 @@
         .nk-header-opaque
 -->
     <header class="nk-header nk-header-opaque">
-        -
-        <!-- START: Top Contacts -->
-        <div class="nk-contacts-top">
-            <div class="container">
-                <div class="nk-contacts-right">
-                    <ul class="nk-contacts-icons">
-
-
-
-                        <li>
-                            <a href={{ path('profile') }} data-toggle="modal" data-target="#modalLogin"
-                                style="color:whitesmoke; font-style:bold;">
-
-                                <span class="fa fa-user" style="font-size:35px;"> </span><br>
-                                profile
-                            </a>
-                        </li>
-
-
-                        <div class="nk-cart-dropdown">
-
-                            <div class="nk-widget-post">
-                                <a href="store-product.html" class="nk-post-image">
-                                    <img src="../public/assets/images/product-5-xs.jpg" alt="In all revolutions of">
-                                </a>
-                                <h3 class="nk-post-title">
-                                    <a href="#" class="nk-cart-remove-item"><span class="ion-android-close"></span></a>
-                                    <a href="store-product.html">In all revolutions of</a>
-                                </h3>
-                                <div class="nk-gap-1"></div>
-                                <div class="nk-product-price">€ 23.00</div>
-                            </div>
-
-                            <div class="nk-widget-post">
-                                <a href="store-product.html" class="nk-post-image">
-                                    <img src="../public/assets/images/product-7-xs.jpg" alt="With what mingled joy">
-                                </a>
-                                <h3 class="nk-post-title">
-                                    <a href="#" class="nk-cart-remove-item"><span class="ion-android-close"></span></a>
-                                    <a href="store-product.html">With what mingled joy</a>
-                                </h3>
-                                <div class="nk-gap-1"></div>
-                                <div class="nk-product-price">€ 14.00</div>
-                            </div>
-
-                            <div class="nk-gap-2"></div>
-                            <div class="text-center">
-                                <a href="store-checkout.html"
-                                    class="nk-btn nk-btn-rounded nk-btn-color-main-1 nk-btn-hover-color-white">Proceed
-                                    to Checkout</a>
-                            </div>
-                        </div>
-                        </li>
-
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!-- END: Top Contacts -->
-
-
         <!-- Translation Code here -->
         <span>
             <div class="translate" id="google_translate_element"></div>
@@ -176,216 +116,52 @@
                     </a>
 
                     <ul class="nk-nav nk-nav-right d-none d-lg-table-cell" data-nav-mobile="#nk-nav-mobile">
-                        <ul class="dropdown">
-
-                            <li>
-                                <a href="elements.html">
-                                    Elements (Shortcodes)
-
-                                </a>
-                            </li>
-                            <li class=" nk-drop-item">
-                                <a href="forum.html">
-                                    Forum
-
-                                </a>
-                                <ul class="dropdown">
-
-                                    <li>
-                                        <a href={{ path('app_posts_index') }}>
-                                            Forum
-
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="forum-topics.html">
-                                            Topics
-
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="forum-single-topic.html">
-                                            Single Topic
-
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="widgets.html">
-                                    Widgets
-
-                                </a>
-                            </li>
-                            <li>
-                                <a href="coming-soon.html">
-                                    Coming Soon
-
-                                </a>
-                            </li>
-                            <li>
-                                <a href="offline.html">
-                                    Offline
-
-                                </a>
-                            </li>
-                            <li>
-                                <a href="404.html">
-                                    404
-
-                                </a>
-                            </li>
-                        </ul>
-                        </li>
-                        <li class=" nk-drop-item">
-                            <a href={{ path('app_front') }}>
-                                game
-
-                            </a>
+                      
                             <ul class="dropdown">
 
-                                <li>
-                                    <a href="elements.html">
-                                        Elements (Shortcodes)
-
-                                    </a>
+                                       
+                                    </ul>
                                 </li>
-                                <li class=" nk-drop-item">
-                                    <a href="forum.html">
-                                        Forum
+                               
+                            </ul>
+                        </li>
 
-                                    </a>
+                        <li class=" nk-drop-item">
+                          
                                     <ul class="dropdown">
+                                    <li>
+                                            <a href={{ path('app_front') }}>
+                                                Games
 
+                                            </a>
+                                        </li>
+</ul>
                                         <li>
                                             <a href={{ path('app_posts_index') }}>
                                                 Forum
 
                                             </a>
                                         </li>
-                                        <li>
-                                            <a href="forum-topics.html">
-                                                Topics
-
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="forum-single-topic.html">
-                                                Single Topic
-
-                                            </a>
-                                        </li>
+                                       
                                     </ul>
                                 </li>
                                 <li>
-                                    <a href="widgets.html">
-                                        Widgets
+                                    <a href={{ path('app_tournaments_index') }}>
+                                        Tournaments
 
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="coming-soon.html">
-                                        Coming Soon
-
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="offline.html">
-                                        Offline
-
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="404.html">
-                                        404
-
-                                    </a>
-                                </li>
+                                
                             </ul>
                         </li>
 
-                        <li class=" nk-drop-item">
-                            <a href={{ path('app_tournaments_index') }}>
-                                Tournament
-
-                            </a>
-                            <ul class="dropdown">
-
-                                <li>
-                                    <a href="elements.html">
-                                        Elements (Shortcodes)
-
-                                    </a>
-                                </li>
-                                <li class=" nk-drop-item">
-                                    <a href="forum.html">
-                                        Forum
-
-                                    </a>
-                                    <ul class="dropdown">
-
-                                        <li>
-                                            <a href={{ path('app_posts_index') }}>
-                                                Forum
-
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="forum-topics.html">
-                                                Topics
-
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="forum-single-topic.html">
-                                                Single Topic
-
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a href="widgets.html">
-                                        Widgets
-
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="coming-soon.html">
-                                        Coming Soon
-
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="offline.html">
-                                        Offline
-
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="404.html">
-                                        404
-
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class=" nk-drop-item">
+                        
                             <a href={{ path('app_teams_index') }}>
                                 Team
 
                             </a>
                             <ul class="dropdown">
 
-
-
-                                <li>
-                                    <a href="blog-article.html">
-                                        Blog Article
-
-                                    </a>
-                                </li>
                             </ul>
                         </li>
                         <li>
@@ -399,28 +175,15 @@
                                 Stores
 
                             </a>
-                            <ul class="dropdown">
+                             <li>
+                            <a href={{ path('profile') }} data-toggle="modal" data-target="#modalLogin"
+                                style="color:whitesmoke; font-style:bold; position:center;">
 
-                                <li>
-                                    <a href={{ path('app_tournaments_index') }}>
-                                        Tournament
-
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="tournaments-teams.html">
-                                        Teams
-
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="tournaments-teammate.html">
-                                        Teammate
-
-                                    </a>
-                                </li>
-                            </ul>
+                                <span class="fa fa-user" style="font-size:35px;"> </span><br>
+                                profile
+                            </a>
                         </li>
+
                         <li class=" nk-drop-item">
                     </ul>
                     </li>
