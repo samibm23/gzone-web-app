@@ -3,7 +3,14 @@
 {% block title %}Teams{% endblock %}
 
 {% block body %}
+{% if team.requestable %}
+<h1 style="display:inline-block;margin-right:20px;">Teams</h1>
+<a href="{{ path('app_user_join_requests_new', {'user_id': requestingUserId, 'invitation': 0, 'message': "accept me", 'team_id': team.id}) }}" 
+style="display:inline-block;"">Request</a>
+
+{% else %}
     <h1>Teams</h1>
+    {% endif %}
     <div class="nk-teammate-card">
                 <div class="nk-teammate-card-photo">
                     <img src="..\..\uploads\team\{{team.PhotoUrl}}" width="100" height="100"  alt="">
