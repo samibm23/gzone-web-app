@@ -19,6 +19,15 @@ class GamesRepository extends ServiceEntityRepository
         parent::__construct($registry, Games::class);
     }
 
+    public function stat()
+    {
+        $qb = $this->createQueryBuilder('v')
+            ->select('COUNT(v.id) AS name, SUBSTRING(v.id, 1, 100000) AS id')
+            ->groupBy('id');
+        return $qb->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Games[] Returns an array of Games objects
     //  */
@@ -116,4 +125,28 @@ public function findGameByName($name){
 
 
     } */
+
+    public function findTeamwithNumber($num){
+        return $this->createQueryBuilder('Games')
+            ->where('Games.name LIKE :name')
+            ->setParameter('name', '%'.$num.'%')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+
+    public function DescReclamationSearch($order){
+        $em = $this->getEntityManager();
+
+        $query = $em->createQuery('SELECT e FROM App\Entity\Games e order by e.id DESC ');
+        return $query->getResult();
+    }
+
+    public function AscReclamationSearch($order){
+        $em = $this->getEntityManager();
+
+        $query = $em->createQuery('SELECT e FROM App\Entity\Games e order by e.id ASC  ');
+        return $query->getResult();
+    }
 }

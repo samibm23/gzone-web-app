@@ -25,6 +25,28 @@ class BadgesController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @Route("/triid", name="triid")
+     */
+
+    public function Triid(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $query = $em->createQuery(
+            'SELECT c FROM App\Entity\Badges c 
+            ORDER BY c.title'
+        );
+
+
+        $rep = $query->getResult();
+
+        return $this->render('badges/index.html.twig',
+            array('badges' => $rep));
+
+    }
+
     #[Route('/new', name: 'app_badges_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
