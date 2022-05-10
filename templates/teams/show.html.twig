@@ -4,52 +4,90 @@
 
 {% block body %}
     <h1>Teams</h1>
+    <div class="nk-teammate-card">
+                <div class="nk-teammate-card-photo">
+                    <img src="..\..\uploads\team\{{team.PhotoUrl}}" width="100" height="100"  alt="">
+                </div>
 
-    <table class="nk-table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ team.id }}</td>
-            </tr>
-              <tr>
-                <th>Name</th>
-                <td>{{ team.name }}</td>
-            </tr>
-            <tr>
-                <th>PhotoUrl</th>
-                <td> <img src="..\..\uploads\team\{{team.PhotoUrl}}"width="250" height="300"></img></td>
-            </tr>
-         
-            <tr>
-                <th>Description</th>
-                <td>{{ team.description }}</td>
-            </tr>
-            <tr>
-                <th>TeamSize</th>
-                <td>{{ team.teamSize }}</td>
-            </tr>
-            <tr>
-                <th>Requestable</th>
-                <td>{{ team.requestable ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Invitable</th>
-                <td>{{ team.invitable ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>CreateDate</th>
-                <td>{{ team.createDate ? team.createDate|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-            <th>winrate</th>
-            <td>{{winrate}} %</td>
-            </tr>
-        </tbody>
-    </table>
+                <div class="nk-teammate-card-info">
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <img src="assets/images/teammate-team.png" alt="">
+                            </td>
+                            <td>
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td><strong class="h5">Id:</strong>&nbsp;&nbsp;&nbsp;</td>
+                                        <td><strong class="h5">{{ team.id }}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong class="h5">Name:</strong>&nbsp;&nbsp;&nbsp;</td>
+                                        <td><strong class="h5">{{ team.name }}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong class="h5">Created date:</strong>&nbsp;&nbsp;&nbsp;</td>
+                                        <td><strong class="h5">{{ team.createDate ? team.createDate|date('Y-m-d H:i:s') : '' }}</strong></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong class="h3">{{ team.requestable ? 'Yes' : 'No' }}</strong>
+                            </td>
+                            <td>
+                                <strong class="h5">REQUESTABLE</strong>
+                                <div></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong class="h3">{{ team.invitable ? 'Yes' : 'No' }}</strong>
+                            </td>
+                            <td>
+                                <strong class="h5">INVITABLE</strong>
+                                <div></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong class="h3">{{winrate}} %</strong>
+                            </td>
+                            <td>
+                                <strong class="h5">Win Rate</strong>
+                                <div></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong class="h3">{{ team.teamSize }}</strong>
+                            </td>
+                            <td>
+                                <strong class="h5">Team Size</strong>
+                                <div></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="nk-gap-3"></div>
+            <h3 class="nk-decorated-h-2"><span>Biography</span></h3>
+            <p>{{ team.description }} </p>
+            
+            
 
-    <a href="{{ path('app_teams_index') }}">back to list</a>
 
-    <a href="{{ path('app_teams_edit', {'id': team.id}) }}">edit</a>
 
+    
+<div class="nk-gap-1"></div>
+    <a href="{{ path('app_teams_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">back to list</a>
+
+    <a href="{{ path('app_teams_edit', {'id': team.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>
+<div class="nk-gap-1"></div>
     {{ include('teams/_delete_form.html.twig') }}
 {% endblock %}

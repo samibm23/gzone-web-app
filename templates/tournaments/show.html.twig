@@ -3,48 +3,115 @@
 {% block title %}Tournaments{% endblock %}
 
 {% block body %}
-    <h1>Tournaments</h1>
+{% if tournament.requestable and tournament.requiredTeams > joinedTeams and requestingTeamId is not null %}
+<h1 style="display:inline-block;margin-right:88px;">Tournaments</h1>
+<a class="nk-btn nk-btn-outline nk-btn-color-success"
+   href="{{ path('app_tournament_join_requests_new', {'team_id': requestingTeamId, 'invitation': 0, 'message': "accept me", 'tournament_id': tournament.id}) }}"
+   style="display:inline-block;"">
+                        Request
+</a>
+{% else %}
+<h1>Tournaments</h1>
+{% endif %}
 
-    <table class="nk-table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ tournament.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ tournament.name }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ tournament.description }}</td>
-            </tr>
-            <tr>
-                <th>RequiredTeams</th>
-                <td>{{ tournament.requiredTeams }}</td>
-            </tr>
-            <tr>
-                <th>TeamSize</th>
-                <td>{{ tournament.teamSize }}</td>
-            </tr>
-            <tr>
-                <th>Requestable</th>
-                <td>{{ tournament.requestable ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>Approved</th>
-                <td>{{ tournament.approved ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>CreateDate</th>
-                <td>{{ tournament.createDate ? tournament.createDate|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+<table class="nk-table">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ tournament.id }}</td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td>{{ tournament.name }}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{ tournament.description }}</td>
+        </tr>
+        <tr>
+            <th>Teams</th>
+            <td>{{ joinedTeams }} / {{ tournament.requiredTeams }} joined</td>
+        </tr>
+        <tr>
+            <th>TeamSize</th>
+            <td>{{ tournament.teamSize }}</td>
+        </tr>
+        <tr>
+            <th>Requestable</th>
+            <td>{{ tournament.requestable ? 'Yes' : 'No' }}</td>
+        </tr>
+        <tr>
+            <th>Approved</th>
+            <td>{{ tournament.approved ? 'Yes' : 'No' }}</td>
+        </tr>
+        <tr>
+            <th>CreateDate</th>
+            <td>{{ tournament.createDate ? tournament.createDate|date('Y-m-d H:i:s') : '' }}</td>
+        </tr>
+    </tbody>
+</table>
+<div class="nk-gap-1"></div>
 
-    <a href="{{ path('app_tournaments_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">back to list</a>
+<a href="{{ path('app_tournaments_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">back to list</a>
+{% if tournament.admin.id == userId %}
+<a href="{{ path('app_tournaments_edit', {'id': tournament.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>
+<div class="nk-gap-1"></div>
 
-    <a href="{{ path('app_tournaments_edit', {'id': tournament.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>
+{{ include('tournaments/_delete_form.html.twig') }}
+{% endif %}
 
-    {{ include('tournaments/_delete_form.html.twig') }}
+<hr />
+
+{% if userId == tournament.admin.id %}
+<h4 style="display:inline-block;margin-right:88px;" class="nk-widget-title">
+    <span><span class="text-main-1">Matches</span></span>
+</h4>
+<a class="nk-btn nk-btn-rounded nk-btn-outline nk-btn-color-warning"
+   href="{{ path('app_tournaments_matches_new', {'id': tournament.id}) }}"
+   style="display:inline-block;"">
+                        Add Matches
+</a>
+{% else %}
+<h4 class="nk-widget-title">
+    <span><span class="text-main-1">Matches</span></span>
+</h4>
+{% endif %}
+{% for match in matches %}
+<div class="nk-match">
+    <div class="nk-match-team-left">
+        <a href="{{ path('app_teams_show', {"id": match.team1.id}) }}">
+            <span class="nk-match-team-logo">
+                <img src="..\..\uploads\team\{{match.team1.photoUrl}}" alt="" width="100" height="100">
+            </span>
+            <span class="nk-match-team-name">
+                {{ match.team1.name }}
+            </span>
+        </a>
+    </div>
+    <div class="nk-match-status">
+        {% if userId == tournament.admin.id %}
+        <a href="{{ path('app_tournaments_matches_show', {"tid": tournament.id, "mid": match.id}) }}">
+            <span class="nk-match-status-date">Round {{ match.round }}</span>
+            <span class="nk-match-status-vs">VS</span>
+            <span class="nk-match-status-date">{{ match.startTime | date }}</span>
+        </a>
+        {% else %}
+            <span class="nk-match-status-date">Round {{ match.round }}</span>
+            <span class="nk-match-status-vs">VS</span>
+            <span class="nk-match-status-date">{{ match.startTime | date }}</span>
+        {% endif %}
+    </div>
+    <div class="nk-match-team-right">
+        <a href="{{ path('app_teams_show', {"id": match.team2.id}) }}">
+            <span class="nk-match-team-name">
+                {{ match.team2.name }}
+            </span>
+            <span class="nk-match-team-logo">
+                <img src="..\..\uploads\team\{{match.team2.photoUrl}}" alt="" width="100" height="100">
+            </span>
+        </a>
+    </div>
+</div>
+{% endfor %}
+
 {% endblock %}
