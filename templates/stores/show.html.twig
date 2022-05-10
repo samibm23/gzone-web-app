@@ -36,6 +36,7 @@
 </table>
 
 <hr>
+<a class="nk-btn nk-btn-rounded nk-btn-color-main-1" href="{{ path('app_reports_new' , {'reportType' : 2 , 'id' : store.id }) }}">Report</a></br>
 <a href="{{ path('app_stores_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-white">back to list</a>
 {% if user_id==store.owner.id %}
 <a href="{{ path('app_stores_edit', {'id': store.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-white">edit</a>

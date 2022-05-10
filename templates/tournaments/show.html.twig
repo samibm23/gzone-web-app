@@ -48,11 +48,12 @@
             <th>CreateDate</th>
             <td>{{ tournament.createDate ? tournament.createDate|date('Y-m-d H:i:s') : '' }}</td>
         </tr>
+      
     </tbody>
     </table>
     <div class="nk-gap-1"></div>
-
-    <a href="{{ path('app_tournaments_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">back to list</a>
+    <a class="nk-btn nk-btn-rounded nk-btn-color-main-1" href="{{ path('app_reports_new' , {'reportType' : 1 , 'id' : tournament.id }) }}">Report</a></br>
+    <a class="nk-btn nk-btn-rounded nk-btn-color-black" href="{{ path('app_tournaments_index') }}" >back to list</a>
     {% if tournament.admin.id == userId %}
     <a href="{{ path('app_tournaments_edit', {'id': tournament.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>
     <div class="nk-gap-1"></div>
