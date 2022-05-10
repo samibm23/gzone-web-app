@@ -34,7 +34,6 @@ class JoinRequestsController extends AbstractController
             $joinRequest = new JoinRequests();
             $joinRequest->setMessage($request->get("message"));
             $joinRequest->setRequestDate(new \DateTime('now'));
-            $joinRequest->setAccepted(false);
             $joinRequest->setInvitation((boolean)$request->get("invitation"));
             $joinRequest->setTournament($entityManager->getRepository(Tournaments::class)->find((int)$request->get("tournament_id")));
             $joinRequest->setTeam($entityManager->getRepository(Teams::class)->find((int)$request->get("team_id")));
@@ -79,7 +78,6 @@ class JoinRequestsController extends AbstractController
             $joinRequest = new JoinRequests();
             $joinRequest->setMessage($request->get("message"));
             $joinRequest->setRequestDate(new \DateTime('now'));
-            $joinRequest->setAccepted(false);
             $joinRequest->setInvitation((boolean)$request->get("invitation"));
             $joinRequest->setTeam($entityManager->getRepository(Teams::class)->find((int)$request->get("team_id")));
             $joinRequest->setUser($entityManager->getRepository(Users::class)->find((int)$request->get("user_id")));
@@ -129,21 +127,15 @@ class JoinRequestsController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_join_requests_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, JoinRequests $joinRequest, EntityManagerInterface $entityManager): Response
+
+    #[Route('/{id}/tournament/{accepted}', name: 'app_join_requests_respond_tournament', methods: ['GET', 'POST'])]
+    public function editTournament(Request $request, JoinRequests $joinRequest, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(JoinRequestsType::class, $joinRequest);
-        $form->handleRequest($request);
+        $joinRequest->setAccepted((boolean)$request->get('accepted'));
+        $entityManager->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_join_requests_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('join_requests/edit.html.twig', [
-            'join_request' => $joinRequest,
-            'form' => $form,
+       return $this->redirectToRoute('app_tournaments_show', [
+            'id'=>$joinRequest->getTournament()->getId()
         ]);
     }
 

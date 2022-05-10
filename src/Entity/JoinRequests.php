@@ -80,8 +80,7 @@ class JoinRequests
     /**
      * @var \Teams
      *
-     * @ORM\ManyToOne(targetEntity="Teams", cascade={"remove"})
-     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @ORM\ManyToOne(targetEntity="Teams")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="team_id", referencedColumnName="id")
      * })

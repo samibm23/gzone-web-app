@@ -14,4 +14,34 @@
     <a href="{{ path('app_teams_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">back to list</a>
 <div class="nk-gap-1"></div>
     {{ include('teams/_delete_form.html.twig') }}
+      <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Message</th>
+                <th>RequestDate</th>
+                <th>Accepted</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for join_request in join_requests %}
+            <tr>
+                <td>{{ join_request.id }}</td>
+                <td>{{ join_request.message }}</td>
+                <td>{{ join_request.requestDate ? join_request.requestDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ join_request.accepted ? 'Yes' : 'No' }}</td>
+
+                <td>
+                    {% if join_request.accepted is null or join_request.accepted == false  %}<a href="{{ path('app_join_requests_accept_team', {'id': join_request.team.id ,'jrid': join_request.id}) }}">accept</a>{% endif %}
+                    {% if join_request.accepted is null or join_request.accepted == true  %}<a href="{{ path('app_join_requests_decline_team', {'id': join_request.team.id,'jrid': join_request.id}) }}">decline</a>{% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
