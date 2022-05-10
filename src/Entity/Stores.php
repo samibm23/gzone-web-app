@@ -99,5 +99,14 @@ class Stores
         return $this->name;
     }
 
+    public function hash()
+    {
+        return date();
+    }
+
+    public function equals($obj): bool
+    {
+        return $this->hash() === $obj->hash();
+    }
 
 }

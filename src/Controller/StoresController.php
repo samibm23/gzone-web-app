@@ -12,6 +12,7 @@ use App\Entity\Stores;
 use App\Entity\MarketItems;
 use App\Entity\Users;
 use App\Form\StoresType;
+use App\Form\MarketItemsType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 // Include paginator interface
 use Knp\Component\Pager\PaginatorInterface;
+
 ;
 
 #[Route('/stores')]
@@ -32,10 +34,23 @@ public function __construct(Client $twilio) {
     #[Route('/', name: 'app_stores_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager,PaginatorInterface $paginator, Request $request): Response
     {
-        //$bestStore = $entityManager->getRepository(Stores::class)->find($entityManager->getRepository(MarketItems::class)->getBestStore());
+        $storeMap = new \Ds\Map();
         $stores = $entityManager
             ->getRepository(Stores::class)
             ->findAll();
+        foreach ($stores as $store) {
+            $likes = $entityManager
+                ->getRepository(UserLikesDislikes::class)
+                ->findBy(['store' => $store, 'like' => 1]);
+            $dislikes = $entityManager
+                ->getRepository(UserLikesDislikes::class)
+                ->findBy(['store' => $store, 'like' => 0]);
+            $storeMap->put($store, (count($likes) - count($dislikes)));
+            $storeMap->sort(function ($a, $b) {
+                return $b <=> $a;
+            });
+            $storeMap = $storeMap->slice(0, 3);
+        }
         // Paginate the results of the query
         $stores = $paginator->paginate(
         // Doctrine Query, not results
@@ -48,16 +63,17 @@ public function __construct(Client $twilio) {
 
         return $this->render('stores/index.html.twig', [
             'stores' => $stores,
-            //'bestStore' => $bestStore
+            'sortedStores' => $storeMap,
+            "user_id" => $this->getUser()->getId()
         ]);
     }
-
 
     #[Route('/new', name: 'app_stores_new', methods: ['GET', 'POST'])]
 
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $store = new Stores();
+        $store->setOwner($this->getUser());
         $form = $this->createForm(StoresType::class, $store);
         $form->handleRequest($request);
 
@@ -87,11 +103,34 @@ public function __construct(Client $twilio) {
         }
 
         return new Response("Sent messages ");
-    }
 
+    }
+    #[Route('/{id}/market-items/new', name: 'app_stores_market_items_new', methods: ['GET', 'POST'])]
+    public function newMarketItem(Request $request, EntityManagerInterface $entityManager,Stores $store): Response
+    {
+        $marketItem = new MarketItems();
+        $marketItem->setStore($store);
+        $marketItem->setSold(false);
+        $form = $this->createForm(MarketItemsType::class, $marketItem);
+        $form->handleRequest($request);
+        $date = new \DateTime('now');
+        $marketItem->setPostDate($date);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($marketItem);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_stores_show', ["id"=>$store->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('market_items/new.html.twig', [
+            'market_item' => $marketItem,
+            'form' => $form,
+        ]);
+    }
     #[Route('/{id}', name: 'app_stores_show', methods: ['GET'])]
     public function show(Stores $store, EntityManagerInterface $entityManager): Response
-    {
+    {     $marketItems= $entityManager->getRepository(MarketItems::class)->findBy(['store' => $store]);
         $likes = $entityManager
             ->getRepository(UserLikesDislikes::class)
             ->findBy(['store' => $store, 'like' => 1]);
@@ -102,7 +141,8 @@ public function __construct(Client $twilio) {
             'store' => $store,
             'likes' => $likes,
             'dislikes' => $dislikes,
-            'user_id' => $this->getUser()->getId()
+            'user_id' => $this->getUser()?->getId(),
+            'marketItems' => $marketItems
         ]);
     }
 
