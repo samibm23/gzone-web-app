@@ -16,21 +16,21 @@ class HomeController extends AbstractController
     public function index(EntityManagerInterface $entityManager): Response
     {
 
-        $httpClient = HttpClient::create(['headers' => [
-            'X-RapidAPI-Host' => 'free-to-play-games-database.p.rapidapi.com',
-            'X-RapidAPI-Key' => 'e5a466d3efmsh7027ddb554dd829p14c940jsne6021b74bb7b'
-        ]]);
+        // $httpClient = HttpClient::create(['headers' => [
+        //     'X-RapidAPI-Host' => 'free-to-play-games-database.p.rapidapi.com',
+        //     'X-RapidAPI-Key' => 'e5a466d3efmsh7027ddb554dd829p14c940jsne6021b74bb7b'
+        // ]]);
     
 
-        $response = $httpClient->request('GET', 'https://free-to-play-games-database.p.rapidapi.com/api/game',[
-            'query' => [
-                'id' => '4'
-            ]
-        ]);
-       $response = dump($response->toArray());
-       echo($response);
+        // $response = $httpClient->request('GET', 'https://free-to-play-games-database.p.rapidapi.com/api/game',[
+        //     'query' => [
+        //         'id' => '4'
+        //     ]
+        // ]);
+        // dump($response->toArray());
         
-
+        // $content = $response->toArray();
+        // echo $response->getContent() . "\n";
         return $this->render('home/index.html.twig');
     }
 }
