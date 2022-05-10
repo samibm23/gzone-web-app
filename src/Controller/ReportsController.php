@@ -38,6 +38,7 @@ class ReportsController extends AbstractController
         $type = $request->get('reportType');
         $id = $request->get('id');
         $report = new Reports();
+        $report->setReporter($this->getUser());
         $reportTournament = new TournamentReports();
         $reportStore = new StoreReports();
         $reportPost = new PostReports();
@@ -75,7 +76,6 @@ class ReportsController extends AbstractController
                 return $this->redirectToRoute('profile', [], Response::HTTP_SEE_OTHER);
             }
         }
-
         return $this->renderForm('reports/new.html.twig', [
             'report' => $report,
             'form' => $form,
@@ -95,13 +95,11 @@ class ReportsController extends AbstractController
     {
         $form = $this->createForm(ReportsType::class, $report);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
             return $this->redirectToRoute('app_reports_index', [], Response::HTTP_SEE_OTHER);
         }
-
         return $this->renderForm('reports/edit.html.twig', [
             'report' => $report,
             'form' => $form,
