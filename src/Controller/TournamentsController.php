@@ -255,10 +255,35 @@ class TournamentsController extends AbstractController
             ])?->getId()
         ]);
     }
+    #[Route('/{id}/accept-join-request/{jrid}', name: 'app_join_requests_accept_tournament', methods: ['GET', 'POST'])]
+    public function acceptTournament(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $joinRequest=$entityManager->getRepository(JoinRequests::class)->find((int)$request->get('jrid'));
+        $joinRequest->setAccepted(true);
+        $entityManager->flush();
+
+       return $this->redirectToRoute('app_tournaments_edit', [
+            'id'=>$joinRequest->getTournament()->getId()
+        ]);
+    }
+    #[Route('/{id}/decline-join-request/{jrid}', name: 'app_join_requests_decline_tournament', methods: ['GET', 'POST'])]
+    public function declineTournament(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $joinRequest=$entityManager->getRepository(JoinRequests::class)->find((int)$request->get('jrid'));
+        $joinRequest->setAccepted(false);
+        $entityManager->flush();
+
+       return $this->redirectToRoute('app_tournaments_edit', [
+            'id'=>$joinRequest->getTournament()->getId()
+        ]);
+    }
 
     #[Route('/{id}/edit', name: 'app_tournaments_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Tournaments $tournament, EntityManagerInterface $entityManager): Response
     {
+        $joinRequests = $entityManager
+        ->getRepository(JoinRequests::class)
+        ->findBy(['tournament'=>$tournament]);
         $form = $this->createForm(TournamentsType::class, $tournament);
         $form->handleRequest($request);
 
@@ -270,6 +295,7 @@ class TournamentsController extends AbstractController
 
         return $this->renderForm('tournaments/edit.html.twig', [
             'tournament' => $tournament,
+            'join_requests' => $joinRequests,
             'form' => $form,
         ]);
     }
