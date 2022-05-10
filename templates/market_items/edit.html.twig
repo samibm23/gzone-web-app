@@ -3,11 +3,14 @@
 {% block title %}Edit MarketItems{% endblock %}
 
 {% block body %}
-    <h1>Edit MarketItems</h1>
-
+<div class="nk-widget nk-widget-highlighted">
+    <h1 class="nk-widget-title"><span><span class="text-main-1">Edit</span> Market Item</span></h1>
+    <div class="nk-widget-content">
+<hr>
     {{ include('market_items/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_market_items_index') }}">back to list</a>
+ <a href="{{ path('app_stores_show', {'id': market_item.store.id} )}}"class="nk-btn nk-btn-rounded nk-btn-color-main-1">back to store</a>
+        <hr>
 
     {{ include('market_items/_delete_form.html.twig') }}
 {% endblock %}

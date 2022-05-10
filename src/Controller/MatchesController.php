@@ -200,7 +200,7 @@ class MatchesController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_matches_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_tournaments_show', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('matches/edit.html.twig', [
@@ -217,6 +217,6 @@ class MatchesController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_matches_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_tournaments_show', [], Response::HTTP_SEE_OTHER);
     }
 }

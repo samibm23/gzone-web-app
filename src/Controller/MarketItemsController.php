@@ -64,7 +64,7 @@ class MarketItemsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_market_items_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_stores_show', ['id'=>$marketItem->getStore()->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('market_items/edit.html.twig', [
@@ -81,6 +81,6 @@ class MarketItemsController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_market_items_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_stores_show', ['id'=>$marketItem->getStore()->getId()], Response::HTTP_SEE_OTHER);
     }
 }

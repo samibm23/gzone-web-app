@@ -24,9 +24,9 @@ class StoreReports
     /**
      * @var \Stores
      *
-     * @ORM\ManyToOne(targetEntity="Stores")
+     * @ORM\ManyToOne(targetEntity="Stores", cascade={"remove"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="store_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="store_id", referencedColumnName="id",onDelete="CASCADE")
      * })
      */
     private $store;

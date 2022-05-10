@@ -59,10 +59,10 @@ class MarketItems
     /**
      * @var \Stores
      * 
-     * @ORM\ManyToOne(targetEntity="Stores" , cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Stores")
      
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="store_id", referencedColumnName="id",onDelete="CASCADE")
+     *   @ORM\JoinColumn(name="store_id", referencedColumnName="id")
      * })
      */
     private $store;

@@ -24,9 +24,9 @@ class TournamentReports
     /**
      * @var \Tournaments
      *
-     * @ORM\ManyToOne(targetEntity="Tournaments")
+     * @ORM\ManyToOne(targetEntity="Tournaments" , cascade={"remove"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="tournament_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="tournament_id", referencedColumnName="id",onDelete="CASCADE")
      * })
      */
     private $tournament;

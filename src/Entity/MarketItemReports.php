@@ -24,9 +24,9 @@ class MarketItemReports
     /**
      * @var \MarketItems
      *
-     * @ORM\ManyToOne(targetEntity="MarketItems")
+     * @ORM\ManyToOne(targetEntity="MarketItems" , cascade={"remove"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="market_item_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="market_item_id", referencedColumnName="id" ,onDelete="CASCADE")
      * })
      */
     private $marketItem;
@@ -34,7 +34,7 @@ class MarketItemReports
     /**
      * @var \Reports
      *
-     * @ORM\ManyToOne(targetEntity="Reports")
+     * @ORM\ManyToOne(targetEntity="Reports" )
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="report_id", referencedColumnName="id")
      * })

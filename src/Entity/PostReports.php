@@ -24,9 +24,9 @@ class PostReports
     /**
      * @var \Posts
      *
-     * @ORM\ManyToOne(targetEntity="Posts")
+     * @ORM\ManyToOne(targetEntity="Posts", cascade={"remove"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="post_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="post_id", referencedColumnName="id",onDelete="CASCADE")
      * })
      */
     private $post;
