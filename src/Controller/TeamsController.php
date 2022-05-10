@@ -163,7 +163,9 @@ class TeamsController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         $team= $em->getRepository(Teams::class)->find($id);
+        
         $playedMatchesCount = count($entityManager
+        
         ->getRepository(Matches::class)
         ->matching(
             Criteria::create()
@@ -171,7 +173,13 @@ class TeamsController extends AbstractController
                 ->orWhere(Criteria::expr()->eq('team2', $entityManager->getRepository(Teams::class)->find($request->get('id')))
             )
         ));
+        $joinedUsers = count($entityManager->getRepository(JoinRequests::class)->findBy([
+            "team" => $team,
+            "accepted" => true,
+            "tournament" => null,
+        ]));
 
+        
         $wonMatchesCount = count($entityManager
         ->getRepository(Matches::class)
         ->findBy(["winnerTeam" => $entityManager->getRepository(Teams::class)->find($request->get('id'))]));
@@ -183,6 +191,8 @@ class TeamsController extends AbstractController
             'requestingUserId' => $this->getUser()->getId(),
             'jr' => $entityManager->getRepository(JoinRequests::class)->findOneBy(['user'=> $this->getUser(), 'team' =>$team]),
             'winrate' => ($wonMatchesCount *100) / ($playedMatchesCount),
+            'joinedUsers'=> $joinedUsers,
+            
         ]);
    
     } else {
@@ -191,6 +201,8 @@ class TeamsController extends AbstractController
             'requestingUserId' =>$this->getUser()->getId(),
             'jr' => $entityManager->getRepository(JoinRequests::class)->findOneBy(['user'=> $this->getUser(), 'team' =>$team]),
             'winrate' => 0,
+            'joinedUsers'=> $joinedUsers,
+           
         ]);
 
     }

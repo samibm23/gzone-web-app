@@ -59,7 +59,7 @@
 {% for marketItem in marketItems %}
 <div class="nk-match">
     {% if user_id == store.owner.id %}
-    <a href="{{ path('app_market_items_show', {" id": marketItem.id}) }}">
+    <a href="{{ path('app_market_items_show', {"id": marketItem.id}) }}">
         {{ marketItem.title }}
     </a>
     {% else %}
