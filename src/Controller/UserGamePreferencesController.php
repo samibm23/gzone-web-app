@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Games;
 use App\Entity\UserGamePreferences;
 use App\Form\UserGamePreferencesType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,26 +26,19 @@ class UserGamePreferencesController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_user_game_preferences_new', methods: ['GET', 'POST'])]
+    #[Route('/new/id', name: 'app_user_game_preferences_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $currentuser= $this->getUser();
+        $gameId = $request->get('id');
+        $game = $entityManager->getRepository(Games::class)->findOneBy(['id' => $gameId]);
+        $currentuser = $this->getUser();
         $userGamePreference = new UserGamePreferences();
-        $form = $this->createForm(UserGamePreferencesType::class, $userGamePreference);
-        $form->handleRequest($request);
+        $userGamePreference->setGame($game);
         $userGamePreference->setUser($currentuser);
+        $entityManager->persist($userGamePreference);
+        $entityManager->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($userGamePreference);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('profile', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('user_game_preferences/new.html.twig', [
-            'user_game_preference' => $userGamePreference,
-            'form' => $form,
-        ]);
+        return $this->redirectToRoute('profile', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/{id}', name: 'app_user_game_preferences_show', methods: ['GET'])]
@@ -76,7 +70,7 @@ class UserGamePreferencesController extends AbstractController
     #[Route('/{id}', name: 'app_user_game_preferences_delete', methods: ['POST'])]
     public function delete(Request $request, UserGamePreferences $userGamePreference, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$userGamePreference->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $userGamePreference->getId(), $request->request->get('_token'))) {
             $entityManager->remove($userGamePreference);
             $entityManager->flush();
         }

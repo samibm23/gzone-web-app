@@ -1,107 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Games index{% endblock %}
+{% block title %}Games{% endblock %}
 
-{#{% block body %}
-    <h1>Games </h1>
-
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Image</th>
-            <th>Description</th>
-            <th>Details</th>
-
-        </tr>
-        </thead>
-        <tbody>
-        {% for game in games %}
-            <tr>
-                <td>{{ game.name }}</td>
-                <td><img style="height: 100px; width: 100px" src="{{ asset('images/games/'~game.photo_url) }}" ></td>
-                <td>{{ game.description }}</td>
-    <td> <a href="{{ path('app_front_details', {'id': game.id}) }}">Details</a> </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-{% endblock %}
-#}
-{#{% block body %}
-
-    <div class="layout_padding promoted_sectipon">
-        <div class="container">
-            <h1 class="promoted_text"> <span style="border-bottom: 5px solid #4bc714;">GAMES</span></h1>
-            <div class="images_main">
-                <div class="row">
-                   {% for game in games %}
-                      <div>
-                          {{ game.name }}
-                      </div>
-                        <div class="col-sm-6 col-md-6 col-lg-3">
-
-                            <div> <img style="height: 100px; width: 100px" src="{{ asset('images/games/'~game.photo_url) }}" >
-                            </div>
-                            <a  href="{{ path('app_front_details', {'id': game.id}) }}"> details game'</a>
-                        </div>
-                    {% else %}
-                        <tr>
-                            <td colspan="7">no records found</td>
-                        </tr>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-{% endblock %}
-#}
-{#{% block body %}
-
-<div class="row text-center">
-    {% for game in games %}
-
-    <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card-body">
-            <h4 class="card-title">
-                {{ game.name }}
-            </h4>
-        </div>
-        <div class="card h-100">
-
-            <div>
-                <img style="height: 100px; width: 100px" src="{{ asset('images/games/'~game.photo_url) }}" >
-            </div>
-
-
-            <div>
-                {{ game.description }}
-
-            </div>
-
-            <div class="card-footer">
-                <a href="#" class="btn btn-primary">Find Out More!</a>
-            </div>
-
-
-
-        </div>
-
-    </div>
-    {% endfor %}
-
-
-</div>
-{% endblock %}
-#}
 
 {% block body %}
 <html lang="en">
@@ -151,7 +51,7 @@ Additional Classes:
 
             <li><span class="fa fa-angle-right"></span></li>
 
-            <li><span>Game List</span></li>
+            <li><span>games List</span></li>
 
         </ul>
     </div>
@@ -183,7 +83,8 @@ Additional Classes:
 
                             </div>
                             <div class="col-md-7 col-lg-6">
-                            <h3> {{ game.name }}</h3>
+                            <h3> {{ game.name }}</h3>   <a style ="color:whitesmoke;"href="{{ path('app_user_game_preferences_new', {'id': game.id}) }}"> Add to my favorites </a>
+
 
                                 <div class="nk-post-text ">
                                     <p>
