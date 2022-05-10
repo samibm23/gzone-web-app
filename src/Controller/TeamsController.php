@@ -39,6 +39,7 @@ class TeamsController extends AbstractController
             );
 
         return $this->render('teams/index.html.twig', [
+            'userId' =>$this->getUser()->getId(),
             'teams' => $teams,
         ]);
     }
@@ -173,23 +174,21 @@ class TeamsController extends AbstractController
         ->getRepository(Matches::class)
         ->findBy(["winnerTeam" => $entityManager->getRepository(Teams::class)->find($request->get('id'))]));
 
-        if($playedMatchesCount !=0){
+        if ($playedMatchesCount !=0) {
         return $this->render('teams/show.html.twig', [
             'team' => $team,
-            
+            'userId' => $this->getUser()->getId(),
             'winrate' => ($wonMatchesCount *100) / ($playedMatchesCount ),
         ]);
    
+        } else {
+            return $this->render('teams/show.html.twig', [
+                'team' => $team,
+                'userId' =>$this->getUser()->getId(),
+                'winrate' => 0,
+            ]);
+        }
     }
-    else{
-        return $this->render('teams/show.html.twig', [
-            'team' => $team,
-            
-            'winrate' => 0,
-        ]);
-
-    }
-}
 
     #[Route('/{id}/edit', name: 'app_teams_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Teams $team, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response

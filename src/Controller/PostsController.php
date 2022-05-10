@@ -18,12 +18,9 @@ use Snipe\BanBuilder\CensorWords;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-
-
 #[Route('/posts')]
 class PostsController extends AbstractController
 {
-   
     #[Route('/', name: 'app_posts_index', methods: ['GET'])]
     public function index(
         EntityManagerInterface $entityManager,
@@ -47,10 +44,8 @@ class PostsController extends AbstractController
             // Items per page
             5
         );
-        return $this->render('posts/index.html.twig', ['posts' => $posts]);
-    }  
-   
-
+        return $this->render('posts/index.html.twig', ['userId' => $this->getUser()->getId(), 'posts' => $posts]);
+    }
     #[Route('/List', name: 'app_posts_list', methods: ['GET'])]
     public function ListJson(
         EntityManagerInterface $entityManager,
@@ -65,8 +60,6 @@ class PostsController extends AbstractController
         //]);
         return new Response(json_encode($jsonContent));
     }
-   
-
 
     #[Route('/list/{id}', name: 'app_posts_list', methods: ['GET'])]
     public function showId(
@@ -89,11 +82,7 @@ class PostsController extends AbstractController
     ): Response {
         $em = $this->getDoctrine()->getManager();
         $post = new Posts();
-        $post->setPoster(
-            $entityManager
-                ->getRepository(Users::class)
-                ->find((int) $request->get('poster_id'))
-        );
+        $post->setPoster($entityManager->getRepository(Users::class)->find((int)$request->get('poster_id')));
         $post->setTitle($request->get('title'));
         $post->setContent($request->get('content'));
         $date = new \DateTime('now');
@@ -245,6 +234,8 @@ class PostsController extends AbstractController
             ->findBy(['post' => $post, 'like' => 0]);
         return $this->render('posts/show.html.twig', [
             'post' => $post,
+            'likes' => count($likes),
+            'dislikes' => count($dislikes),
             'stars' => (count($likes) + count($dislikes) > 0)? floor(count($likes) * 5 / (count($likes) + count($dislikes))) : 0,
             'user_id' => $this->getUser()->getId(),
             'comments' => $entityManager->getRepository(Comments::class)->findBy(['post' => $post])
@@ -282,24 +273,7 @@ class PostsController extends AbstractController
             'form' => $form,
         ]);
     }
-    /**
-     * @Route("/tri", name="app_tri")
-     */
-    public function Tri(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
 
-        $query = $em->createQuery(
-            'SELECT a FROM App\Entity\Comments a 
-        ORDER BY a.name ASC'
-        );
-
-        $posts = $query->getResult();
-
-        return $this->render('comments/index.html.twig', [
-            'comments' => $comments,
-        ]);
-    }
     #[Route('/{id}', name: 'app_posts_delete', methods: ['POST'])]
     public function delete(
         Request $request,
@@ -328,5 +302,23 @@ class PostsController extends AbstractController
             [],
             Response::HTTP_SEE_OTHER
         );
+    }
+    /**
+     * @Route("/tri", name="app_tri")
+     */
+    public function Tri(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $query = $em->createQuery(
+            'SELECT a FROM App\Entity\Comments a 
+        ORDER BY a.name ASC'
+        );
+
+        $posts = $query->getResult();
+
+        return $this->render('comments/index.html.twig', [
+            'comments' => $comments,
+        ]);
     }
 }

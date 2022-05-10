@@ -64,7 +64,7 @@
                 <td>{{ post.postDate ? post.postDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('app_posts_show', {'id': post.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">show</a>
-                    <a href="{{ path('app_posts_edit', {'id': post.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>
+                    {% if userId == post.poster.id %}<a href="{{ path('app_posts_edit', {'id': post.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>{% endif %}
                 </td>
             </tr>
         {% else %}

@@ -51,7 +51,7 @@
                 <td>
                     <a href="{{ path('app_teams_show', {'id': team.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">show</a>
                     <div class="nk-gap-1"></div>
-                    <a href="{{ path('app_teams_edit', {'id': team.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>
+                    {% if team.admin.id == userId %}<a href="{{ path('app_teams_edit', {'id': team.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>{% endif %}
                 </td>
             </tr>
         {% else %}
