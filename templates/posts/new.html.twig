@@ -3,13 +3,10 @@
 {% block title %}New Posts{% endblock %}
 
 {% block body %}
-<div class="nk-widget nk-widget-highlighted">
-    <h1 class="nk-widget-title"><span><span class="text-main-1">New</span> Post</span></h1>
-    <div class="nk-widget-content">
-    
+    <h1>Create new Posts</h1>
 
     {{ include('posts/_form.html.twig') }}
-    <div class="nk-gap-1"></div>
+    <blockquote class="nk-blockquote"></blockquote>
 
-    <a href="{{ path('app_posts_index')}}" class="nk-btn nk-btn-rounded nk-btn-color-main-1">back to list</a>
+    <a href="{{ path('app_posts_index') }}">back to list</a>
 {% endblock %}
