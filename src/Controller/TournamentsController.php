@@ -250,7 +250,7 @@ class TournamentsController extends AbstractController
                 'tournament' => $tournament,
                 'matches' => $matches,
                 'joinedTeams' => $joinedTeams,
-                'requestButton' => $entityManager->getRepository(JoinRequests::class)->findOneBy(['team' => $team, 'tournament' => $tournament, 'accepted' => null]) != null,
+                'requestButton' => $entityManager->getRepository(JoinRequests::class)->findOneBy(['team' => $team, 'tournament' => $tournament, 'accepted' => null]) == null,
                 'teams' => ($tournament->getRequiredTeams() - $joinedTeams == 0)? null : $entityManager->getRepository(Teams::class)->findBy([
                     "admin" => $this->getUser(),
                     "teamSize" => $tournament->getTeamSize(),

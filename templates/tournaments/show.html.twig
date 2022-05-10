@@ -4,22 +4,22 @@
 
 {% block body %}
 {% if tournament.requestable and tournament.requiredTeams > joinedTeams and requestingTeamId is not null %}
-<h1 style="display:inline-block;margin-right:88px;">Tournaments</h1>
-{% if requestButton %}
-<a class="nk-btn nk-btn-outline nk-btn-color-success"
-    href="{{ path('app_tournament_join_requests_new', {'team_id': requestingTeamId, 'invitation': 0, 'message': " accept
-    me", 'tournament_id' : tournament.id}) }}" style="display:inline-block;"">
-                        Request
-</a>
+    <h1 style="display:inline-block;margin-right:88px;">Tournaments</h1>
+    {% if requestButton == true %}
+        <a class="nk-btn nk-btn-outline nk-btn-color-success"
+            href="{{ path('app_tournament_join_requests_new', {'team_id': requestingTeamId, 'invitation': 0, 'message': " accept
+            me", 'tournament_id' : tournament.id}) }}" style="display:inline-block;"">
+                                Request
+        </a>
+    {% else %}
+        <a class="nk-btn nk-btn-outline nk-btn-color-danger"
+            href="{{ path('app_tournament_join_requests_new', {'team_id': requestingTeamId, 'invitation': 0, 'message': " accept
+            me", 'tournament_id' : tournament.id}) }}" style="display:inline-block;"">
+                                Cancel Request
+        </a>
+    {% endif %}
 {% else %}
-<a class="nk-btn nk-btn-outline nk-btn-color-danger"
-    href="{{ path('app_tournament_join_requests_new', {'team_id': requestingTeamId, 'invitation': 0, 'message': " accept
-    me", 'tournament_id' : tournament.id}) }}" style="display:inline-block;"">
-                        Cancel Request
-</a>
-{% endif %}
-{% else %}
-<h1>Tournaments</h1>
+    <h1>Tournaments</h1>
 {% endif %}
 
 <table class=" nk-table">
