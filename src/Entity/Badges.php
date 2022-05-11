@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use JsonSerializable;
 
 
 /**
@@ -12,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="badges", uniqueConstraints={@ORM\UniqueConstraint(name="title", columns={"title"})}, indexes={@ORM\Index(name="game_id", columns={"game_id"})})
  * @ORM\Entity
  */
-class Badges
+class Badges implements JsonSerializable
 {
     /**
      * @var int
@@ -88,6 +89,22 @@ class Badges
     {
         $this->id = $id;
     }
-    
+
+    public function jsonSerialize(): array
+    {
+        return array(
+            'id' => $this->id,
+            'game' => $this->game,
+            'title' => $this->title
+
+        );
+    }
+
+    public function setUp($game, $title)
+    {
+        $this->game = $game;
+        $this->title = $title;
+
+    }
 
 }

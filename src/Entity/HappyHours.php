@@ -7,6 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
+use JsonSerializable;
 
 /**
  * HappyHours
@@ -14,7 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Table(name="happy_hours", indexes={@ORM\Index(name="badge_id", columns={"badge_id"})})
  * @ORM\Entity
  */
-class HappyHours
+class HappyHours implements JsonSerializable
 {
     /**
      * @var int
@@ -30,7 +31,7 @@ class HappyHours
      /**
      * @var \DateTime
       *
-     * @ORM\Column(name="start_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
+     * @ORM\Column(name="start_date", type="datetime", nullable=false)
       * @Assert\GreaterThanOrEqual("today")
       * @Groups("post:read")
 
@@ -39,7 +40,7 @@ class HappyHours
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="end_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
+     * @ORM\Column(name="end_date", type="datetime", nullable=false)
      * @Assert\GreaterThanOrEqual(propertyPath="startDate", message="the End Date should be greater than Start date")
      * @Groups("post:read")
      *
@@ -115,5 +116,22 @@ class HappyHours
     }
 
 
+    public function jsonSerialize(): array
+    {
+        return array(
+            'id' => $this->id,
+            'badge' => $this->badge,
+            'startDate' => $this->startDate->format("d-m-Y"),
+            'endDate' => $this->endDate->format("d-m-Y")
 
+        );
+    }
+
+    public function setUp($badge, $startDate, $endDate)
+    {
+        $this->badge = $badge;
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
+
+    }
 }

@@ -51,61 +51,61 @@ class GamesController extends AbstractController
             array('games' => $rep));
 
     }
-    #[Route('/List', name: 'app_games_list', methods: ['GET'])]
-    public function ListJson(EntityManagerInterface $entityManager, NormalizerInterface $normalizer): Response
-    {
-        $games = $entityManager
-            ->getRepository(Games::class)
-            ->findAll();
-        $jsonContent = $normalizer->normalize($games, 'json', ['groups'=>'post:read']);
-        // return $this->render('games/index.html.twig', [
-        //   'games' => $games,
-        //]);
-        return new Response(json_encode($jsonContent));
-    }
-
-#[Route('/lis/{id}', name: 'app_games_lis', methods: ['GET'])]
-    public function showId(Request $request, $id, NormalizerInterface $normalizer): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $game = $em->getRepository(Games::class)->find($id);
-        $jsonContent = $normalizer->normalize($game, 'json', ['groups'=>'post:read']);
-        return new Response(json_encode($jsonContent));
-    }
-#[Route('/newJson', name: 'app_games_newJson', methods: ['GET', 'POST'])]
-    public function newJson(Request $request, NormalizerInterface $normalizer): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $game= new Games();
-        $game->setName($request->get('name'));
-        $game->setDescription($request->get('description'));
-        $em->persist($game);
-        $em->flush();
-        $jsonContent = $normalizer->normalize($game, 'json', ['groups'=>'post:read']);
-        return new Response(json_encode($jsonContent));
-    }
-#[Route('/updateJson/{id}', name: 'app_games_updateJson', methods: ['GET', 'POST'])]
-    public function updateJson(Request $request, NormalizerInterface $normalizer, $id): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $game= $em->getRepository(Games::class)->find($id);
-        $game->setName($request->get('name'));
-        $game->setDescription($request->get('description'));
-        $em->persist($game);
-        $em->flush();
-        $jsonContent = $normalizer->normalize($game, 'json', ['groups'=>'post:read']);
-        return new Response("Information update".json_encode($jsonContent));
-    }
-#[Route('/deleteJson/{id}', name: 'app_games_deleteJson', methods: ['GET', 'POST'])]
-    public function deleteJson(Request $request, NormalizerInterface $normalizer, $id): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $game= $em->getRepository(Games::class)->find($id);
-        $em->remove($game);
-        $em->flush();
-        $jsonContent = $normalizer->normalize($game, 'json', ['groups'=>'post:read']);
-        return new Response("Game deleted".json_encode($jsonContent));
-    }
+   // #[Route('/List', name: 'app_games_list', methods: ['GET'])]
+    //    public function ListJson(EntityManagerInterface $entityManager, NormalizerInterface $normalizer): Response
+    //    {
+    //        $games = $entityManager
+    //            ->getRepository(Games::class)
+    //            ->findAll();
+    //        $jsonContent = $normalizer->normalize($games, 'json', ['groups'=>'post:read']);
+    //        // return $this->render('games/index.html.twig', [
+    //        //   'games' => $games,
+    //        //]);
+    //        return new Response(json_encode($jsonContent));
+    //    }
+    //
+    //#[Route('/lis/{id}', name: 'app_games_lis', methods: ['GET'])]
+    //    public function showId(Request $request, $id, NormalizerInterface $normalizer): Response
+    //    {
+    //        $em = $this->getDoctrine()->getManager();
+    //        $game = $em->getRepository(Games::class)->find($id);
+    //        $jsonContent = $normalizer->normalize($game, 'json', ['groups'=>'post:read']);
+    //        return new Response(json_encode($jsonContent));
+    //    }
+    //#[Route('/newJson', name: 'app_games_newJson', methods: ['GET', 'POST'])]
+    //    public function newJson(Request $request, NormalizerInterface $normalizer): Response
+    //    {
+    //        $em = $this->getDoctrine()->getManager();
+    //        $game= new Games();
+    //        $game->setName($request->get('name'));
+    //        $game->setDescription($request->get('description'));
+    //        $em->persist($game);
+    //        $em->flush();
+    //        $jsonContent = $normalizer->normalize($game, 'json', ['groups'=>'post:read']);
+    //        return new Response(json_encode($jsonContent));
+    //    }
+    //#[Route('/updateJson/{id}', name: 'app_games_updateJson', methods: ['GET', 'POST'])]
+    //    public function updateJson(Request $request, NormalizerInterface $normalizer, $id): Response
+    //    {
+    //        $em = $this->getDoctrine()->getManager();
+    //        $game= $em->getRepository(Games::class)->find($id);
+    //        $game->setName($request->get('name'));
+    //        $game->setDescription($request->get('description'));
+    //        $em->persist($game);
+    //        $em->flush();
+    //        $jsonContent = $normalizer->normalize($game, 'json', ['groups'=>'post:read']);
+    //        return new Response("Information update".json_encode($jsonContent));
+    //    }
+    //#[Route('/deleteJson/{id}', name: 'app_games_deleteJson', methods: ['GET', 'POST'])]
+    //    public function deleteJson(Request $request, NormalizerInterface $normalizer, $id): Response
+    //    {
+    //        $em = $this->getDoctrine()->getManager();
+    //        $game= $em->getRepository(Games::class)->find($id);
+    //        $em->remove($game);
+    //        $em->flush();
+    //        $jsonContent = $normalizer->normalize($game, 'json', ['groups'=>'post:read']);
+    //        return new Response("Game deleted".json_encode($jsonContent));
+    //    }
 
 
     #[Route('/stat', name: 'app_games_stat')]

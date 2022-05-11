@@ -5,6 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use JsonSerializable;
 
 /**
  * Games
@@ -12,7 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Table(name="games", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"})})
  * @ORM\Entity
  */
-class Games
+class Games implements JsonSerializable
 {
     /**
      * @var int
@@ -37,7 +38,7 @@ class Games
     /**
      * @var string
      * @ORM\Column(name="photo_url",
-     * length=500, nullable=true, options={"default"="NULL"})
+     * length=500, nullable=true)
      * @Assert\Image(
      *     minWidth = 200,
      *     maxWidth = 400,
@@ -52,7 +53,7 @@ class Games
     /**
      * @var string|null
      * @Assert\NotBlank
-     * @ORM\Column(name="description", type="string", length=500, nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="description", type="string", length=500, nullable=true)
      * @Assert\Length(
      *      min = 2,
      *      max = 500,
@@ -119,5 +120,20 @@ class Games
     {
         return $this->name;
     }
+    public function jsonSerialize(): array
+    {
+        return array(
+            'id' => $this->id,
+            'name' => $this->name,
+            'image' => $this->photo_url,
+            'description' => $this->description
+        );
+    }
 
+    public function setUp($name, $photoUrl, $description)
+    {
+        $this->name = $name;
+        $this->photo_url = $photoUrl;
+        $this->description = $description;
+    }
 }

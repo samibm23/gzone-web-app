@@ -29,56 +29,51 @@ class HappyHoursController extends AbstractController
         ]);
     }
 
-    #[Route('/newJson', name: 'app_happy_hours_new', methods: ['GET', 'POST'])]
-    public function newJson(Request $request,  NormalizerInterface $normalizer): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $happyHour= new HappyHours();
-        $happyHour->setStartDate($request->get('startDate'));
-        $happyHour->setEndDate($request->get('endDate'));
-        $happyHour->setBadge($request->get('badge'));
-        $em->persist($happyHour);
-        $em->flush();
-        $jsonContent = $normalizer->normalize($happyHour, 'json', ['groups'=>'post:read']);
-        return new Response(json_encode($jsonContent));
-
-    }
-    #[Route('/List', name: 'app_happy_hours_list', methods: ['GET'])]
-    public function ListJson(EntityManagerInterface $entityManager, NormalizerInterface $normalizer): Response
-    {
-        $happyHour = $entityManager
-            ->getRepository(HappyHours::class)
-            ->findAll();
-        $jsonContent = $normalizer->normalize($happyHour, 'json', ['groups'=>'post:read']);
-
-        return new Response(json_encode($jsonContent));
-    }
-
-
-    #[Route('/deleteJson/{id}', name: 'app_games_deleteJson', methods: ['GET', 'POST'])]
-    public function deleteJson(Request $request, NormalizerInterface $normalizer, $id): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $happyHours= $em->getRepository(HappyHours::class)->find($id);
-        $em->remove($happyHours);
-        $em->flush();
-        $jsonContent = $normalizer->normalize($happyHours, 'json', ['groups'=>'post:read']);
-        return new Response("HappyHour deleted".json_encode($jsonContent));
-    }
-
-#[Route('/list/{id}', name: 'app_happy_hours_list', methods: ['GET'])]
-    public function showId(Request $request, $id, NormalizerInterface $normalizer): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $happyHours = $em->getRepository(HappyHours::class)->find($id);
-        $jsonContent = $normalizer->normalize($happyHours, 'json', ['groups'=>'post:read']);
-        return new Response(json_encode($jsonContent));
-    }
-
-
-
-
-
+ //   #[Route('/newJson', name: 'app_happy_hours_new', methods: ['GET', 'POST'])]
+    //    public function newJson(Request $request,  NormalizerInterface $normalizer): Response
+    //    {
+    //        $em = $this->getDoctrine()->getManager();
+    //        $happyHour= new HappyHours();
+    //        $happyHour->setStartDate($request->get('startDate'));
+    //        $happyHour->setEndDate($request->get('endDate'));
+    //        $happyHour->setBadge($request->get('badge'));
+    //        $em->persist($happyHour);
+    //        $em->flush();
+    //        $jsonContent = $normalizer->normalize($happyHour, 'json', ['groups'=>'post:read']);
+    //        return new Response(json_encode($jsonContent));
+    //
+    //    }
+    //    #[Route('/List', name: 'app_happy_hours_list', methods: ['GET'])]
+    //    public function ListJson(EntityManagerInterface $entityManager, NormalizerInterface $normalizer): Response
+    //    {
+    //        $happyHour = $entityManager
+    //            ->getRepository(HappyHours::class)
+    //            ->findAll();
+    //        $jsonContent = $normalizer->normalize($happyHour, 'json', ['groups'=>'post:read']);
+    //
+    //        return new Response(json_encode($jsonContent));
+    //    }
+    //
+    //
+    //    #[Route('/deleteJson/{id}', name: 'app_games_deleteJson', methods: ['GET', 'POST'])]
+    //    public function deleteJson(Request $request, NormalizerInterface $normalizer, $id): Response
+    //    {
+    //        $em = $this->getDoctrine()->getManager();
+    //        $happyHours= $em->getRepository(HappyHours::class)->find($id);
+    //        $em->remove($happyHours);
+    //        $em->flush();
+    //        $jsonContent = $normalizer->normalize($happyHours, 'json', ['groups'=>'post:read']);
+    //        return new Response("HappyHour deleted".json_encode($jsonContent));
+    //    }
+    //
+    //#[Route('/list/{id}', name: 'app_happy_hours_list', methods: ['GET'])]
+    //    public function showId(Request $request, $id, NormalizerInterface $normalizer): Response
+    //    {
+    //        $em = $this->getDoctrine()->getManager();
+    //        $happyHours = $em->getRepository(HappyHours::class)->find($id);
+    //        $jsonContent = $normalizer->normalize($happyHours, 'json', ['groups'=>'post:read']);
+    //        return new Response(json_encode($jsonContent));
+    //    }
 
 
 
