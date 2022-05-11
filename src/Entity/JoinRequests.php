@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Acme\CascadeBundle\Entity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * JoinRequests
@@ -19,6 +20,7 @@ class JoinRequests
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups("post:read")
      */
     private $id;
 
@@ -26,6 +28,7 @@ class JoinRequests
      * @var string|null
      *
      * @ORM\Column(name="message", type="string", length=255, nullable=true, options={"default"="NULL"})
+     * @Groups("post:read")
      */
     private $message;
 
@@ -33,6 +36,7 @@ class JoinRequests
      * @var \DateTime
      *
      * @ORM\Column(name="request_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
+     * @Groups("post:read")
      */
     private $requestDate;
 
@@ -40,6 +44,7 @@ class JoinRequests
      * @var bool|null
      *
      * @ORM\Column(name="accepted", type="boolean", nullable=true, options={"default"="NULL"})
+     * @Groups("post:read")
      */
     private $accepted;
 
@@ -47,6 +52,7 @@ class JoinRequests
      * @var \DateTime|null
      *
      * @ORM\Column(name="response_date", type="datetime", nullable=true, options={"default"="NULL"})
+     * @Groups("post:read")
      */
     private $responseDate;
 
@@ -54,6 +60,7 @@ class JoinRequests
      * @var bool
      *
      * @ORM\Column(name="invitation", type="boolean", nullable=false)
+     * @Groups("post:read")
      */
     private $invitation = '0';
 
@@ -64,6 +71,7 @@ class JoinRequests
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })
+     * @Groups("post:read")
      */
     private $user;
 
@@ -74,6 +82,7 @@ class JoinRequests
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="tournament_id", referencedColumnName="id")
      * })
+     * @Groups("post:read")
      */
     private $tournament;
 
@@ -84,6 +93,7 @@ class JoinRequests
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="team_id", referencedColumnName="id")
      * })
+     * @Groups("post:read")
      */
     private $team;
 
