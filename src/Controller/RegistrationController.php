@@ -15,6 +15,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+
 
 class RegistrationController extends AbstractController
 {
@@ -89,5 +94,50 @@ class RegistrationController extends AbstractController
         $this->addFlash('success', 'Your email address has been verified.');
 
         return $this->redirectToRoute('app_login');
+    }
+
+    #[Route('/json/register', name: 'user_register', methods: ['GET', 'POST'])]
+    public function newJson(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        NormalizerInterface $normalizer
+    ): Response {
+        $em = $this->getDoctrine()->getManager();
+        $user = new Users();
+        $user->setUsername($request->get('username'));
+        $user->setFullName($request->get('full_name'));
+        $user->setEmail($request->get('email'));
+        $user->setPassword($request->get('password'));
+        $user->setPhoneNumber($request->get('phone_number'));
+        $user->setBio($request->get('bio'));
+        $user->setPhotoUrl($request->get('photo_url'));
+        $user->setBirthDate(new \DateTime('now'));
+        $user->setJoinDate(new \DateTime('now'));
+        $user->setActivationToken(null);
+        $user->setIsVerified(true);
+        $user->setDisableToken(null);
+        $user->setInvitable(true);
+        $user->setRole("ROLE_USER");
+        $em->persist($user);
+        $em->flush();
+        $jsonContent = $normalizer->normalize($user, 'json', [
+            'groups' => 'post:read',
+        ]);
+        return new Response(json_encode($jsonContent));
+    }
+
+    #[Route('/json/list', name: 'user_list', methods: ['GET'])]
+    public function ListJson(
+        EntityManagerInterface $entityManager
+    ): Response {
+        $users = $entityManager->getRepository(Users::class)->findAll();
+	  $encoders = [new JsonEncoder()];
+	  $normalizers = [new ObjectNormalizer()];
+
+	  $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($users, 'json', [
+            'groups' => 'post:read',
+        ]);
+        return new Response($jsonContent);
     }
 }
