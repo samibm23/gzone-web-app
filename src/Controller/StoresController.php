@@ -5,9 +5,11 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use \Twilio\Rest\Client;
 
 use App\Entity\UserLikesDislikes;
+use App\Entity\Games;
 use App\Entity\Stores;
 use App\Entity\MarketItems;
 use App\Entity\Users;
@@ -68,6 +70,62 @@ public function __construct(Client $twilio) {
         ]);
     }
 
+    #[Route('/json/list', name: 'app_stores_json_list', methods: ['GET'])]
+    public function ListJson(EntityManagerInterface $entityManager, NormalizerInterface $normalizer): Response
+    {
+        $store = $entityManager
+            ->getRepository(Stores::class)
+            ->findAll();
+        $jsonContent = $normalizer->normalize($store, 'json', ['groups'=>'post:read']);
+        // return $this->render('games/index.html.twig', [
+        //   'games' => $games,
+        //]);
+        return new Response(json_encode($jsonContent));
+    }
+
+    #[Route('/json/list/{id}', name: 'app_stores_json_get', methods: ['GET'])]
+    public function showId(Request $request, $id, NormalizerInterface $normalizer): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $store = $em->getRepository(Stores::class)->find($id);
+        $jsonContent = $normalizer->normalize($store, 'json', ['groups'=>'post:read']);
+        return new Response(json_encode($jsonContent));
+    }
+    #[Route('/json/new', name: 'app_stores_json_new', methods: ['GET', 'POST'])]
+    public function newJson(Request $request, NormalizerInterface $normalizer, EntityManagerInterface $entityManager): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $store= new Stores();
+
+        $store->setName($request->get('name'));
+        $store->setOwner($entityManager->getRepository(Users::class)->find((int)$request->get("owner_id")));
+        $em->persist($store);
+        $em->flush();
+        $jsonContent = $normalizer->normalize($store, 'json', ['groups'=>'post:read']);
+        return new Response(json_encode($jsonContent));
+    }
+    #[Route('/json/update/{id}', name: 'app_stores_json_update', methods: ['GET', 'POST'])]
+    public function updateJson(Request $request, NormalizerInterface $normalizer,$id): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $store= $em->getRepository(Stores::class)->find($id);
+        $store->setName($request->get('name'));
+
+        $em->persist($store);
+        $em->flush();
+        $jsonContent = $normalizer->normalize($store, 'json', ['groups'=>'post:read']);
+        return new Response("Information update".json_encode($jsonContent));
+    }
+    #[Route('/json/delete/{id}', name: 'app_stores_json_delete', methods: ['GET', 'POST'])]
+    public function deleteJson(Request $request, NormalizerInterface $normalizer, $id): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $store= $em->getRepository(Stores::class)->find($id);
+        $em->remove($store);
+        $em->flush();
+        $jsonContent = $normalizer->normalize($store, 'json', ['groups'=>'post:read']);
+        return new Response("Game deleted".json_encode($jsonContent));
+    }
     #[Route('/new', name: 'app_stores_new', methods: ['GET', 'POST'])]
 
     public function new(Request $request, EntityManagerInterface $entityManager): Response

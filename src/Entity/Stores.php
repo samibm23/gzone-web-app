@@ -5,6 +5,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Acme\CascadeBundle\Entity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Stores
@@ -20,6 +21,7 @@ class Stores
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups("post:read")
      */
     private $id;
 
@@ -28,7 +30,7 @@ class Stores
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
-     * 
+     * @Groups("post:read")
      */
     private $name;
 
@@ -39,7 +41,7 @@ class Stores
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="owner_id", referencedColumnName="id")
      * })
-     * 
+     * @Groups("post:read")
      */
     private $owner;
 
@@ -50,6 +52,7 @@ class Stores
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="game_id", referencedColumnName="id")
      * })
+     * @Groups("post:read")
      */
     private $game;
 

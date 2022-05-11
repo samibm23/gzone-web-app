@@ -5,6 +5,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Acme\CascadeBundle\Entity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * MarketItems
@@ -28,6 +29,7 @@ class MarketItems
      *
      * @ORM\Column(name="title", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
+     *  @Groups("post:read")
      * 
      */
     private $title;
@@ -37,7 +39,7 @@ class MarketItems
      *
      * @ORM\Column(name="description", type="string", length=500, nullable=true, options={"default"="NULL"})
      * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
-     * 
+     *  @Groups("post:read")
      */
     private $description;
 
@@ -45,6 +47,7 @@ class MarketItems
      * @var bool|null
      *
      * @ORM\Column(name="sold", type="boolean", nullable=true)
+     * @Groups("post:read")
      */
     private $sold = '0';
 
@@ -53,6 +56,7 @@ class MarketItems
      *
      * @ORM\Column(name="post_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
      * @Assert\GreaterThanOrEqual("today")
+     * @Groups("post:read")
      */
     private $postDate;
 
@@ -64,6 +68,7 @@ class MarketItems
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="store_id", referencedColumnName="id")
      * })
+     * @Groups("post:read")
      */
     private $store;
 
