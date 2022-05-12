@@ -45,7 +45,7 @@ class TeamsController extends AbstractController
 
     #[Route('/json/{id}', name: 'app_teams_json_show', methods: ['GET'])]
     public function showJson(
-        Teams $tournament
+        Teams $team
     ): Response {
         $encoders = [new JsonEncoder()];
         $normalizers = [new ObjectNormalizer()];
