@@ -21,9 +21,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 /**
  * @Route("/user")
@@ -37,7 +39,7 @@ class UsersController extends AbstractController
     {
         return $this->render('users/profile.html.twig', [
             'user' => $userRepository->findOneBy(['id' => $this->getUser()->getUserIdentifier()]),
-            'favgames' => $entityManager->getRepository(UserGamePreferences::class)->findBy(['user'=>$this->getUser()]),
+            'favgames' => $entityManager->getRepository(UserGamePreferences::class)->findBy(['user' => $this->getUser()]),
         ]);
     }
 
@@ -232,5 +234,41 @@ class UsersController extends AbstractController
         //$link = $request->headers->get("referer");
         return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
     }
-    
+
+
+    /**
+     * @Route("/json/user/{id}", name= "user_profile", methods= {"GET"})
+     */
+
+    public function showUser(
+        Request $request,
+        $id,
+    ): Response {
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(Users::class)->find($id);
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($user, 'json', [
+            'groups' => 'post:read',
+        ]);
+        return new Response($jsonContent);
+    }
+
+
+    #[Route('/json/users', name: 'user_list', methods: ['GET'])]
+    public function ListJson(
+        EntityManagerInterface $entityManager
+    ): Response {
+        $users = $entityManager->getRepository(Users::class)->findAll();
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($users, 'json', [
+            'groups' => 'post:read',
+        ]);
+        return new Response($jsonContent);
+    }
 }

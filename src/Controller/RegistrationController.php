@@ -16,9 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+
 
 
 class RegistrationController extends AbstractController
@@ -99,7 +97,6 @@ class RegistrationController extends AbstractController
     #[Route('/json/register', name: 'user_register', methods: ['GET', 'POST'])]
     public function newJson(
         Request $request,
-        EntityManagerInterface $entityManager,
         NormalizerInterface $normalizer
     ): Response {
         $em = $this->getDoctrine()->getManager();
@@ -126,18 +123,5 @@ class RegistrationController extends AbstractController
         return new Response(json_encode($jsonContent));
     }
 
-    #[Route('/json/list', name: 'user_list', methods: ['GET'])]
-    public function ListJson(
-        EntityManagerInterface $entityManager
-    ): Response {
-        $users = $entityManager->getRepository(Users::class)->findAll();
-	  $encoders = [new JsonEncoder()];
-	  $normalizers = [new ObjectNormalizer()];
-
-	  $serializer = new Serializer($normalizers, $encoders);
-        $jsonContent = $serializer->serialize($users, 'json', [
-            'groups' => 'post:read',
-        ]);
-        return new Response($jsonContent);
-    }
+   
 }
