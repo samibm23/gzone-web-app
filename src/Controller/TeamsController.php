@@ -87,9 +87,10 @@ class TeamsController extends AbstractController
         return new Response(json_encode($jsonContent));
     }
     #[Route('/json/update/{id}', name: 'app_teams_json_update', methods: ['GET', 'POST'])]
-    public function updateJson(Request $request, NormalizerInterface $normalizer): Response
+    public function updateJson(Request $request, NormalizerInterface $normalizer,$id): Response
     {
-     
+        $em = this->getDoctrine()->getManager();
+        $team = $em->getRepository(Teams::class)->find($id);
         $team->setName($request->get('name'));
         $team->setDescription($request->get('description'));
         $em->persist($team);
