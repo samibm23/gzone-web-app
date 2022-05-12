@@ -1,9 +1,12 @@
 <?php
+
 namespace App\Entity;
+
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Users
  *
@@ -404,5 +407,16 @@ class Users implements UserInterface
         $this->verificationCode = $verificationCode;
 
         return $this;
+    }
+
+    function getJsonData()
+    {
+        $var = get_object_vars($this);
+        foreach ($var as &$value) {
+            if (is_object($value) && method_exists($value, 'getJsonData')) {
+                $value = $value->getJsonData();
+            }
+        }
+        return $var;
     }
 }
