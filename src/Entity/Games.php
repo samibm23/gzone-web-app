@@ -85,7 +85,7 @@ class Games
     /**
      * @return string|null
      */
-    public function getPhoto_Url(): ?string
+    public function getPhotoUrl(): ?string
     {
         return $this->photo_url;
     }

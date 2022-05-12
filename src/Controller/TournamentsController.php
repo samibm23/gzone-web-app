@@ -43,31 +43,28 @@ class TournamentsController extends AbstractController
         ]);
     }
 
-    #[Route('/json/list', name: 'app_tournaments_json_list', methods: ['GET'])]
-    public function ListJson(
+    #[Route('/json', name: 'app_tournaments_json_index', methods: ['GET'])]
+    public function indexJson(
         EntityManagerInterface $entityManager
     ): Response {
         $tournaments = $entityManager->getRepository(Tournaments::class)->findAll();
-	  $encoders = [new JsonEncoder()];
-	  $normalizers = [new ObjectNormalizer()];
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
 
-	  $serializer = new Serializer($normalizers, $encoders);
-        $jsonContent = $serializer->serialize($tournaments, 'json', [
-            'groups' => 'post:read',
-        ]);
-        // return $this->render('games/index.html.twig', [
-        //   'games' => $games,
-        //]);
-        return new Response($jsonContent);
-    }
+        $serializer = new Serializer($normalizers, $encoders);
+            $jsonContent = $serializer->serialize($tournaments, 'json', [
+                'groups' => 'post:read',
+            ]);
 
-    #[Route('/json/list/{id}', name: 'app_tournaments_json_list_show', methods: ['GET'])]
-    public function showId(
+            return new Response($jsonContent);
+        }
+
+    #[Route('/json/{id}', name: 'app_tournaments_json_show', methods: ['GET'])]
+    public function showJson(
         Request $request,
-        $id,
+        EntityManagerInterface $entityManager
     ): Response {
-        $em = $this->getDoctrine()->getManager();
-        $tournament = $em->getRepository(Tournaments::class)->find($id);
+        $tournament = $entityManager->getRepository(Tournaments::class)->find((int)$request->get('id'));
 	  $encoders = [new JsonEncoder()];
 	  $normalizers = [new ObjectNormalizer()];
 
@@ -102,6 +99,32 @@ class TournamentsController extends AbstractController
             'groups' => 'post:read',
         ]);
         return new Response(json_encode($jsonContent));
+    }
+
+    #[Route('/json/{id}/edit', name: 'app_tournaments_json_update', methods: ['GET', 'POST'])]
+    public function updateJson(Request $request, NormalizerInterface $normalizer, EntityManagerInterface $entityManager): Response
+    {
+        $tournament = $entityManager->getRepository(Tournaments::class)->find((int)$request->get('id'));
+        if (request->get('name') != null) $tournament->setName($request->get('name'));
+        if (request->get('description') != null) $tournament->setDescription($request->get('description'));
+        if (request->get('required_teams') != null) $tournament->setRequiredTeams((int)$request->get('required_teams'));
+        if (request->get('team_size') != null) $tournament->setTeamSize((int)$request->get('team_size'));
+        if (request->get('requestable') != null) $tournament->setRequestable((boolean)$request->get('requestable'));
+        if (request->get('approved') != null) $tournament->setApproved((boolean)$request->get('approved'));
+        
+        $entityManager->flush();
+        $jsonContent = $normalizer->normalize($tournament, 'json', ['groups'=>'post:read']);
+        return new Response("Information update".json_encode($jsonContent));
+    }
+    
+    #[Route('/json/delete/{id}', name: 'app_tournaments_json_delete', methods: ['GET', 'POST'])]
+    public function deleteJson(Request $request, NormalizerInterface $normalizer, $id): Response
+    {
+        $tournament = $entityManager->getRepository(Tournaments::class)->find((int)$request->get('id'));
+        $em->remove($tournament);
+        $em->flush();
+        $jsonContent = $normalizer->normalize($tournament, 'json', ['groups'=>'post:read']);
+        return new Response("Tournament deleted".json_encode($jsonContent));
     }
 
     #[Route('/new', name: 'app_tournaments_new', methods: ['GET', 'POST'])]
