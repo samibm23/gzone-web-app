@@ -271,4 +271,42 @@ class UsersController extends AbstractController
         ]);
         return new Response($jsonContent);
     }
+
+    #[Route('/json/edit/{id}', name: 'user_json_update', methods: ['GET', 'POST'])]
+    public function updateJson(Request $request, EntityManagerInterface $entityManager, Users $user): Response
+    {
+        if ($request->get('full_name') != null) $user->setFullName($request->get('full_name'));
+        if ($request->get('username') != null) $user->setUsername($request->get('username'));
+        if ($request->get('email') != null) $user->setEmail($request->get('email'));
+        if ($request->get('password') != null) $user->setPassword($request->get('password'));
+        if ($request->get('phone_number') != null) $user->setPhoneNumber($request->get('phone_number'));
+        if ($request->get('bio') != null) $user->setBio($request->get('bio'));
+
+        $entityManager->flush();
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($user, 'json', [
+            'groups' => 'post:read',
+        ]);
+
+        return new Response("Information update" . $jsonContent);
+    }
+
+    #[Route('/json/delete/{id}', name: 'user_json_delete', methods: ['GET', 'POST'])]
+    public function deleteJson(Users $user, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($user, 'json', [
+            'groups' => 'post:read',
+        ]);        return new Response("User deleted" . $jsonContent);
+    }
 }
