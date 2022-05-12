@@ -85,8 +85,8 @@ class TeamsController extends AbstractController
     {
         if ($request->get('name') != null) $team->setName($request->get('name'));
         if ($request->get('description') != null) $team->setDescription($request->get('description'));
-        if ($request->get('requestable') != null) $team->setDescription((bool)$request->get('requestable'));
-        if ($request->get('invitable') != null) $team->setRequiredTeams((int)$$request->get('invitable'));
+        if ($request->get('requestable') != null) $team->setRequestable((bool)$request->get('requestable'));
+        if ($request->get('invitable') != null) $team->setInvitable((int)$$request->get('invitable'));
 
         $entityManager->flush();
 
