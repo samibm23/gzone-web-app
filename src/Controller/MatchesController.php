@@ -18,7 +18,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 #[Route('/matches')]
 class MatchesController extends AbstractController
@@ -27,6 +29,93 @@ class MatchesController extends AbstractController
     {
         $this->emailVerifier = $emailVerifier;
     }
+
+    #[Route('/json', name: 'app_matches_json_index', methods: ['GET'])]
+    public function indexJson(
+        EntityManagerInterface $entityManager
+    ): Response {
+        $matches = $entityManager->getRepository(Matches::class)->findAll();
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($matches, 'json', [
+            'groups' => 'post:read',
+        ]);
+
+        return new Response($jsonContent);
+    }
+
+    #[Route('/json/{id}', name: 'app_matches_json_show', methods: ['GET'])]
+    public function showJson(
+        Matches $match
+    ): Response {
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($match, 'json', [
+            'groups' => 'post:read',
+        ]);
+        return new Response($jsonContent);
+    }
+
+    #[Route('/json/new', name: 'app_matches_json_new', methods: ['GET', 'POST'])]
+    public function newJson(
+        Request $request,
+        EntityManagerInterface $entityManager,
+    ): Response {
+        $match = new Matches();
+        $match->setStartTime($request->get('start_time'));
+        $match->setRound($request->get('round'));
+        $match->setTournament($entityManager->getRepository(Tournaments::class)->find((int)$request->get('tournament_id')));
+        $match->setTeam1($entityManager->getRepository(Teams::class)->find((int)$request->get('team1')));
+        $match->setTeam2($entityManager->getRepository(Teams::class)->find((int)$request->get('team2')));
+        $match->setWinnerTeam($entityManager->getRepository(Teams::class)->find((int)$request->get('winner_team')));
+
+        $entityManager->persist($match);
+        $entityManager->flush();
+
+        return new Response("success");
+    }
+
+    #[Route('/json/edit/{id}', name: 'app_matches_json_update', methods: ['GET', 'POST'])]
+    public function updateJson(Request $request, EntityManagerInterface $entityManager, Matches $match): Response
+    {
+        if ($request->get('start_time') != null) $match->setStartTime($request->get('name'));
+        if ($request->get('round') != null) $match->setRound($request->get('round'));
+        if ($request->get('team1_id') != null && (int)$request->get('team1_id')!=$match->getTeam1()->getId()) $match->setTeam1($entityManager->getRepository(Teams::class)->find((int)$request->get('team1')));
+        if ($request->get('team2_id') != null && (int)$request->get('team2_id')!=$match->getTeam2()->getId()) $match->setTeam2($entityManager->getRepository(Teams::class)->find((int)$request->get('team2')));
+        if ($request->get('winner_team_id') != null && (int)$request->get('winner_team_id')!=$match->getWinnerTeam()->getId()) $match->setWinnerTeam($entityManager->getRepository(Teams::class)->find((int)$request->get('winner_team_id')));
+
+        $entityManager->flush();
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($match, 'json', [
+            'groups' => 'post:read',
+        ]);
+
+        return new Response("Information update" . $jsonContent);
+    }
+
+    #[Route('/json/delete/{id}', name: 'app_matches_json_delete', methods: ['GET', 'POST'])]
+    public function deleteJson(Matches $match, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($match);
+        $entityManager->flush();
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($match, 'json', [
+            'groups' => 'post:read',
+        ]);        return new Response("Match deleted" . $jsonContent);
+    }
+
     #[Route('/', name: 'app_matches_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -38,59 +127,6 @@ class MatchesController extends AbstractController
             'matches' => $matches,
         ]);
     }
-
-    #[Route('/json/list', name: 'app_matches_json_list', methods: ['GET'])]
-    public function ListJson(
-        EntityManagerInterface $entityManager,
-        NormalizerInterface $normalizer
-    ): Response {
-        $matches = $entityManager->getRepository(Matches::class)->findAll();
-        $jsonContent = $normalizer->normalize($matches, 'json', [
-            'groups' => 'post:read',
-        ]);
-        // return $this->render('games/index.html.twig', [
-        //   'games' => $games,
-        //]);
-        return new Response(json_encode($jsonContent));
-    }
-
-    #[Route('/json/list/{id}', name: 'app_matches_list_id', methods: ['GET'])]
-    public function showId(
-        Request $request,
-        $id,
-        NormalizerInterface $normalizer
-    ): Response {
-        $em = $this->getDoctrine()->getManager();
-        $match = $em->getRepository(Matches::class)->find($id);
-        $jsonContent = $normalizer->normalize($match, 'json', [
-            'groups' => 'post:read',
-        ]);
-        return new Response(json_encode($jsonContent));
-    }
-
-    #[Route('/json/new', name: 'app_matches_json_new', methods: ['GET', 'POST'])]
-    public function newJson(
-        Request $request,
-        EntityManagerInterface $entityManager,
-        NormalizerInterface $normalizer
-    ): Response {
-        $em = $this->getDoctrine()->getManager();
-        $match = new Matches();
-        $match->setStartTime(new \DateTime($request->get('start_time')));
-        $match->setRound((int)$request->get('round'));
-        $match->setTournament($entityManager->getRepository(Tournaments::class)->find((int)$request->get('tournament_id')));
-        $match->setTeam1($entityManager->getRepository(Teams::class)->find((int)$request->get('team1_id')));
-        $match->setTeam2($entityManager->getRepository(Teams::class)->find((int)$request->get('team2_id')));
-        $match->setWinnerTeam($entityManager->getRepository(Teams::class)->find((int)$request->get('winner_team_id')));
-        
-        $em->persist($match);
-        $em->flush();
-        $jsonContent = $normalizer->normalize($match, 'json', [
-            'groups' => 'post:read',
-        ]);
-        return new Response(json_encode($jsonContent));
-    }
-
     #[Route('/new', name: 'app_matches_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
