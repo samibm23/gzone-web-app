@@ -17,10 +17,106 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use Snipe\BanBuilder\CensorWords;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
 
 #[Route('/posts')]
 class PostsController extends AbstractController
 {
+    /**
+ * @Route("/json", name= "app_posts_list", methods= {"GET"})
+ */
+
+    
+
+    #[Route('/json', name: 'app_posts_json_index', methods: ['GET'])]
+    public function indexJson(
+        EntityManagerInterface $entityManager
+    ): Response {
+        $posts = $entityManager->getRepository(Posts::class)->findAll();
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($posts, 'json', [
+            'groups' => 'post:read',
+        ]);
+
+        return new Response($jsonContent);
+    }
+
+    #[Route('/json/new', name: 'app_posts_json_new', methods: ['GET', 'POST'])]
+    public function newJson(
+        Request $request,
+        EntityManagerInterface $entityManager,
+    ): Response {
+        $post = new Posts();
+        $post->setTtile($request->get('title'));
+        $post->setContent($request->get('content'));
+        
+        $post->setPostDate(new \DateTime('now'));
+        $post->setPoster($entityManager->getRepository(Users::class)->find((int)$request->get('poster_id')));
+        
+
+        $entityManager->persist($post);
+        $entityManager->flush();
+
+        return new Response(json_encode("Success"));
+    }
+
+
+    #[Route('/json/{id}', name: 'app_posts_json_show', methods: ['GET'])]
+    public function showJson(
+        Posts $posts
+    ): Response {
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($post, 'json', [
+            'groups' => 'post:read',
+        ]);
+        return new Response($jsonContent);
+    }
+
+    
+    #[Route('/json/edit/{id}', name: 'app_posts_json_update', methods: ['GET', 'POST'])]
+    public function updateJson(Request $request, EntityManagerInterface $entityManager, Posts $post): Response
+    {
+        if ($request->get('title') != null) $post->setTitle($request->get('title'));
+        if ($request->get('content') != null) $post->setContent($request->get('content'));
+        
+
+        $entityManager->flush();
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($post, 'json', [
+            'groups' => 'post:read',
+        ]);
+
+        return new Response("Information update" . $jsonContent);
+    }
+
+    #[Route('/json/delete/{id}', name: 'app_posts_json_delete', methods: ['GET', 'POST'])]
+    public function deleteJson(Posts $post, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($post);
+        $entityManager->flush();
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($post, 'json', [
+            'groups' => 'post:read',
+        ]);        return new Response("Post deleted" . $jsonContent);
+    }
+
     #[Route('/', name: 'app_posts_index', methods: ['GET'])]
     public function index(
         EntityManagerInterface $entityManager,
@@ -44,87 +140,10 @@ class PostsController extends AbstractController
             // Items per page
             5
         );
-        return $this->render('posts/index.html.twig', ['userId' => $this->getUser()->getId(), 'posts' => $posts]);
-    }
-    #[Route('/List', name: 'app_posts_list', methods: ['GET'])]
-    public function ListJson(
-        EntityManagerInterface $entityManager,
-        NormalizerInterface $normalizer
-    ): Response {
-        $posts = $entityManager->getRepository(Posts::class)->findAll();
-        $jsonContent = $normalizer->normalize($posts, 'json', [
-            'groups' => 'post:read',
+        return $this->render('posts/index.html.twig', [
+            'userId' => $this->getUser()->getId(),
+            'posts' => $posts,
         ]);
-        // return $this->render('games/index.html.twig', [
-        //   'games' => $games,
-        //]);
-        return new Response(json_encode($jsonContent));
-    }
-
-    #[Route('/list/{id}', name: 'app_posts_list', methods: ['GET'])]
-    public function showId(
-        Request $request,
-        $id,
-        NormalizerInterface $normalizer
-    ): Response {
-        $em = $this->getDoctrine()->getManager();
-        $post = $em->getRepository(Posts::class)->find($id);
-        $jsonContent = $normalizer->normalize($post, 'json', [
-            'groups' => 'post:read',
-        ]);
-        return new Response(json_encode($jsonContent));
-    }
-    #[Route('/newJson', name: 'app_posts_newJson', methods: ['GET', 'POST'])]
-    public function newJson(
-        Request $request,
-        EntityManagerInterface $entityManager,
-        NormalizerInterface $normalizer
-    ): Response {
-        $em = $this->getDoctrine()->getManager();
-        $post = new Posts();
-        $post->setPoster($entityManager->getRepository(Users::class)->find((int)$request->get('poster_id')));
-        $post->setTitle($request->get('title'));
-        $post->setContent($request->get('content'));
-        $date = new \DateTime('now');
-        $post->setPostDate($date);
-        $em->persist($post);
-        $em->flush();
-        $jsonContent = $normalizer->normalize($post, 'json', [
-            'groups' => 'post:read',
-        ]);
-        return new Response(json_encode($jsonContent));
-    }
-    #[Route('/updateJson/{id}', name: 'app_posts_updateJson', methods: ['GET', 'POST'])]
-    public function updateJson(
-        Request $request,
-        NormalizerInterface $normalizer,
-        $id
-    ): Response {
-        $em = $this->getDoctrine()->getManager();
-        $post = $em->getRepository(Posts::class)->find($id);
-        $post->setTitle($request->get('title'));
-        $post->setContent($request->get('content'));
-        $em->persist($post);
-        $em->flush();
-        $jsonContent = $normalizer->normalize($post, 'json', [
-            'groups' => 'post:read',
-        ]);
-        return new Response('Information update' . json_encode($jsonContent));
-    }
-    #[Route('/deleteJson/{id}', name: 'app_posts_deleteJson', methods: ['GET', 'POST'])]
-    public function deleteJson(
-        Request $request,
-        NormalizerInterface $normalizer,
-        $id
-    ): Response {
-        $em = $this->getDoctrine()->getManager();
-        $post = $em->getRepository(Posts::class)->find($id);
-        $em->remove($post);
-        $em->flush();
-        $jsonContent = $normalizer->normalize($post, 'json', [
-            'groups' => 'post:read',
-        ]);
-        return new Response('Post deleted' . json_encode($jsonContent));
     }
 
     #[Route('/new', name: 'app_posts_new', methods: ['GET', 'POST'])]
@@ -162,23 +181,34 @@ class PostsController extends AbstractController
     }
 
     #[Route('/{id}/comments/new', name: 'app_posts_comments_new', methods: ['GET', 'POST'])]
-    public function newComment(Request $request, EntityManagerInterface $entityManager, Posts $post): Response
-    {
-        $user= $this->getUser();
-        
+    public function newComment(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        Posts $post
+    ): Response {
+        $user = $this->getUser();
+
         $comment = new Comments();
         $comment->setPost($post);
         $form = $this->createForm(CommentsType::class, $comment);
         $form->handleRequest($request);
-        $date = new \DateTime('now'); 
+        $date = new \DateTime('now');
         $comment->setCommentDate($date);
         $comment->setCommenter($user);
 
-        if ($form->isSubmitted() && $form->isValid() && $comment->getPost()->getResolved()== false) {
+        if (
+            $form->isSubmitted() &&
+            $form->isValid() &&
+            $comment->getPost()->getResolved() == false
+        ) {
             $entityManager->persist($comment);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_posts_show', ['id' => $post->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute(
+                'app_posts_show',
+                ['id' => $post->getId()],
+                Response::HTTP_SEE_OTHER
+            );
         }
 
         return $this->renderForm('comments/new.html.twig', [
@@ -189,21 +219,33 @@ class PostsController extends AbstractController
     }
 
     #[Route('/{pid}/comments/{cid}', name: 'app_posts_comments_show', methods: ['GET'])]
-    public function showComment(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $comment = $entityManager->getRepository(Comments::class)->find((int)$request->get('cid'));
+    public function showComment(
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $comment = $entityManager
+            ->getRepository(Comments::class)
+            ->find((int) $request->get('cid'));
         return $this->render('comments/show.html.twig', [
-            'postId' => (int)$request->get('pid'),
+            'postId' => (int) $request->get('pid'),
             'comment' => $comment,
         ]);
     }
 
     #[Route('/{pid}/comments/{cid}/edit', name: 'app_posts_comments_edit', methods: ['GET', 'POST'])]
-    public function editComment(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $comment = $entityManager->getRepository(Comments::class)->find((int)$request->get('cid'));
+    public function editComment(
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $comment = $entityManager
+            ->getRepository(Comments::class)
+            ->find((int) $request->get('cid'));
         if ($this->getUser()->getId() != $comment->getCommenter()->getId()) {
-            return $this->redirectToRoute('app_comments_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute(
+                'app_comments_index',
+                [],
+                Response::HTTP_SEE_OTHER
+            );
         }
         $form = $this->createForm(CommentsType::class, $comment);
         $form->handleRequest($request);
@@ -211,11 +253,18 @@ class PostsController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_posts_comments_show', ['pid' => (int)$request->get('pid'), 'cid' => (int)$request->get('cid')], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute(
+                'app_posts_comments_show',
+                [
+                    'pid' => (int) $request->get('pid'),
+                    'cid' => (int) $request->get('cid'),
+                ],
+                Response::HTTP_SEE_OTHER
+            );
         }
 
         return $this->renderForm('comments/edit.html.twig', [
-            'postId' => (int)$request->get('pid'),
+            'postId' => (int) $request->get('pid'),
             'comment' => $comment,
             'form' => $form,
         ]);
@@ -236,9 +285,16 @@ class PostsController extends AbstractController
             'post' => $post,
             'likes' => count($likes),
             'dislikes' => count($dislikes),
-            'stars' => (count($likes) + count($dislikes) > 0)? floor(count($likes) * 5 / (count($likes) + count($dislikes))) : 0,
+            'stars' =>
+                count($likes) + count($dislikes) > 0
+                    ? floor(
+                        (count($likes) * 5) / (count($likes) + count($dislikes))
+                    )
+                    : 0,
             'user_id' => $this->getUser()->getId(),
-            'comments' => $entityManager->getRepository(Comments::class)->findBy(['post' => $post])
+            'comments' => $entityManager
+                ->getRepository(Comments::class)
+                ->findBy(['post' => $post]),
         ]);
     }
 
