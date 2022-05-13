@@ -23,22 +23,6 @@ use Knp\Component\Pager\PaginatorInterface;
 #[Route('/tournaments')]
 class TournamentsController extends AbstractController
 {
-    #[Route('/json', name: 'app_tournaments_json_index', methods: ['GET'])]
-    public function indexJson(
-        EntityManagerInterface $entityManager
-    ): Response {
-        $tournaments = $entityManager->getRepository(Tournaments::class)->findAll();
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-
-        $serializer = new Serializer($normalizers, $encoders);
-        $jsonContent = $serializer->serialize($tournaments, 'json', [
-            'groups' => 'post:read',
-        ]);
-
-        return new Response($jsonContent);
-    }
-
     #[Route('/json/new', name: 'app_tournaments_json_new', methods: ['GET', 'POST'])]
     public function newJson(
         Request $request,
@@ -60,6 +44,61 @@ class TournamentsController extends AbstractController
 
         return new Response(json_encode("Success"));
     }
+    #[Route('/json', name: 'app_tournaments_json_index', methods: ['GET'])]
+    public function indexJson(
+        EntityManagerInterface $entityManager
+    ): Response {
+        $tournaments = $entityManager->getRepository(Tournaments::class)->findAll();
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($tournaments, 'json', [
+            'groups' => 'post:read',
+        ]);
+
+        return new Response($jsonContent);
+    }
+
+<<<<<<< Updated upstream
+    #[Route('/json/new', name: 'app_tournaments_json_new', methods: ['GET', 'POST'])]
+    public function newJson(
+        Request $request,
+        EntityManagerInterface $entityManager,
+    ): Response {
+        $tournament = new Tournaments();
+        $tournament->setName($request->get('name'));
+        $tournament->setDescription($request->get('description'));
+        $tournament->setRequiredTeams((int)$request->get('required_teams'));
+        $tournament->setTeamSize((int)$request->get('team_size'));
+        $tournament->setRequestable((bool)$request->get('requestable'));
+        $tournament->setApproved((bool)$request->get('approved'));
+        $tournament->setCreateDate(new \DateTime('now'));
+        $tournament->setAdmin($entityManager->getRepository(Users::class)->find((int)$request->get('admin_id')));
+        $tournament->setGame($entityManager->getRepository(Games::class)->find((int)$request->get('game_id')));
+
+        $entityManager->persist($tournament);
+        $entityManager->flush();
+
+        return new Response(json_encode("Success"));
+    }
+=======
+    #[Route('/json/{id}', name: 'app_tournaments_json_show', methods: ['GET'])]
+    public function showJson(
+        Tournaments $tournament
+    ): Response {
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($tournament, 'json', [
+            'groups' => 'post:read',
+        ]);
+        return new Response($jsonContent);
+    }
+
+    
+>>>>>>> Stashed changes
 
 
     #[Route('/json/delete/{id}', name: 'app_tournaments_json_delete', methods: ['GET', 'POST'])]
