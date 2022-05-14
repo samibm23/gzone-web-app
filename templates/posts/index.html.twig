@@ -5,13 +5,7 @@
 
 {% block body %}
 <div class="nk-gap-1"></div>
-<div class="container">
-    <ul class="nk-breadcrumbs">
-        <li><span class="fa fa-angle-right"></span></li>
-        <li><span class="fa fa-angle-right"></span></li>
-        <li><span>POSTS</span></li>
-    </ul>
-</div>
+ <h3 class="nk-decorated-h-3"><span><span class="text-main-1"></span> POSTS</span></h3>
 <div class="nk-gap-1"></div>
 {% block stylesheets%}
 {#<input type="text" id="search" class="form-control" placeholder="Search">#}
@@ -39,12 +33,13 @@
     });
 </script>
 {% endblock %}
+<div class="nk-gap-1"></div>
 <table class="nk-table" id="tr">
 
     <thead>
 
         <tr>
-            <th>Id</th>
+            
             <th>Resolved</th>
             <th>Title</th>
             <th>Content</th>
@@ -56,7 +51,7 @@
     <tbody>
         {% for post in posts %}
         <tr>
-            <td>{{ post.id }}</td>
+            
             <td>{{ post.resolved ? 'Yes' : 'No' }}</td>
             <td>{{ post.title }}</td>
             <td>{{ post.content }}</td>
@@ -98,7 +93,17 @@
     </nav>
     <a href="#" class="nk-pagination-next">
     </a>
+    
 </div>
-<a href="{{ path('app_posts_new') }} " class="nk-btn nk-btn-rounded nk-btn-color-main-1">Create new</a>
+<div class="nk-gap-1"></div>
+<a href="{{ path('app_posts_new') }} " style="background-color: #ff4343;border-radius: 4px;color: #ffffff; display: block;font-size: 13px; font-weight: 700;letter-spacing: 2px;text-transform: uppercase;width: 460px;padding: 14px 0;position: relative;margin: 0 auto; " type="submit" class="btn btn-danger btn-fw">Create new</a>
+<div class="nk-gap-1"></div>
+
+
+
+
+
+
+
 
 {% endblock %}

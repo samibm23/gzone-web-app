@@ -6,12 +6,9 @@
 <h1>Posts</h1>
 <table class="nk-table">
     <tbody>
+       
         <tr>
-            <th>Id</th>
-            <td>{{ post.id }}</td>
-        </tr>
-        <tr>
-            <th>Resolved</th>
+            <th >Resolved</th>
             <td>{{ post.resolved ? 'Yes' : 'No' }}</td>
         </tr>
         <tr>
@@ -66,12 +63,14 @@
 <div class="nk-gap-1"></div>
 <a class="nk-btn nk-btn-rounded nk-btn-color-main-1" href="{{ path('app_reports_new' , {'reportType' : 3 , 'id' : post.id }) }}">Report</a></br>
 <div class="nk-gap-1"></div>
-<a href="{{ path('app_posts_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-white">back to list</a>
-
-<div class="nk-gap-1"></div>
-
 {% if user_id == post.poster.id %}
 <a href="{{ path('app_posts_edit', {'id': post.id}) }}" class="nk-btn nk-btn-rounded nk-btn-color-white">edit</a>
+<div class="nk-gap-1"></div>
+<a href="{{ path('app_posts_index') }}" class="nk-btn nk-btn-rounded nk-btn-color-white" >back to list</a>
+
+
+
+
 <div class="nk-gap-1"></div>
 
 {{ include('posts/_delete_form.html.twig') }}
