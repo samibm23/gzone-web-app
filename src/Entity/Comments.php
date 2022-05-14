@@ -19,6 +19,7 @@ class Comments
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * Groups("post:read")
      */
     private $id;
 
@@ -27,6 +28,7 @@ class Comments
      *
      * @ORM\Column(name="comment_body", type="string", length=1000, nullable=false)
      * @Assert\NotBlank(message="Le Champ Titre est obligatoire")
+     * Groups("post:read")
      */
     private $commentBody;
 
@@ -35,6 +37,7 @@ class Comments
      *
      * @ORM\Column(name="comment_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
      * @Assert\GreaterThanOrEqual("today")
+     * Groups("post:read")
      * 
      */
     private $commentDate;
@@ -47,7 +50,7 @@ class Comments
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="post_id", referencedColumnName="id")
      * })
-     * 
+     * Groups("post:read")
      */
     private $post;
 
@@ -58,6 +61,7 @@ class Comments
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="commenter_id", referencedColumnName="id")
      * })
+     * Groups("post:read")
      */
     private $commenter;
 
