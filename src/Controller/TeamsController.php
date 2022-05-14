@@ -26,7 +26,6 @@ use Symfony\Component\Serializer\Serializer;
 #[Route('/teams')]
 class TeamsController extends AbstractController
 {
-<<<<<<< Updated upstream
 
     #[Route('/json', name: 'app_teams_json_index', methods: ['GET'])]
     public function indexJson(
@@ -58,8 +57,6 @@ class TeamsController extends AbstractController
         return new Response($jsonContent);
     }
 
-=======
->>>>>>> Stashed changes
     #[Route('/json/new', name: 'app_teams_json_new', methods: ['GET', 'POST'])]
     public function newJson(
         Request $request,
@@ -82,56 +79,6 @@ class TeamsController extends AbstractController
         return new Response(json_encode("Success"));
     }
 
-<<<<<<< Updated upstream
-=======
-    #[Route('/json', name: 'app_teams_json_index', methods: ['GET'])]
-    public function indexJson(
-        EntityManagerInterface $entityManager
-    ): Response {
-        $teams = $entityManager->getRepository(Teams::class)->findAll();
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-
-        $serializer = new Serializer($normalizers, $encoders);
-        $jsonContent = $serializer->serialize($teams, 'json', [
-            'groups' => 'post:read',
-        ]);
-
-        return new Response($jsonContent);
-    }
-    #[Route('/json/delete/{id}', name: 'app_teams_json_delete', methods: ['GET', 'POST'])]
-    public function deleteJson(Teams $team, EntityManagerInterface $entityManager): Response
-    {
-        $entityManager->remove($team);
-        $entityManager->flush();
-
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-
-        $serializer = new Serializer($normalizers, $encoders);
-        $jsonContent = $serializer->serialize($team, 'json', [
-            'groups' => 'post:read',
-        ]);       
-         return new Response("Team deleted" . $jsonContent);
-    }
-    
-    #[Route('/json/{id}', name: 'app_teams_json_show', methods: ['GET'])]
-    public function showJson(
-        Teams $team
-    ): Response {
-        $encoders = [new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-
-        $serializer = new Serializer($normalizers, $encoders);
-        $jsonContent = $serializer->serialize($team, 'json', [
-            'groups' => 'post:read',
-        ]);
-        return new Response($jsonContent);
-    }
-
-
-
->>>>>>> Stashed changes
     #[Route('/json/edit/{id}', name: 'app_teams_json_update', methods: ['GET', 'POST'])]
     public function updateJson(Request $request, EntityManagerInterface $entityManager, Teams $team): Response
     
@@ -154,7 +101,21 @@ class TeamsController extends AbstractController
         return new Response("Information update" . $jsonContent);
     }
 
-   
+    #[Route('/json/delete/{id}', name: 'app_teams_json_delete', methods: ['GET', 'POST'])]
+    public function deleteJson(Teams $team, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($team);
+        $entityManager->flush();
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($team, 'json', [
+            'groups' => 'post:read',
+        ]);       
+         return new Response("Team deleted" . $jsonContent);
+    }
    #[Route('/', name: 'app_teams_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager, Request $request, PaginatorInterface $paginator): Response
     {
