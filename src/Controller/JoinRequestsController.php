@@ -19,6 +19,166 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 #[Route('/join-requests')]
 class JoinRequestsController extends AbstractController
 {
+<<<<<<< Updated upstream
+#[Route('/t/{team_id}/{invitation}/{message}/{tournament_id}', name: 'app_tournament_join_requests_new', methods: ['GET', 'POST'])]
+    public function Tournament(Request $request, EntityManagerInterface $entityManager): Response
+=======
+    
+    #[Route('/json', name: 'app_join_requests_json_index', methods: ['GET'])]
+    public function indexJson(
+        EntityManagerInterface $entityManager
+    ): Response {
+        $joinRequests = $entityManager->getRepository(JoinRequests::class)->findAll();
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($joinRequests, 'json', [
+            'groups' => 'post:read',
+        ]);
+
+        return new Response($jsonContent);
+    }
+    #[Route('/json/new', name: 'app_join_requests_json_new', methods: ['GET', 'POST'])]
+    public function newJson(
+        Request $request,
+        EntityManagerInterface $entityManager,
+    ): Response {
+        $joinRequest = new JoinRequests();
+        $joinRequest->setMessage($request->get('message'));
+        $joinRequest->setInvitation($request->get('invitation'));
+        $joinRequest->setUser($entityManager->getRepository(Users::class)->find((int)$request->get("user")));
+        $joinRequest->setTeam($entityManager->getRepository(Teams::class)->find((int)$request->get("team_id")));
+        $joinRequest->setTournament($entityManager->getRepository(Tournaments::class)->find((int)$request->get("tournament_id")));
+
+        $date = new \DateTime('now');
+        $joinRequest->setRequestDate($date);
+        $entityManager->persist($joinRequest);
+        $entityManager->flush();
+
+        return new Response(json_encode("Success"));
+    }
+    #[Route('/json/delete/{id}', name: 'app_join_requests_json_delete', methods: ['GET', 'POST'])]
+    public function deleteJson(JoinRequests $joinRequest, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($joinRequest);
+        $entityManager->flush();
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($joinRequest, 'json', [
+            'groups' => 'post:read',
+        ]);       
+         return new Response(" deleted" . $jsonContent);
+    }
+    #[Route('/json/{id}', name: 'app_join_requests_json_show', methods: ['GET'])]
+    public function showJson(
+        JoinRequest $joinRequest
+    ): Response {
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($joinRequest, 'json', [
+            'groups' => 'post:read',
+        ]);
+        return new Response($jsonContent);
+    }
+
+
+
+    #[Route('/json/edit/{id}', name: 'app_join_requests_json_update', methods: ['GET', 'POST'])]
+    public function updateJson(Request $request, EntityManagerInterface $entityManager, JoinRequests $joinRequest): Response
+    
+    {
+        if ($request->get('invitation') != null) $joinRequest->setInvitation($request->get('invitation'));
+
+
+        $entityManager->flush();
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($joinRequest, 'json', [
+            'groups' => 'post:read',
+        ]);
+
+        return new Response("Information update" . $jsonContent);
+    }
+
+    #[Route('/', name: 'app_join_requests_index', methods: ['GET'])]
+    public function index(EntityManagerInterface $entityManager): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $query = $em->createQuery(
+            'SELECT a FROM App\Entity\JoinRequests a 
+            ORDER BY a.message ASC'
+        );
+    
+        $joinRequests = $query->getResult();
+        return $this->render('join_requests/index.html.twig',
+        array('join_requests' => $joinRequests));
+    }
+   
+    #[Route('/{id}', name: 'app_join_requests_show', methods: ['GET'])]
+    public function show(JoinRequests $joinRequest): Response
+    {
+        return $this->render('join_requests/show.html.twig', [
+            'join_request' => $joinRequest,
+        ]);
+    }
+
+  
+    #[Route('/u/{user_id}/{invitation}/{message}/{team_id}', name: 'app_user_join_requests_new', methods: ['GET', 'POST'])]
+    public function User(Request $request, EntityManagerInterface $entityManager): Response
+>>>>>>> Stashed changes
+    {
+        if (count($entityManager->getRepository(JoinRequests::class)->findBy([
+            "user" => $entityManager->getRepository(Users::class)->find((int)$request->get("user_id")),
+            "team" => $entityManager->getRepository(Teams::class)->find((int)$request->get("team_id")),
+            ])) > 0) {
+                $entityManager->remove($entityManager->getRepository(JoinRequests::class)->findBy([
+                    "user" => $entityManager->getRepository(Users::class)->find((int)$request->get("user_id")),
+                    "team" => $entityManager->getRepository(Teams::class)->find((int)$request->get("team_id")),
+                    ])[0]);
+                $entityManager->flush();
+        } else {
+            $joinRequest = new JoinRequests();
+            $joinRequest->setMessage($request->get("message"));
+            $joinRequest->setRequestDate(new \DateTime('now'));
+            $joinRequest->setInvitation((boolean)$request->get("invitation"));
+            $joinRequest->setTeam($entityManager->getRepository(Teams::class)->find((int)$request->get("team_id")));
+            $joinRequest->setUser($entityManager->getRepository(Users::class)->find((int)$request->get("user_id")));
+
+            if (
+                $joinRequest->getTeam()?->getTeamSize() > count($entityManager->getRepository(JoinRequests::class)->findBy([
+                    "user" => $joinRequest->getUser(),
+                    "accepted" => true
+                ]))
+                && (
+                    $joinRequest->getInvitation() && $this->getUser()?->getId() == $joinRequest->getTeam()?->getAdmin()?->getId() && $joinRequest->getUser()?->getInvitable()
+                    || !$joinRequest->getInvitation() && $joinRequest->getTeam()->getRequestable()
+                )
+                
+            ) {
+                $entityManager->persist($joinRequest);
+                $entityManager->flush();
+            }
+        }
+        if ((boolean) $request->get("invitation")) {
+<<<<<<< Updated upstream
+            return $this->redirectToRoute("app_teams_show", ["id" =>(int) $request->get("team_id")]);
+=======
+            return $this->redirectToRoute("app_users_show", ["id" => (int) $request->get("user_id")]);
+>>>>>>> Stashed changes
+        } else {
+            return $this->redirectToRoute("app_teams_show", ["id" => (int) $request->get("team_id")]);
+        }
+    }
+    
 #[Route('/t/{team_id}/{invitation}/{message}/{tournament_id}', name: 'app_tournament_join_requests_new', methods: ['GET', 'POST'])]
     public function Tournament(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -56,56 +216,18 @@ class JoinRequestsController extends AbstractController
             }
         }
         if ((boolean) $request->get("invitation")) {
-            return $this->redirectToRoute("app_teams_show", ["id" =>(int) $request->get("team_id")]);
+            return $this->redirectToRoute("app_join_requests_show", ["id" =>(int) $request->get("team_id")]);
         } else {
-            return $this->redirectToRoute("app_tournaments_show", ["id" => (int) $request->get("tournament_id")]);
-        }
-    }
-    
-
-    #[Route('/u/{user_id}/{invitation}/{message}/{team_id}', name: 'app_user_join_requests_new', methods: ['GET', 'POST'])]
-    public function User(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        if (count($entityManager->getRepository(JoinRequests::class)->findBy([
-            "user" => $entityManager->getRepository(Users::class)->find((int)$request->get("user_id")),
-            "team" => $entityManager->getRepository(Teams::class)->find((int)$request->get("team_id")),
-            ])) > 0) {
-                $entityManager->remove($entityManager->getRepository(JoinRequests::class)->findBy([
-                    "user" => $entityManager->getRepository(Users::class)->find((int)$request->get("user_id")),
-                    "team" => $entityManager->getRepository(Teams::class)->find((int)$request->get("team_id")),
-                    ])[0]);
-                $entityManager->flush();
-        } else {
-            $joinRequest = new JoinRequests();
-            $joinRequest->setMessage($request->get("message"));
-            $joinRequest->setRequestDate(new \DateTime('now'));
-            $joinRequest->setInvitation((boolean)$request->get("invitation"));
-            $joinRequest->setTeam($entityManager->getRepository(Teams::class)->find((int)$request->get("team_id")));
-            $joinRequest->setUser($entityManager->getRepository(Users::class)->find((int)$request->get("user_id")));
-
-            if (
-                $joinRequest->getTeam()?->getTeamSize() > count($entityManager->getRepository(JoinRequests::class)->findBy([
-                    "user" => $joinRequest->getUser(),
-                    "accepted" => true
-                ]))
-                && (
-                    $joinRequest->getInvitation() && $this->getUser()?->getId() == $joinRequest->getTeam()?->getAdmin()?->getId() && $joinRequest->getUser()?->getInvitable()
-                    || !$joinRequest->getInvitation() && $joinRequest->getTeam()->getRequestable()
-                )
-                
-            ) {
-                $entityManager->persist($joinRequest);
-                $entityManager->flush();
-            }
-        }
-        if ((boolean) $request->get("invitation")) {
-            return $this->redirectToRoute("app_users_show", ["id" => (int) $request->get("user_id")]);
-        } else {
+<<<<<<< Updated upstream
             return $this->redirectToRoute("app_teams_show", ["id" => (int) $request->get("team_id")]);
+=======
+            return $this->redirectToRoute("app_tournaments_show", ["id" => (int) $request->get("tournament_id")]);
+>>>>>>> Stashed changes
         }
     }
     
 
+<<<<<<< Updated upstream
     #[Route('/', name: 'app_join_requests_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -190,6 +312,8 @@ class JoinRequestsController extends AbstractController
             'join_request' => $joinRequest,
         ]);
     }
+=======
+>>>>>>> Stashed changes
 
 
     #[Route('/{id}/tournament/{accepted}', name: 'app_join_requests_respond_tournament', methods: ['GET', 'POST'])]
