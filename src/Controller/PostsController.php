@@ -53,11 +53,12 @@ class PostsController extends AbstractController
         EntityManagerInterface $entityManager,
     ): Response {
         $post = new Posts();
-        $post->setTtile($request->get('title'));
+        $post->setPoster($entityManager->getRepository(Users::class)->find((int)$request->get('poster_id')));
+        $post->setTitle($request->get('title'));
         $post->setContent($request->get('content'));
         
         $post->setPostDate(new \DateTime('now'));
-        $post->setPoster($entityManager->getRepository(Users::class)->find((int)$request->get('poster_id')));
+        
         
 
         $entityManager->persist($post);
