@@ -42,6 +42,27 @@ class TeamsController extends AbstractController
 
         return new Response($jsonContent);
     }
+    #[Route('/json/new', name: 'app_teams_json_new', methods: ['GET', 'POST'])]
+    public function newJson(
+        Request $request,
+        EntityManagerInterface $entityManager,
+    ): Response {
+        $team = new Teams();
+        $team->setPhotoUrl($request->get('photo_url'));
+        $team->setName($request->get('name'));
+        $team->setTeamSize($request->get('team_size'));
+        $team->setRequestable($request->get('requestable'));
+        $team->setInvitable($request->get('invitable'));
+        $team->setDescription($request->get('description'));
+        $team->setGame($entityManager->getRepository(Games::class)->find((int)$request->get("game_id")));
+        $date = new \DateTime('now');
+        $team->setCreateDate($date);
+        $team->setAdmin($entityManager->getRepository(Users::class)->find((int)$request->get("admin_id")));
+        $entityManager->persist($team);
+        $entityManager->flush();
+
+        return new Response(json_encode("Success"));
+    }
 
     #[Route('/json/{id}', name: 'app_teams_json_show', methods: ['GET'])]
     public function showJson(
@@ -57,27 +78,7 @@ class TeamsController extends AbstractController
         return new Response($jsonContent);
     }
 
-    #[Route('/json/new', name: 'app_teams_json_new', methods: ['GET', 'POST'])]
-    public function newJson(
-        Request $request,
-        EntityManagerInterface $entityManager,
-    ): Response {
-        $team = new Teams();
-        $team->setPhotoUrl($request->get('photo_url'));
-        $team->setName($request->get('name'));
-        $team->setTeamSize($request->get('team_size'));
-        $team->setRequestable($request->get('requestable'));
-        $team->setInvitable($request->get('invitable'));
-        $team->setDescription($request->get('description'));
-        $team->setGame($entityManager->getRepository(Games::class)->find((int)$request->get("game_id")));
-        $date = new \DateTime('now'); 
-        $team->setCreateDate($date);
-        $team->setAdmin($entityManager->getRepository(Users::class)->find((int)$request->get("admin_id")));
-        $entityManager->persist($team);
-        $entityManager->flush();
 
-        return new Response(json_encode("Success"));
-    }
 
     #[Route('/json/edit/{id}', name: 'app_teams_json_update', methods: ['GET', 'POST'])]
     public function updateJson(Request $request, EntityManagerInterface $entityManager, Teams $team): Response
@@ -85,8 +86,7 @@ class TeamsController extends AbstractController
     {
         if ($request->get('name') != null) $team->setName($request->get('name'));
         if ($request->get('description') != null) $team->setDescription($request->get('description'));
-        if ($request->get('requestable') != null) $team->setRequestable((bool)$request->get('requestable'));
-        if ($request->get('invitable') != null) $team->setInvitable((int)$$request->get('invitable'));
+
 
         $entityManager->flush();
 
