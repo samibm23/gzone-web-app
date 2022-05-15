@@ -7,6 +7,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\HttpFoundation\Response;
+
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+
 
 class GoogleController extends AbstractController
 {
@@ -19,7 +26,7 @@ class GoogleController extends AbstractController
     {
      
         return $clientRegistry
-            ->getClient('google') // key used in config/packages/knpu_oauth2_client.yaml
+            ->getClient('google') 
             ->redirect();
     }
 
@@ -33,6 +40,13 @@ class GoogleController extends AbstractController
 return new JsonResponse(array('status'=>false,'message'=>"User not found!"));
         }else{
             return $this->redirectToRoute('profile');
+            $encoders = [new JsonEncoder()];
+            $normalizers = [new ObjectNormalizer()];
+            $serializer = new Serializer($normalizers, $encoders);
+            $jsonContent = $serializer->serialize($this->getUser(), 'json', [
+                'groups' => 'post:read',
+            ]);
+            return new Response($jsonContent);
         }
     }
 }
