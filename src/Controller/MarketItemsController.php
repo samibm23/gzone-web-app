@@ -10,7 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Constraints\DateTime;
 #[Route('/market-items')]
 class MarketItemsController extends AbstractController
@@ -28,16 +31,19 @@ class MarketItemsController extends AbstractController
     }
 
     #[Route('/json/list', name: 'app_market_items_json_list', methods: ['GET'])]
-    public function ListJson(EntityManagerInterface $entityManager, NormalizerInterface $normalizer): Response
-    {
-        $teams = $entityManager
-            ->getRepository(MarketItems::class)
-            ->findAll();
-        $jsonContent = $normalizer->normalize($teams, 'json', ['groups'=>'post:read']);
-        // return $this->render('games/index.html.twig', [
-        //   'games' => $games,
-        //]);
-        return new Response(json_encode($jsonContent));
+    public function listJson(
+        EntityManagerInterface $entityManager
+    ): Response {
+        $marketItems = $entityManager->getRepository(MarketItems::class)->findAll();
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($marketItems, 'json', [
+            'groups' => 'post:read',
+        ]);
+
+        return new Response($jsonContent);
     }
 
     #[Route('/json/list/{id}', name: 'app_market_items_json_get', methods: ['GET'])]
@@ -70,6 +76,7 @@ class MarketItemsController extends AbstractController
 
 
         {
+
             $em = $this->getDoctrine()->getManager();
             $marketItem= $em->getRepository(MarketItems::class)->find($id);
         $marketItem->settitle($request->get('title'));
@@ -79,6 +86,7 @@ class MarketItemsController extends AbstractController
         $em->flush();
         $jsonContent = $normalizer->normalize($marketItem, 'json', ['groups'=>'post:read']);
         return new Response("Information update".json_encode($jsonContent));
+
     }
     #[Route('/json/delete/{id}', name: 'app_market_items_json_delete', methods: ['GET', 'POST'])]
     public function deleteJson(Request $request, NormalizerInterface $normalizer, $id): Response
