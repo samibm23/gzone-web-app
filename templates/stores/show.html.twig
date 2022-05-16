@@ -7,10 +7,7 @@
 
 <table class="nk-table">
     <tr>
-    <tr>
-        <th>Id</th>
-        <td>{{ store.id }}</td>
-    </tr>
+   
     <tr>
         <th>Name</th>
         <td>{{ store.name }}</td>
@@ -23,7 +20,7 @@
                 href="{{ path('app_user_store_likes_dislikes_new', {'user_id': user_id, 'like': 0, 'store_id': store.id}) }}"
                 class=" nk-btn nk-btn-rounded nk-btn-color-main-1">Dislike</a></td>
     </tr>
-    <>
+    
         <td>Like Count</td>
         <td>{{ likes | length }}</td>
 
