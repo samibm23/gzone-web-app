@@ -122,6 +122,7 @@ class RegistrationController extends AbstractController
         ]);
         return new Response(json_encode($jsonContent));
     }
+    
 
    
 }

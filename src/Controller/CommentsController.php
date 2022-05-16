@@ -11,10 +11,99 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 #[Route('/comments')]
 class CommentsController extends AbstractController
 {
+     /**
+ * @Route("/json", name= "app_comments_list", methods= {"GET"})
+ */
+
+    
+
+#[Route('/json', name: 'app_comments_json_index', methods: ['GET'])]
+public function indexJson(
+    EntityManagerInterface $entityManager
+): Response {
+    $comments = $entityManager->getRepository(Comments::class)->findAll();
+    $encoders = [new JsonEncoder()];
+    $normalizers = [new ObjectNormalizer()];
+
+    $serializer = new Serializer($normalizers, $encoders);
+    $jsonContent = $serializer->serialize($comments, 'json', [
+        'groups' => 'post:read',
+    ]);
+
+    return new Response($jsonContent);
+} 
+
+#[Route('/json/{id}', name: 'app_comments_json_show', methods: ['GET'])]
+public function showJson(
+    Comments $comments
+): Response {
+    $encoders = [new JsonEncoder()];
+    $normalizers = [new ObjectNormalizer()];
+
+    $serializer = new Serializer($normalizers, $encoders);
+    $jsonContent = $serializer->serialize($comment, 'json', [
+        'groups' => 'post:read',
+    ]);
+    return new Response($jsonContent);
+}
+
+#[Route('/json/new', name: 'app_comments_json_new', methods: ['GET', 'POST'])]
+public function newJson(
+    Request $request,
+    EntityManagerInterface $entityManager,
+): Response {
+    $comment = new Comments();
+    $comment->setCommenter($entityManager->getRepository(Users::class)->find((int)$request->get('commenter_id')));
+    $comment->setCommentBody($request->get('comment_body'));
+    $comment->setCommentDate(new \DateTime('now'));
+    
+    $entityManager->persist($comment);
+    $entityManager->flush();
+
+    return new Response(json_encode("Success"));
+}
+
+
+#[Route('/json/edit/{id}', name: 'app_comments_json_update', methods: ['GET', 'POST'])]
+public function updateJson(Request $request, EntityManagerInterface $entityManager, Comments $comment): Response
+{
+    if ($request->get('comment_body') != null) $comment->setCommentBody($request->get('comment_body'));
+    
+    $entityManager->flush();
+
+    $encoders = [new JsonEncoder()];
+    $normalizers = [new ObjectNormalizer()];
+
+    $serializer = new Serializer($normalizers, $encoders);
+    $jsonContent = $serializer->serialize($comment, 'json', [
+        'groups' => 'post:read',
+    ]);
+
+    return new Response("Information update" . $jsonContent);
+}
+
+#[Route('/json/delete/{id}', name: 'app_comments_json_delete', methods: ['GET', 'POST'])]
+public function deleteJson(Comments $comment, EntityManagerInterface $entityManager): Response
+{
+    $entityManager->remove($comment);
+    $entityManager->flush();
+
+    $encoders = [new JsonEncoder()];
+    $normalizers = [new ObjectNormalizer()];
+
+    $serializer = new Serializer($normalizers, $encoders);
+    $jsonContent = $serializer->serialize($comment, 'json', [
+        'groups' => 'post:read',
+    ]);        return new Response("Comment deleted" . $jsonContent);
+}
     #[Route('/', name: 'app_comments_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): Response
     {

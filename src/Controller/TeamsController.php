@@ -19,11 +19,103 @@ use MercurySeries\FlashyBundle\FlashyNotifier;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 #[Route('/teams')]
 class TeamsController extends AbstractController
 {
 
+    #[Route('/json', name: 'app_teams_json_index', methods: ['GET'])]
+    public function indexJson(
+        EntityManagerInterface $entityManager
+    ): Response {
+        $teams = $entityManager->getRepository(Teams::class)->findAll();
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($teams, 'json', [
+            'groups' => 'post:read',
+        ]);
+
+        return new Response($jsonContent);
+    }
+
+    #[Route('/json/{id}', name: 'app_teams_json_show', methods: ['GET'])]
+    public function showJson(
+        Teams $team
+    ): Response {
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($team, 'json', [
+            'groups' => 'post:read',
+        ]);
+        return new Response($jsonContent);
+    }
+
+    #[Route('/json/new', name: 'app_teams_json_new', methods: ['GET', 'POST'])]
+    public function newJson(
+        Request $request,
+        EntityManagerInterface $entityManager,
+    ): Response {
+        $team = new Teams();
+        $team->setPhotoUrl($request->get('photo_url'));
+        $team->setName($request->get('name'));
+        $team->setTeamSize($request->get('team_size'));
+        $team->setRequestable($request->get('requestable'));
+        $team->setInvitable($request->get('invitable'));
+        $team->setDescription($request->get('description'));
+        $team->setGame($entityManager->getRepository(Games::class)->find((int)$request->get("game_id")));
+        $date = new \DateTime('now'); 
+        $team->setCreateDate($date);
+        $team->setAdmin($entityManager->getRepository(Users::class)->find((int)$request->get("admin_id")));
+        $entityManager->persist($team);
+        $entityManager->flush();
+
+        return new Response(json_encode("Success"));
+    }
+
+    #[Route('/json/edit/{id}', name: 'app_teams_json_update', methods: ['GET', 'POST'])]
+    public function updateJson(Request $request, EntityManagerInterface $entityManager, Teams $team): Response
+    
+    {
+        if ($request->get('name') != null) $team->setName($request->get('name'));
+        if ($request->get('description') != null) $team->setDescription($request->get('description'));
+        if ($request->get('requestable') != null) $team->setRequestable((bool)$request->get('requestable'));
+        if ($request->get('invitable') != null) $team->setInvitable((int)$$request->get('invitable'));
+
+        $entityManager->flush();
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($team, 'json', [
+            'groups' => 'post:read',
+        ]);
+
+        return new Response("Information update" . $jsonContent);
+    }
+
+    #[Route('/json/delete/{id}', name: 'app_teams_json_delete', methods: ['GET', 'POST'])]
+    public function deleteJson(Teams $team, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($team);
+        $entityManager->flush();
+
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($team, 'json', [
+            'groups' => 'post:read',
+        ]);       
+         return new Response("Team deleted" . $jsonContent);
+    }
    #[Route('/', name: 'app_teams_index', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager, Request $request, PaginatorInterface $paginator): Response
     {
@@ -45,69 +137,6 @@ class TeamsController extends AbstractController
         ]);
     }
 
-    #[Route('/json/list', name: 'app_teams_json_list', methods: ['GET'])]
-    public function ListJson(EntityManagerInterface $entityManager, NormalizerInterface $normalizer): Response
-    {
-        $teams = $entityManager
-            ->getRepository(Teams::class)
-            ->findAll();
-        $jsonContent = $normalizer->normalize($teams, 'json', ['groups'=>'post:read']);
-        // return $this->render('games/index.html.twig', [
-        //   'games' => $games,
-        //]);
-        return new Response(json_encode($jsonContent));
-    }
-
-    #[Route('/json/list/{id}', name: 'app_teams_json_get', methods: ['GET'])]
-    public function showId(Request $request, $id, NormalizerInterface $normalizer): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $team = $em->getRepository(Teams::class)->find($id);
-        $jsonContent = $normalizer->normalize($team, 'json', ['groups'=>'post:read']);
-        return new Response(json_encode($jsonContent));
-    }
-    #[Route('/json/new', name: 'app_teams_json_new', methods: ['GET', 'POST'])]
-    public function newJson(Request $request, NormalizerInterface $normalizer, EntityManagerInterface $entityManager): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $team= new Teams();
-        $team->setPhotoUrl($request->get('photo_url'));
-        $team->setName($request->get('name'));
-        $team->setTeamSize($request->get('team_size'));
-        $team->setRequestable($request->get('requestable'));
-        $team->setInvitable($request->get('invitable'));
-        $team->setDescription($request->get('description'));
-        $team->setGame($entityManager->getRepository(Games::class)->find((int)$request->get("game_id")));
-        $date = new \DateTime('now'); 
-        $team->setCreateDate($date);
-        $team->setAdmin($entityManager->getRepository(Users::class)->find((int)$request->get("admin_id")));
-        $em->persist($team);
-        $em->flush();
-        $jsonContent = $normalizer->normalize($team, 'json', ['groups'=>'post:read']);
-        return new Response(json_encode($jsonContent));
-    }
-    #[Route('/json/update/{id}', name: 'app_teams_json_update', methods: ['GET', 'POST'])]
-    public function updateJson(Request $request, NormalizerInterface $normalizer,$id): Response
-    {
-        $em = this->getDoctrine()->getManager();
-        $team = $em->getRepository(Teams::class)->find($id);
-        $team->setName($request->get('name'));
-        $team->setDescription($request->get('description'));
-        $em->persist($team);
-        $em->flush();
-        $jsonContent = $normalizer->normalize($team, 'json', ['groups'=>'post:read']);
-        return new Response("Information update".json_encode($jsonContent));
-    }
-    #[Route('/json/delete/{id}', name: 'app_teams_json_delete', methods: ['GET', 'POST'])]
-    public function deleteJson(Request $request, NormalizerInterface $normalizer, $id): Response
-    {
-        $em = $this->getDoctrine()->getManager();
-        $team= $em->getRepository(Teams::class)->find($id);
-        $em->remove($team);
-        $em->flush();
-        $jsonContent = $normalizer->normalize($team, 'json', ['groups'=>'post:read']);
-        return new Response("Game deleted".json_encode($jsonContent));
-    }
     
     #[Route('/new', name: 'app_teams_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, FlashyNotifier $flashy, SluggerInterface $slugger): Response
