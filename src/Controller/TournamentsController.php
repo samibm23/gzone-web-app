@@ -39,6 +39,27 @@ class TournamentsController extends AbstractController
         return new Response($jsonContent);
     }
 
+    private function extractTeam(JoinRequests $jr) {
+        return $jr->getTeam();
+    }
+
+    #[Route('/{id}/teams/json', name: 'app_tournament_teams_json_index', methods: ['GET'])]
+    public function indexTeamsJson(
+        EntityManagerInterface $entityManager,
+        Tournaments $tournament
+    ): Response {
+        $teams = array_map('extractTeam', $entityManager->getRepository(JoinRequests::class)->findBy(['tournament' => $tournament, 'accepted' => true]));
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($teams, 'json', [
+            'groups' => 'post:read',
+        ]);
+
+        return new Response($jsonContent);
+    }
+
     #[Route('/{id}/matches/json', name: 'app_tournament_matches_json_index', methods: ['GET'])]
     public function indexMatchesJson(
         EntityManagerInterface $entityManager,
