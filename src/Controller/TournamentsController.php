@@ -217,9 +217,9 @@ class TournamentsController extends AbstractController
     #[Route('/{id}/matches/new', name: 'app_tournaments_matches_new', methods: ['GET', 'POST'])]
     public function newMatch(Request $request, EntityManagerInterface $entityManager, Tournaments $tournament): Response
     {
-        $user = $this->getUser();
         $match = new Matches();
         $match->setTournament($tournament);
+        $match->setRound($tournament->getRequiredTeams() >> 1);
         $form = $this->createForm(MatchesType::class, $match);
         $form->handleRequest($request);
 
