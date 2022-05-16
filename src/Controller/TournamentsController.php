@@ -237,10 +237,6 @@ class TournamentsController extends AbstractController
                     "tournament" => $match->getTournament(),
                     "accepted" => true
                 ])) == 1
-                && count($entityManager->getRepository(Matches::class)->findBy([
-                    "tournament" => $match->getTournament(),
-                    "round" => 1
-                ]))
             ) {
                 $entityManager->persist($match);
                 $entityManager->flush();
