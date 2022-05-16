@@ -11,6 +11,7 @@ use App\Entity\JoinRequests;
 use App\Form\TournamentsType;
 use App\Form\MatchesType;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Math;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +20,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Knp\Component\Pager\PaginatorInterface;
+use PhpParser\Node\Expr\Match_;
 
 #[Route('/tournaments')]
 class TournamentsController extends AbstractController
@@ -237,6 +239,10 @@ class TournamentsController extends AbstractController
                     "tournament" => $match->getTournament(),
                     "accepted" => true
                 ])) == 1
+                && count($entityManager->getRepository(Matches::class)->findBy([
+                    "tournament" => $match->getTournament(),
+                    "round" => 1
+                ])) == 0
             ) {
                 $entityManager->persist($match);
                 $entityManager->flush();
