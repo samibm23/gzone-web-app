@@ -117,6 +117,36 @@ class PostsController extends AbstractController
             'groups' => 'post:read',
         ]);        return new Response("Post deleted" . $jsonContent);
     }
+    #[Route('/{id}/comments/json', name: 'app_posts_comments_json_index', methods: ['GET'])]
+    public function indexPostsJson(
+    EntityManagerInterface $entityManager
+    ): Response {
+    $comments = $entityManager->getRepository(Comments::class)->findAll();
+    $encoders = [new JsonEncoder()];
+    $normalizers = [new ObjectNormalizer()];
+
+    $serializer = new Serializer($normalizers, $encoders);
+    $jsonContent = $serializer->serialize($comments, 'json', [
+        'groups' => 'post:read',
+    ]);
+
+    return new Response($jsonContent);
+} 
+    #[Route('/{id}/comments/json/new', name: 'app_posts_comments_json_new', methods: ['GET', 'POST'])]
+    public function newPostJson(
+    Request $request,
+    EntityManagerInterface $entityManager,
+    ): Response {
+    $comment = new Comments();
+    $comment->setCommenter($entityManager->getRepository(Users::class)->find((int)$request->get('commenter_id')));
+    $comment->setCommentBody($request->get('comment_body'));
+    $comment->setCommentDate(new \DateTime('now'));
+    
+    $entityManager->persist($comment);
+    $entityManager->flush();
+
+    return new Response(json_encode("Success"));
+}
 
     #[Route('/', name: 'app_posts_index', methods: ['GET'])]
     public function index(
