@@ -136,8 +136,10 @@ class PostsController extends AbstractController
     public function newPostJson(
     Request $request,
     EntityManagerInterface $entityManager,
+    Posts $post
     ): Response {
     $comment = new Comments();
+    $comment->setPost($post);
     $comment->setCommenter($entityManager->getRepository(Users::class)->find((int)$request->get('commenter_id')));
     $comment->setCommentBody($request->get('comment_body'));
     $comment->setCommentDate(new \DateTime('now'));
