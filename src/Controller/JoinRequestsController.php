@@ -46,7 +46,7 @@ class JoinRequestsController extends AbstractController
         $joinRequest = new JoinRequests();
         $joinRequest->setMessage($request->get('message'));
         $joinRequest->setInvitation($request->get('invitation'));
-        $joinRequest->setUser($entityManager->getRepository(Users::class)->find((int)$request->get("user")));
+        $joinRequest->setUser($entityManager->getRepository(Users::class)->find((int)$request->get("user_id")));
         $joinRequest->setTeam($entityManager->getRepository(Teams::class)->find((int)$request->get("team_id")));
         $joinRequest->setTournament($entityManager->getRepository(Tournaments::class)->find((int)$request->get("tournament_id")));
 
@@ -57,6 +57,7 @@ class JoinRequestsController extends AbstractController
 
         return new Response(json_encode("Success"));
     }
+
     #[Route('/json/delete/{id}', name: 'app_join_requests_json_delete', methods: ['GET', 'POST'])]
     public function deleteJson(JoinRequests $joinRequest, EntityManagerInterface $entityManager): Response
     {
@@ -92,7 +93,7 @@ class JoinRequestsController extends AbstractController
     public function updateJson(Request $request, EntityManagerInterface $entityManager, JoinRequests $joinRequest): Response
     
     {
-        if ($request->get('invitation') != null) $joinRequest->setInvitation($request->get('invitation'));
+        if ($request->get('accepted') != null) $joinRequest->setAccepted((bool)$request->get('accepted'));
 
 
         $entityManager->flush();
