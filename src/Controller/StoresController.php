@@ -197,6 +197,27 @@ public function __construct(Client $twilio) {
             'form' => $form,
         ]);
     }
+    
+    #[Route('/{id}/market-items/json/list', name: 'app_stores_market_items_json_list', methods: ['GET'])]
+    public function listMkJson(
+        EntityManagerInterface $entityManager,
+        Stores $store
+    ): Response {
+        $marketItems = $entityManager->getRepository(MarketItems::class)->findBy([
+            'store' => $store
+        ]);
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+        $jsonContent = $serializer->serialize($marketItems, 'json', [
+            'groups' => 'post:read',
+        ]);
+
+        return new Response($jsonContent);
+    }
+   
+
     #[Route('/{id}', name: 'app_stores_show', methods: ['GET'])]
     public function show(Stores $store, EntityManagerInterface $entityManager): Response
     {     $marketItems= $entityManager->getRepository(MarketItems::class)->findBy(['store' => $store]);

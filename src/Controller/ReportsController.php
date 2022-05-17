@@ -179,7 +179,7 @@ class ReportsController extends AbstractController
      * @Route("/json/report/{id}", name= "report_show", methods= {"GET"})
      */
 
-    public function showUser(
+    public function showReport(
         Request $request,
         $id,
     ): Response {
