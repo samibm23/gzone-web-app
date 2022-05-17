@@ -235,10 +235,7 @@ class UsersController extends AbstractController
         return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    /**
-     * @Route("/json/checkuser", name= "user_profile", methods= {"GET"})
-     */
-
+    #[Route('/json/checkuser', name: 'user_json_check', methods: ['GET', 'POST'])]
     public function checkLogin(
         Request $request,
         EntityManagerInterface $em
@@ -260,7 +257,7 @@ class UsersController extends AbstractController
 
 
     /**
-     * @Route("/json/user/{id}", name= "user_profile", methods= {"GET"})
+     * @Route("/json/user/{id}", name= "user_profile", methods= {"GET" , "POST"})
      */
 
     public function showUser(
