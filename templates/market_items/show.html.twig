@@ -29,9 +29,11 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_stores_show', {'id':market_item.store.id}) }}">back to store</a>
 
-    <a href="{{ path('app_market_items_edit', {'id': market_item.id}) }}">edit</a>
-    <a href="{{ path('app_reports_new' , {'reportType' : 4 , 'id' : market_item.id}) }}">Report</a>
+
+    <a class="nk-btn nk-btn-rounded nk-btn-color-white" href="{{ path('app_stores_show', {'id':market_item.store.id}) }}">back to store</a>
+    <a class="nk-btn nk-btn-rounded nk-btn-color-white" href="{{ path('app_market_items_edit', {'id': market_item.id}) }}">edit</a>
+    <a class="nk-btn nk-btn-rounded nk-btn-color-main-1" href="{{ path('app_reports_new' , {'reportType' : 4 , 'id' : market_item.id}) }}">Report</a>
+    <hr>
     {{ include('market_items/_delete_form.html.twig') }}
 {% endblock %}
