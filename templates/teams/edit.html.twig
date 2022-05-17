@@ -17,7 +17,7 @@
       <table class="nk-table">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>User</th>
                 <th>Message</th>
                 <th>RequestDate</th>
                 <th>Accepted</th>
@@ -27,7 +27,7 @@
         <tbody>
         {% for join_request in join_requests %}
             <tr>
-                <td>{{ join_request.id }}</td>
+                <td>{{ join_request.user.username }}</td>
                 <td>{{ join_request.message }}</td>
                 <td>{{ join_request.requestDate ? join_request.requestDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ join_request.accepted ? 'Yes' : 'No' }}</td>

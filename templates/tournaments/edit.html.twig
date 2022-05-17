@@ -11,7 +11,8 @@
           <table class="nk-table">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>Photo</th>
+                <th>Team</th>
                 <th>Message</th>
                 <th>RequestDate</th>
                 <th>Accepted</th>
@@ -21,7 +22,8 @@
         <tbody>
         {% for join_request in join_requests %}
             <tr>
-                <td>{{ join_request.id }}</td>
+                <td><img src="{{ join_request.team.photoUrl }}"></td>
+                <td><a href="{{ path('app_teams_show', {'id': join_request.team.id}) }}">{{ join_request.team.name }}</a></td>
                 <td>{{ join_request.message }}</td>
                 <td>{{ join_request.requestDate ? join_request.requestDate|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ join_request.accepted ? 'Yes' : 'No' }}</td>
