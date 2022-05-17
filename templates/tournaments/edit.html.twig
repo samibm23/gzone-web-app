@@ -22,7 +22,7 @@
         <tbody>
         {% for join_request in join_requests %}
             <tr>
-                <td><img src="{{ join_request.team.photoUrl }}"></td>
+                <td><img src="../../uploads/team/{{join_request.team.photoUrl}}" width="100" height="100"  alt=""></td>
                 <td><a href="{{ path('app_teams_show', {'id': join_request.team.id}) }}">{{ join_request.team.name }}</a></td>
                 <td>{{ join_request.message }}</td>
                 <td>{{ join_request.requestDate ? join_request.requestDate|date('Y-m-d H:i:s') : '' }}</td>

@@ -33,19 +33,19 @@ class RegistrationController extends AbstractController
         $user = new Users();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-        $date = new \DateTime('now'); 
+        $date = new \DateTime('now');
         $user->setJoinDate($date);
         $user->setRole("ROLE_USER");
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
-            $userPasswordEncoder->encodePassword(
+                $userPasswordEncoder->encodePassword(
                     $user,
                     $form->get('password')->getData()
                 )
             );
-           
+
             $bytes = random_bytes(3);
             $verificationCode = bin2hex($bytes);
             $user->SetVerificationCode($verificationCode);
@@ -56,7 +56,9 @@ class RegistrationController extends AbstractController
 
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            $this->emailVerifier->sendEmailConfirmation(
+                'app_verify_email',
+                $user,
                 (new TemplatedEmail())
                     ->from(new Address('appgzone@gmail.com', 'Gzone App'))
                     ->to($user->getEmail())
@@ -122,7 +124,4 @@ class RegistrationController extends AbstractController
         ]);
         return new Response(json_encode($jsonContent));
     }
-    
-
-   
 }
