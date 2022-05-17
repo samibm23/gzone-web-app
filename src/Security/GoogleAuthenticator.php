@@ -77,6 +77,35 @@ class GoogleAuthenticator extends SocialAuthenticator
         return $user;
     }
 
+
+    public function getUserJSON($credentials, UserProviderInterface $userProvider)
+    {
+        /** @var GoogleUser $googleUser */
+        $googleUser = $this->getGoogleClient(1)
+            ->fetchUserFromToken($credentials);
+        $email = $googleUser->getEmail();
+        $user = $this->em->getRepository(Users::class)
+            ->findOneBy(['email' => $email]);
+        if (!$user) {
+            $user = new Users();
+            $user->setEmail($googleUser->getEmail());
+            $user->setFullName($googleUser->getName());
+            $user->setUsername($googleUser->getName());
+            $user->setPassword($googleUser->getName());
+            $date = new \DateTime('now');
+            $user->setJoinDate($date);
+            $user->setBirthDate($date);
+            $user->setRole("ROLE_USER");
+            $bytes = random_bytes(3);
+            $verificationCode = bin2hex($bytes);
+            $user->SetVerificationCode($verificationCode);
+            $user->setIsVerified(1);
+            $this->em->persist($user);
+            $this->em->flush();
+        }
+        return $user;
+    }
+
     /**
      * Called when authentication is needed, but it's not sent.
      * This redirects to the 'login'.

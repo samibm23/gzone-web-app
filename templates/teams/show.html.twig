@@ -35,10 +35,7 @@ style="display:inline-block;">Cancel Request</a>
                             <td>
                                 <table>
                                     <tbody>
-                                    <tr>
-                                        <td><strong class="h5">Id:</strong>&nbsp;&nbsp;&nbsp;</td>
-                                        <td><strong class="h5">{{ team.id }}</strong></td>
-                                    </tr>
+                              
                                     <tr>
                                         <td><strong class="h5">Name:</strong>&nbsp;&nbsp;&nbsp;</td>
                                         <td><strong class="h5">{{ team.name }}</strong></td>
@@ -110,4 +107,49 @@ style="display:inline-block;">Cancel Request</a>
     <a href="{{ path('app_teams_edit', {'id': team.id}) }}" class="nk-btn nk-btn-color-primary">edit</a>
 <div class="nk-gap-1"></div>
     {{ include('teams/_delete_form.html.twig') }}
+ <table class="nk-table" id="tr">
+        <thead>
+            <tr>
+                <th>fName</th>
+                <th>Bio</th>
+                <th>Photo</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+    {% for u in users %}
+ <tr>
+    <td> {{u.fullname}}</td>
+     <td>{{u.bio}} </td>
+
+    <td>  <img src={{u.photoURL}} width="15%" class="rounded-circle"></td>
+
+
+</tr>
+    {% endfor %}
+    </tbody>
+                <h3 class="nk-decorated-h-2"><span>Team Members</span></h3>
+
+    <table class="nk-table" id="tr">
+        <thead>
+            <tr>
+                <th>Team Name</th>
+                <th>Description</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+                        <h3 class="nk-decorated-h-2"><span>Tournaments you have joined</span></h3>
+
+    {% for t in tournaments %}
+ <tr>
+    <td> {{t.name}}</td>
+     <td>{{t.description}} </td>
+
+</td>
+
+
+</tr>
+    {% endfor %}
+    </tbody>
 {% endblock %}

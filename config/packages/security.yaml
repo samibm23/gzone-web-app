@@ -2,6 +2,8 @@ security:
     encoders:
         App\Entity\Users:
             algorithm: md5
+            encode_as_base64: false
+            iterations: 1
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         # used to reload user from session & other features (e.g. switch_user)
