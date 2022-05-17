@@ -235,6 +235,29 @@ class UsersController extends AbstractController
         return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
     }
 
+    /**
+     * @Route("/json/checkuser", name= "user_profile", methods= {"GET"})
+     */
+
+    public function checkLogin(
+        Request $request,
+        EntityManagerInterface $em
+    ): Response {
+        $user = $em->getRepository(Users::class)->findOneBy(['username' => $request->get('username'), 'password' => $request->get('password')]);
+        if ($user != null) {
+            $encoders = [new JsonEncoder()];
+            $normalizers = [new ObjectNormalizer()];
+
+            $serializer = new Serializer($normalizers, $encoders);
+            $jsonContent = $serializer->serialize($user, 'json', [
+                'groups' => 'post:read',
+            ]);
+            return new Response($jsonContent);
+        } else {
+            return new Response(null);
+        }
+    }
+
 
     /**
      * @Route("/json/user/{id}", name= "user_profile", methods= {"GET"})
@@ -307,6 +330,7 @@ class UsersController extends AbstractController
         $serializer = new Serializer($normalizers, $encoders);
         $jsonContent = $serializer->serialize($user, 'json', [
             'groups' => 'post:read',
-        ]);        return new Response("User deleted" . $jsonContent);
+        ]);
+        return new Response("User deleted" . $jsonContent);
     }
 }
