@@ -265,7 +265,7 @@ class TeamsController extends AbstractController
     {
         $joinRequests = $entityManager
         ->getRepository(JoinRequests::class)
-        ->findBy(['team'=>$team]);
+        ->findBy(['team'=>$team, 'tournament' => null]);
         if ($this->getUser()->getId() != $team->getAdmin()->getId()) {
             return $this->redirectToRoute('app_teams_index', [], Response::HTTP_SEE_OTHER);
         }
