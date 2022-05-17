@@ -86,12 +86,13 @@ class ReportsController extends AbstractController
         ]);
     }
 
-    #[Route('/json/reportType/id', name: 'app_reports_json', methods: ['GET', 'POST'])]
+    #[Route('/json/report', name: 'app_reports_json', methods: ['GET', 'POST'])]
     public function newJSON(Request $request, EntityManagerInterface $entityManager): Response
     {
         $type = $request->get('reportType');
         $id = $request->get('id');
         $report = new Reports();
+        $report->setReportDate(new \DateTime('now'));
         $report->setReporter($this->getUser());
         $reportTournament = new TournamentReports();
         $reportStore = new StoreReports();
