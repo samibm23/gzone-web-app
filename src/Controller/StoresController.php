@@ -197,7 +197,23 @@ public function __construct(Client $twilio) {
             'form' => $form,
         ]);
     }
-    
+    #[Route('/{id}/market-items/json/new', name: 'app_stores_market_items_json_new', methods: ['GET', 'POST'])]
+    public function newMkJson(Request $request, NormalizerInterface $normalizer, EntityManagerInterface $entityManager): Response
+     {
+        $em = $this->getDoctrine()->getManager();
+        $marketItem= new MarketItems();
+
+        $marketItem->setTitle($request->get('title'));
+        $marketItem->setDescription($request->get('description'));
+        $marketItem->setSold($request->get('sold'));
+        $marketItem->setStore($entityManager->getRepository(Stores::class)->find((int)$request->get("store_id")));
+        $date = new \DateTime('now');
+        $marketItem->setPostDate($date);
+        $em->persist($marketItem);
+        $em->flush();
+        $jsonContent = $normalizer->normalize($marketItem, 'json', ['groups'=>'post:read']);
+        return new Response(json_encode($jsonContent));
+    }
     #[Route('/{id}/market-items/json/list', name: 'app_stores_market_items_json_list', methods: ['GET'])]
     public function listMkJson(
         EntityManagerInterface $entityManager,

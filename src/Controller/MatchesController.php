@@ -192,6 +192,7 @@ class MatchesController extends AbstractController
     {
         return $this->render('matches/show.html.twig', [
             'match' => $match,
+            'userId' => $this->getUser()->getId()
         ]);
     }
 
