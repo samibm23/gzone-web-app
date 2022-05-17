@@ -188,11 +188,23 @@ class TeamsController extends AbstractController
             'form' => $form,
         ]);
     }
+
+    private function extractTournament(JoinRequests $jr) {
+        return $jr->getTournament();
+    }
+
+    private function extractUser(JoinRequests $jr) {
+        return $jr->getUser();
+    }
+    
     #[Route('/{id}', name: 'app_teams_show', methods: ['GET'])]
     public function show(Teams $team,EntityManagerInterface $entityManager,Request $request,  $id): Response
     {
         $em = $this->getDoctrine()->getManager();
         $team= $em->getRepository(Teams::class)->find($id);
+        $tournaments = array_map('self::extractTournament', $entityManager->getRepository(JoinRequests::class)->findBy(['user' => null, 'team' => $team, 'accepted' => true]));
+        $users = array_map('self::extractUser', $entityManager->getRepository(JoinRequests::class)->findBy(['tournament' => null, 'team' => $team, 'accepted' => true]));
+
         
         $playedMatchesCount = count($entityManager
         
@@ -222,6 +234,9 @@ class TeamsController extends AbstractController
             'jr' => $entityManager->getRepository(JoinRequests::class)->findOneBy(['user'=> $this->getUser(), 'team' =>$team]),
             'winrate' => ($wonMatchesCount *100) / ($playedMatchesCount),
             'joinedUsers'=> $joinedUsers,
+            'tournaments'=> $tournaments,
+            'users'=>$users,
+
             
         ]);
    
@@ -232,7 +247,8 @@ class TeamsController extends AbstractController
             'jr' => $entityManager->getRepository(JoinRequests::class)->findOneBy(['user'=> $this->getUser(), 'team' =>$team]),
             'winrate' => 0,
             'joinedUsers'=> $joinedUsers,
-           
+            'tournaments'=> $tournaments,
+            'users'=>$users
         ]);
 
     }
